@@ -1,3 +1,3 @@
 #!/bin/bash
 
-/cornerstone/flask/run
+nohup /cornerstone/flask/run &
