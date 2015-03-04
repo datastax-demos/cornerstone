@@ -23,6 +23,44 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # disable default synced folder for all machines
     config.vm.synced_folder '.', '/vagrant', disabled: true
 
+    # define the a single-machine setup machine
+    config.vm.define 'supernode', autostart: false do |dev|
+
+        # define virtualbox dev machine
+        dev.vm.provider :virtualbox do |vb, override|
+
+            # sync this project folder to /cornerstone on the guest machine
+            override.vm.synced_folder '.', '/cornerstone', create: true
+
+            # sync this ./cache folder to /cache on the guest machine
+            override.vm.synced_folder 'cache', '/cache', create: true
+
+            # set the machine's image and network options
+            override.vm.box = 'ubuntu/trusty64'
+            override.vm.network :private_network, ip: '192.168.101.7'
+
+            # set the machine's memory and cpu utilization
+            vb.memory = 3072
+            vb.cpus = 3
+
+            # provision machine
+            override.vm.provision :shell, path: 'vagrant/install-jdk8_v1.sh',
+                                          privileged: false
+            override.vm.provision :shell, path: 'vagrant/bootstrap-dev-environment_v1.sh',
+                                          privileged: false
+            override.vm.provision :shell, path: 'vagrant/install-datastax-enterprise_v1.sh',
+                                          privileged: false
+            override.vm.provision :shell, path: 'vagrant/install-bower_v1.sh',
+                                          privileged: false
+            override.vm.provision :shell, path: 'vagrant/start-datastax-enterprise_v1.sh',
+                                          privileged: false
+            # override.vm.provision :shell, path: 'vagrant/install-cornerstone.sh',
+            #                               privileged: false
+            # override.vm.provision :shell, path: 'vagrant/start-cornerstone.sh',
+            #                               privileged: false
+        end
+    end
+
     # define the dev machine
     config.vm.define 'dev', autostart: false do |dev|
 
