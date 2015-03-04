@@ -27,8 +27,8 @@ if [ ! -f ${CFG} ]; then
     # generate new secret key and DSE IP addresses
     SECRET_KEY=$(date +%s | sha256sum | base64 | head -c 32)
 
-#    DSE_CLUSTER='192.168.101.10,192.168.101.11,192.168.101.12'
-    DSE_CLUSTER='127.0.0.1'
+    DSE_CLUSTER='192.168.101.10,192.168.101.11,192.168.101.12'
+    # DSE_CLUSTER='127.0.0.1'
 
     # make replacements
     sed -i -e "s/^SECRET_KEY.*/SECRET_KEY = '${SECRET_KEY}'/" ${CFG}

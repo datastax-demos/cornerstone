@@ -26,8 +26,8 @@ if [ ! -d ${CACHE} ]; then
 fi
 sudo dpkg -i ${CACHE}/*
 
-sudo sed -i -e "s|^#MAX_HEAP_SIZE=.*|MAX_HEAP_SIZE=\"750M\"|g" /etc/dse/cassandra/cassandra-env.sh
-sudo sed -i -e "s|^#HEAP_NEWSIZE=.*|HEAP_NEWSIZE=\"200M\"|g" /etc/dse/cassandra/cassandra-env.sh
+# sudo sed -i -e "s|^#MAX_HEAP_SIZE=.*|MAX_HEAP_SIZE=\"750M\"|g" /etc/dse/cassandra/cassandra-env.sh
+# sudo sed -i -e "s|^#HEAP_NEWSIZE=.*|HEAP_NEWSIZE=\"200M\"|g" /etc/dse/cassandra/cassandra-env.sh
 
 if [ -n "${3}" ]; then
     sudo sed -i -e "s|listen_address:.*|listen_address: ${3}|g" /etc/dse/cassandra/cassandra.yaml

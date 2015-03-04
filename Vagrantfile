@@ -61,42 +61,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         end
     end
 
-    # define the dev machine
-    config.vm.define 'dev', autostart: false do |dev|
-
-        # define virtualbox dev machine
-        dev.vm.provider :virtualbox do |vb, override|
-
-            # sync this project folder to /cornerstone on the guest machine
-            override.vm.synced_folder '.', '/cornerstone', create: true
-
-            # sync this ./cache folder to /cache on the guest machine
-            override.vm.synced_folder 'cache', '/cache', create: true
-
-            # set the machine's image and network options
-            override.vm.box = 'ubuntu/trusty64'
-            override.vm.network :private_network, ip: '192.168.101.9'
-
-            # set the machine's memory and cpu utilization
-            vb.memory = 1024
-            vb.cpus = 2
-
-            # provision machine
-            override.vm.provision :shell, path: 'vagrant/install-jdk8_v1.sh',
-                                          privileged: false
-            override.vm.provision :shell, path: 'vagrant/bootstrap-dev-environment_v1.sh',
-                                          privileged: false
-            override.vm.provision :shell, path: 'vagrant/install-datastax-enterprise_v1.sh',
-                                          privileged: false
-            override.vm.provision :shell, path: 'vagrant/install-bower_v1.sh',
-                                          privileged: false
-            # override.vm.provision :shell, path: 'vagrant/install-cornerstone.sh',
-            #                               privileged: false
-            # override.vm.provision :shell, path: 'vagrant/start-cornerstone.sh',
-            #                               privileged: false
-        end
-    end
-
     # define MAX_DSE_NODES dse machines
     (0..MAX_DSE_NODES).each do |i|
         config.vm.define "dse#{i}" do |dse|
@@ -112,8 +76,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                 override.vm.network :private_network, ip: "192.168.101.#{i+10}"
 
                 # set the machine's memory and cpu utilization
-                vb.memory = 3072
-                vb.cpus = 2
+                vb.memory = 2048
+                vb.cpus = 1
 
                 # install and start dse
                 override.vm.provision :shell,
@@ -184,6 +148,44 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                     end
                 end
             end
+        end
+    end
+
+    # define the dev machine
+    config.vm.define 'dev', autostart: true do |dev|
+
+        # define virtualbox dev machine
+        dev.vm.provider :virtualbox do |vb, override|
+
+            # sync this project folder to /cornerstone on the guest machine
+            override.vm.synced_folder '.', '/cornerstone', create: true
+
+            # sync this ./cache folder to /cache on the guest machine
+            override.vm.synced_folder 'cache', '/cache', create: true
+
+            # set the machine's image and network options
+            override.vm.box = 'ubuntu/trusty64'
+            override.vm.network :private_network, ip: '192.168.101.9'
+
+            # set the machine's memory and cpu utilization
+            vb.memory = 1024
+            vb.cpus = 1
+
+            # provision machine
+            override.vm.provision :shell, path: 'vagrant/install-jdk8_v1.sh',
+                                          privileged: false
+            override.vm.provision :shell, path: 'vagrant/bootstrap-dev-environment_v1.sh',
+                                          privileged: false
+            override.vm.provision :shell, path: 'vagrant/install-datastax-enterprise_v1.sh',
+                                          privileged: false
+            override.vm.provision :shell, path: 'vagrant/enable-spark.sh',
+                                          privileged: false
+            override.vm.provision :shell, path: 'vagrant/install-bower_v1.sh',
+                                          privileged: false
+            override.vm.provision :shell, path: 'vagrant/install-cornerstone.sh',
+                                          privileged: false
+            override.vm.provision :shell, path: 'vagrant/start-cornerstone.sh',
+                                          privileged: false
         end
     end
 
