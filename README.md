@@ -1,11 +1,18 @@
-Capstone project
+Cornerstone project
 
 # Vagrant
 
 ## VirtualBox
 
+Start all VMs:
+
 ```bash
 vagrant up dse0 dse1 dse2 dev
+```
+
+SSH into a specific VM:
+```bash
+vagrant ssh dev
 ```
 
 ## AWS

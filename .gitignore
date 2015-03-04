@@ -1,0 +1,11 @@
+.idea/
+.vagrant/
+bower/
+cache/
+tmp/
+
+*.pyc
+
+.DS_Store
+.dockercfg
+application.cfg
