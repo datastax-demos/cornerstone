@@ -44,7 +44,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             vb.cpus = 2
 
             # provision machine
-            override.vm.provision :shell, path: 'vagrant/install-jdk8.sh',
+            override.vm.provision :shell, path: 'vagrant/install-jdk8_v1.sh',
                                           privileged: false
             override.vm.provision :shell, path: 'vagrant/bootstrap-dev-environment_v1.sh',
                                           privileged: false
