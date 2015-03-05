@@ -1,3 +1,7 @@
+# Installer AWS Provider
+
+    vagrant plugin install vagrant-aws
+
 # Clear Living Nodes
 
     vagrant destroy -f
