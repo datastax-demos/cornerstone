@@ -2,6 +2,7 @@
 .vagrant/
 bower/
 cache/
+cache_old/
 tmp/
 
 *.pyc

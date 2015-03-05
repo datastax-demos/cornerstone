@@ -5,6 +5,8 @@ install-jdk ()
     (
         CACHE=/cache/apt/webupd8team
         echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | sudo /usr/bin/debconf-set-selections
+        sudo dpkg -i ${CACHE}/binutils*
+        sudo dpkg -i ${CACHE}/oracle-java8-installer*
         sudo dpkg -i ${CACHE}/*
     )
 }

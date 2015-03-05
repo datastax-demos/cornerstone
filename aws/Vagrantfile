@@ -1,0 +1,93 @@
+VAGRANTFILE_API_VERSION = '2'
+
+# Ubuntu 14.04 LTS
+# http://cloud-images.ubuntu.com/locator/ec2/
+# "trusty instance-store amd64 aki"
+ami_list = {
+    'ap-northeast-1' => 'ami-40e1e641',
+    'ap-southeast-1' => 'ami-07597455',
+    'ap-southeast-2' => 'ami-39086103',
+    'eu-west-1' => 'ami-5a4bfb2d',
+    'eu-central-1' => 'ami-d21223cf',
+    'sa-east-1' => 'ami-798f3e64',
+    'us-east-1' => 'ami-92f569fa',
+    'us-west-1' => 'ami-71150534',
+    'us-west-2' => 'ami-8b84d0bb'
+}
+
+ENV['DEMO_SECURITY_GROUP'] = 'cornerstone'
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+    # disable default synced folder for all machines
+    config.vm.synced_folder '.', '/vagrant', disabled: true
+
+    # define the a single-machine setup machine
+    (0..20).each do |i|
+        config.vm.define "dev#{i}", autostart: true do |dev|
+
+            dev.vm.provider :aws do |aws, override|
+
+                # sync this ./cache folder to /cache on the guest machine
+                override.vm.synced_folder '../cache', '/cache', create: true
+
+                # set the machine's image and the default username for the machine
+                override.vm.box = 'aws-dummy'
+                override.ssh.username = 'ubuntu'
+
+                # setup basic aws configurations
+                aws.access_key_id = ENV['DEMO_AWS_ACCESS_KEY']
+                aws.secret_access_key = ENV['DEMO_AWS_SECRET_KEY']
+                aws.region = ENV['DEMO_AWS_REGION']
+                aws.availability_zone = ENV['DEMO_AWS_AZ']
+                aws.ami = ami_list[aws.region]
+                aws.instance_type = 'm3.2xlarge'
+
+                # setup keypair configuration
+                aws.keypair_name = ENV['DEMO_KEYPAIR_NAME']
+                override.ssh.private_key_path = ENV['DEMO_KEYPAIR_LOCATION']
+
+                # setup security groups
+                aws.security_groups = [ENV['DEMO_SECURITY_GROUP']]
+
+                # setup AWS Tags
+                aws.tags = {
+                    'Name' => 'cornerstone-aws-vagrant',
+                    'Owner' => ENV['DEMO_USER'],
+                    'Email' => ENV['DEMO_EMAIL']
+                }
+
+                # give class access
+                override.vm.provision :file,
+                                      source: '../keys/classkey.pub',
+                                      destination: '~/.ssh/classkey.pub'
+                override.vm.provision :shell,
+                                      inline: 'cat .ssh/classkey.pub >> .ssh/authorized_keys'
+
+                # prepare the /mnt directories
+                override.vm.provision :shell, path: '../vagrant/create-mnt-directories_v1.sh',
+                                              privileged: false
+
+                # provision machine
+                override.vm.provision :shell, path: '../vagrant/install-jdk8_v1.sh',
+                                              privileged: false
+                override.vm.provision :shell, path: '../vagrant/bootstrap-dev-environment_v1.sh',
+                                              privileged: false
+                override.vm.provision :shell, path: '../vagrant/install-datastax-enterprise_v1.sh',
+                                              args: [ENV['DATASTAX_USER'], ENV['DATASTAX_PASSWORD']],
+                                              privileged: false
+                override.vm.provision :shell, path: '../vagrant/install-bower_v1.sh',
+                                              privileged: false
+                override.vm.provision :shell, path: '../vagrant/start-datastax-enterprise_v1.sh',
+                                              privileged: false
+                override.vm.provision :shell, path: '../vagrant/clone-cornerstone.sh',
+                                              privileged: false
+                override.vm.provision :shell, path: '../vagrant/install-cornerstone.sh',
+                                              privileged: false
+                # override.vm.provision :shell, path: '../vagrant/start-cornerstone.sh',
+                #                               privileged: false
+
+            end
+        end
+    end
+end

@@ -1,10 +1,13 @@
 #!/bin/sh
 
-# ${1} == cqlsh IP address, default: 127.0.0.1
-# ${2} == cassandra.yaml csv seeds, default: no changes made
+# ${1} == DATASTAX_USER
+# ${2} == DATASTAX_PASS
 
-DATASTAX_USER=
-DATASTAX_PASS=
+# ${3} == cqlsh IP address, default: 127.0.0.1
+# ${4} == cassandra.yaml csv seeds, default: no changes made
+
+DATASTAX_USER=${1}
+DATASTAX_PASS=${2}
 
 # cache and install dse
 CACHE=/cache/apt/datastax-enterprise
@@ -26,11 +29,11 @@ sudo dpkg -i ${CACHE}/*
 sudo sed -i -e "s|^#MAX_HEAP_SIZE=.*|MAX_HEAP_SIZE=\"750M\"|g" /etc/dse/cassandra/cassandra-env.sh
 sudo sed -i -e "s|^#HEAP_NEWSIZE=.*|HEAP_NEWSIZE=\"200M\"|g" /etc/dse/cassandra/cassandra-env.sh
 
-if [ -n "${1}" ]; then
-    sudo sed -i -e "s|listen_address:.*|listen_address: ${1}|g" /etc/dse/cassandra/cassandra.yaml
-    sudo sed -i -e "s|rpc_address:.*|rpc_address: ${1}|g" /etc/dse/cassandra/cassandra.yaml
+if [ -n "${3}" ]; then
+    sudo sed -i -e "s|listen_address:.*|listen_address: ${3}|g" /etc/dse/cassandra/cassandra.yaml
+    sudo sed -i -e "s|rpc_address:.*|rpc_address: ${3}|g" /etc/dse/cassandra/cassandra.yaml
 fi
 
-if [ -n "${2}" ]; then
-    sudo sed -i -e "s|seeds:.*|seeds: \"${2}\"|g" /etc/dse/cassandra/cassandra.yaml
+if [ -n "${4}" ]; then
+    sudo sed -i -e "s|seeds:.*|seeds: \"${4}\"|g" /etc/dse/cassandra/cassandra.yaml
 fi

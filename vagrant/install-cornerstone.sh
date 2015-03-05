@@ -25,7 +25,7 @@ if [ ! -f ${CFG} ]; then
     cp /cornerstone/flask/DataStaxDemo/application.cfg.template ${CFG}
 
     # generate new secret key and DSE IP addresses
-    SECRET_KEY=$(openssl rand -base64 48)
+    SECRET_KEY=$(date +%s | sha256sum | base64 | head -c 32)
 
 #    DSE_CLUSTER='192.168.101.10,192.168.101.11,192.168.101.12'
     DSE_CLUSTER='127.0.0.1'
