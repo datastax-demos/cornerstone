@@ -6,10 +6,3 @@ do
    filename=$(basename $file)
    sed -i -e "s|FILENAME=.*|FILENAME=${filename}|g" $file
 done
-
-files=$(find vagrant -type f | grep _v1.sh)
-for file in $files
-do
-    new=$(echo $file | sed -e 's|v1|v2|')
-    mv $file $new
-done
