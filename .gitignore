@@ -3,6 +3,7 @@
 bower/
 cache/
 cache_old/
+keys/
 tmp/
 
 *.pyc
@@ -10,3 +11,5 @@ tmp/
 .DS_Store
 .dockercfg
 application.cfg
+Vagrantfile
+
