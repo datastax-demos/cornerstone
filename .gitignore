@@ -11,5 +11,5 @@ tmp/
 .DS_Store
 .dockercfg
 application.cfg
-Vagrantfile
+./Vagrantfile
 
