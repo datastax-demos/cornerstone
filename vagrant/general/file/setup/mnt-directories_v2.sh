@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 sudo mkdir -p /mnt/lib
 sudo mkdir -p /mnt/log

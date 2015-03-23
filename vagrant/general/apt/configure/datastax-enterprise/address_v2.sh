@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 LISTEN_ADDRESS='localhost'
 RPC_ADDRESS='localhost'
