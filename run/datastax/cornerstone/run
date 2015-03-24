@@ -7,11 +7,11 @@ echo "Running script from: $(pwd)"
 # backup existing Vagrantfile
 if [ -f Vagrantfile ]; then
     VERSION=$(date +"%Y%m%d_%H%M%S")
-    cp Vagrantfile{,.bak.$VERSION}
+    mv Vagrantfile{,.bak.$VERSION}
     echo "Backing up current Vagrantfile to: Vagrantfile.$VERSION"
 fi
 
 # copy correct Vagrantfile in place
-cp vagrantfiles/datastax/cornerstone/Vagrantfile .
+ln -s vagrantfiles/datastax/cornerstone/Vagrantfile Vagrantfile
 
 vagrant up
