@@ -24,10 +24,89 @@ for envar in required_envars
         print "\n$#{envar} must be set! \n"\
               "If performing a specific command, you must specify a "\
               "machine name. Example: \n"\
-                "\t vagrant ssh dev \n"\
-                "\t vagrant destroy dev \n\n"
+                "\t vagrant ssh demo \n"\
+                "\t vagrant destroy demo \n\n"
         exit
     end
+end
+
+def setup()
+    vm.provision :shell, path: 'vagrant/file/setup/cache_v1.sh',
+                                  privileged: false
+    vm.provision :shell, path: 'vagrant/file/setup/sbin_v1.sh',
+                                  privileged: false
+    vm.provision :shell, path: 'vagrant/file/setup/mnt-directories_v1.sh',
+                                  privileged: false
+    vm.provision :shell, path: 'vagrant/apt/setup/apt-get-update_v1.sh',
+                                  privileged: false
+end
+
+def install_dse()
+    vm.provision :shell, path: 'vagrant/apt/install/jdk7_v1.sh',
+                                  privileged: false
+    vm.provision :shell, path: 'vagrant/apt/install/datastax-enterprise_v1.sh',
+                                  args: ["--datastax-user", "#{ENV['DATASTAX_USER']}",
+                                         "--datastax-pass", "#{ENV['DATASTAX_PASS']}"],
+                                  privileged: false
+end
+
+def install_opscenter()
+    vm.provision :shell, path: 'vagrant/apt/install/jdk7_v1.sh',
+                                  privileged: false
+    vm.provision :shell, path: 'vagrant/apt/install/opscenter_v1.sh',
+                                  privileged: false
+end
+
+def install_capstone()
+    vm.provision :shell, path: 'vagrant/apt/install/jdk7_v1.sh',
+                                  privileged: false
+    vm.provision :shell, path: 'vagrant/apt/install/jdk8_v1.sh',
+                                  privileged: false
+    vm.provision :shell, path: 'vagrant/apt/configure/java-default-jdk7_v1.sh',
+                                  privileged: false
+
+    vm.provision :shell, path: 'vagrant/apt/install/dev_v1.sh',
+                                  privileged: false
+    vm.provision :shell, path: 'vagrant/apt/install/python_v1.sh',
+                                  privileged: false
+    vm.provision :shell, path: 'vagrant/apt/install/ruby_v1.sh',
+                                  privileged: false
+    vm.provision :shell, path: 'vagrant/file/install/bower_v1.sh',
+                                  privileged: false
+
+    vm.provision :shell, path: 'vagrant/file/setup/cornerstone_v1.sh',
+                                  privileged: false
+    vm.provision :shell, path: 'vagrant/file/install/cornerstone_v1.sh',
+                                  privileged: false
+end
+
+def start_dse()
+    vm.provision :shell, path: 'vagrant/apt/configure/datastax-enterprise-address_v1.sh',
+                                  privileged: false
+    vm.provision :shell, path: 'vagrant/apt/configure/datastax-enterprise-heap_v1.sh',
+                                  privileged: false
+    vm.provision :shell, path: 'vagrant/apt/configure/datastax-enterprise-seeds_v1.sh',
+                                  privileged: false
+    vm.provision :shell, path: 'vagrant/apt/configure/datastax-agent_v1.sh',
+                                  privileged: false
+
+    vm.provision :shell, path: 'vagrant/apt/start/datastax-enterprise_v1.sh',
+                                  privileged: false
+    vm.provision :shell, path: 'vagrant/apt/start/datastax-agent_v1.sh',
+                                  privileged: false
+end
+
+def start_opscenter()
+    vm.provision :shell, path: 'vagrant/apt/configure/opscenter_v1.sh',
+                                  privileged: false
+
+    vm.provision :shell, path: 'vagrant/apt/start/opscenter_v1.sh',
+                                  privileged: false
+end
+
+def start_cornerstone()
+    vm.provision :shell, path: 'vagrant/file/start/cornerstone_v1.sh',
+                                  privileged: false
 end
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
@@ -36,10 +115,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.vm.synced_folder '.', '/vagrant', disabled: true
 
     # define the a single-machine setup machine
-    config.vm.define 'supernode', autostart: false do |dev|
+    config.vm.define 'singlenode', autostart: true do |singlenode|
 
-        # define virtualbox dev machine
-        dev.vm.provider :virtualbox do |vb, override|
+        # define virtualbox machine
+        singlenode.vm.provider :virtualbox do |vb, override|
 
             # sync this project folder to /cornerstone on the guest machine
             override.vm.synced_folder '.', '/cornerstone', create: true
@@ -55,74 +134,28 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             vb.memory = 3072
             vb.cpus = 3
 
-            # provision machine
-            override.vm.provision :shell, path: 'vagrant/file/setup/cache_v1.sh',
-                                          privileged: false
-            override.vm.provision :shell, path: 'vagrant/file/setup/sbin_v1.sh',
-                                          privileged: false
-            override.vm.provision :shell, path: 'vagrant/file/setup/mnt-directories_v1.sh',
-                                          privileged: false
-            override.vm.provision :shell, path: 'vagrant/apt/setup/apt-get-update_v1.sh',
-                                          privileged: false
-
-            override.vm.provision :shell, path: 'vagrant/apt/install/jdk7_v1.sh',
-                                          privileged: false
-            override.vm.provision :shell, path: 'vagrant/apt/install/jdk8_v1.sh',
-                                          privileged: false
-            override.vm.provision :shell, path: 'vagrant/apt/configure/java-default-jdk7_v1.sh',
-                                          privileged: false
-
-            override.vm.provision :shell, path: 'vagrant/apt/install/dev_v1.sh',
-                                          privileged: false
-            override.vm.provision :shell, path: 'vagrant/apt/install/python_v1.sh',
-                                          privileged: false
-            override.vm.provision :shell, path: 'vagrant/apt/install/ruby_v1.sh',
-                                          privileged: false
-            override.vm.provision :shell, path: 'vagrant/file/install/bower_v1.sh',
-                                          privileged: false
-
-            override.vm.provision :shell, path: 'vagrant/apt/install/datastax-enterprise_v1.sh',
-                                          args: ["--datastax-user", "#{ENV['DATASTAX_USER']}",
-                                                 "--datastax-pass", "#{ENV['DATASTAX_PASS']}"],
-                                          privileged: false
-            override.vm.provision :shell, path: 'vagrant/apt/install/opscenter_v1.sh',
-                                          privileged: false
-
-            override.vm.provision :shell, path: 'vagrant/apt/configure/datastax-enterprise-address_v1.sh',
-                                          privileged: false
-            override.vm.provision :shell, path: 'vagrant/apt/configure/datastax-enterprise-heap_v1.sh',
-                                          privileged: false
-            override.vm.provision :shell, path: 'vagrant/apt/configure/datastax-enterprise-seeds_v1.sh',
-                                          privileged: false
-            override.vm.provision :shell, path: 'vagrant/apt/configure/datastax-agent_v1.sh',
-                                          privileged: false
-            override.vm.provision :shell, path: 'vagrant/apt/configure/opscenter_v1.sh',
-                                          privileged: false
-
-            override.vm.provision :shell, path: 'vagrant/apt/start/datastax-enterprise_v1.sh',
-                                          privileged: false
-            override.vm.provision :shell, path: 'vagrant/apt/start/datastax-agent_v1.sh',
-                                          privileged: false
-            override.vm.provision :shell, path: 'vagrant/apt/start/opscenter_v1.sh',
-                                          privileged: false
-
-            override.vm.provision :shell, path: 'vagrant/file/setup/cornerstone_v1.sh',
-                                          privileged: false
-            override.vm.provision :shell, path: 'vagrant/file/install/cornerstone_v1.sh',
-                                          privileged: false
-            override.vm.provision :shell, path: 'vagrant/file/start/cornerstone_v1.sh',
-                                          privileged: false
-
             override.vm.post_up_message = <<-eos
                 Visit:
                     http://192.168.101.7:5000 for Cornerstone
             eos
         end
+
+        # provision machine
+        setup()
+
+        install_dse()
+        install_opscenter()
+        install_capstone()
+
+        start_dse()
+        start_opscenter()
+        start_cornerstone()
+
     end
 
     # define MAX_DSE_NODES dse machines
     (0..MAX_DSE_NODES).each do |i|
-        config.vm.define "dse#{i}" do |dse|
+        config.vm.define "dse#{i}", autostart: false do |dse|
 
             # define virtualbox dse machines
             dse.vm.provider :virtualbox do |vb, override|
@@ -137,15 +170,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                 # set the machine's memory and cpu utilization
                 vb.memory = 2048
                 vb.cpus = 1
-
-                # install and start dse
-                override.vm.provision :shell,
-                                      path: 'vagrant/install-datastax-enterprise_v1.sh',
-                                      args: ["192.168.101.#{i+10}",
-                                             "192.168.101.10,192.168.101.11,192.168.101.12"]
-                override.vm.provision :shell,
-                                      path: 'vagrant/start-datastax-enterprise_v1.sh',
-                                      args: ["192.168.101.#{i+10}", "192.168.101.8"]
             end
 
             dse.vm.provider :aws do |aws, override|
@@ -175,43 +199,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                     'Owner' => ENV['DEMO_USER'],
                     'Email' => ENV['DEMO_EMAIL']
                 }
-
-                # place the docker credentials
-                override.vm.provision :file,
-                                      source: 'keys/.dockercfg',
-                                      destination: '~/.dockercfg'
-                override.vm.provision :shell,
-                                      inline: 'sudo mv ~/.dockercfg /root',
-                                      privileged: false
-
-                # prepare the /mnt directories
-                override.vm.provision :shell,
-                                      path: 'vagrant/create-mnt-directories_v1.sh'
-
-                # download the dse container
-                override.vm.provision :docker,
-                    images: ['datastaxdemos/datastax-enterprise']
-
-                # run the dse container when $CMD is set
-                if ENV['CMD'] && ENV['CMD'].length > 0
-                    override.vm.provision :docker do |d|
-
-                        # --net host: will use the host's network interface
-                        # --volume <host-directory>:<guest-directory>:
-                        # provides persistent storage for dse data and logs
-                        d.run 'datastaxdemos/datastax-enterprise',
-                            cmd: ENV['CMD'],
-                            args: '--net host'\
-                                  ' --volume /mnt/lib/cassandra:/var/lib/cassandra'\
-                                  ' --volume /mnt/log/cassandra:/var/log/cassandra'
-                    end
-                end
             end
         end
     end
 
-    config.vm.define "opscenter" do |opscenter|
-        # define virtualbox dev machine
+    config.vm.define "opscenter", autostart: false do |opscenter|
+        # define virtualbox machine
         opscenter.vm.provider :virtualbox do |vb, override|
 
             # sync this ./cache folder to /cache on the guest machine
@@ -225,13 +218,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             vb.memory = 768
             vb.cpus = 1
 
-            # provision machine
-            override.vm.provision :shell, path: 'vagrant/install-opscenter_v1.sh',
-                                          privileged: false
-            override.vm.provision :shell, path: 'vagrant/start-opscenter_v1.sh',
-                                          args: ['192.168.101.10,192.168.101.11,192.168.101.12'],
-                                          privileged: false
-
             override.vm.post_up_message = <<-eos
                 Visit:
                     http://192.168.101.8:8888 for OpsCenter
@@ -239,11 +225,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         end
     end
 
-    # define the dev machine
-    config.vm.define 'dev', autostart: true do |dev|
+    # define the demo machine
+    config.vm.define 'demo', autostart: false do |demo|
 
-        # define virtualbox dev machine
-        dev.vm.provider :virtualbox do |vb, override|
+        # define virtualbox machine
+        demo.vm.provider :virtualbox do |vb, override|
 
             # sync this project folder to /cornerstone on the guest machine
             override.vm.synced_folder '.', '/cornerstone', create: true
@@ -258,22 +244,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             # set the machine's memory and cpu utilization
             vb.memory = 1024
             vb.cpus = 1
-
-            # provision machine
-            override.vm.provision :shell, path: 'vagrant/install-jdk8_v1.sh',
-                                          privileged: false
-            override.vm.provision :shell, path: 'vagrant/bootstrap-dev-environment_v1.sh',
-                                          privileged: false
-            override.vm.provision :shell, path: 'vagrant/install-datastax-enterprise_v1.sh',
-                                          privileged: false
-            override.vm.provision :shell, path: 'vagrant/enable-spark.sh',
-                                          privileged: false
-            override.vm.provision :shell, path: 'vagrant/install-bower_v1.sh',
-                                          privileged: false
-            override.vm.provision :shell, path: 'vagrant/install-cornerstone.sh',
-                                          privileged: false
-            override.vm.provision :shell, path: 'vagrant/start-cornerstone.sh',
-                                          privileged: false
         end
     end
 end

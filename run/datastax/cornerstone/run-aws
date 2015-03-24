@@ -14,4 +14,18 @@ fi
 # copy correct Vagrantfile in place
 cp vagrantfiles/datastax/cornerstone/Vagrantfile .
 
-vagrant up
+# clear SEEDS
+unset SEEDS
+
+# start machines, install, do not provision
+vagrant --provider aws up dse0 dse1 dse2 opscenter demo
+
+# collect DSE seeds
+DSE0=vagrant awsinfo -m dse0 -k private_ip
+DSE1=vagrant awsinfo -m dse1 -k private_ip
+DSE2=vagrant awsinfo -m dse2 -k private_ip
+SEEDS=$DSE0,$DSE1,$DSE2
+
+# configure, start
+# TODO: Not setting proper variables
+vagrant --provision dse0 dse1 dse2 opscenter demo
