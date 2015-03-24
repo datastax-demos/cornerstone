@@ -32,81 +32,84 @@ end
 
 def setup(config)
     config.vm.provision :shell, path: 'vagrant/general/file/setup/cache_v2.sh',
-                                  privileged: false
+                                privileged: false
     config.vm.provision :shell, path: 'vagrant/general/file/setup/sbin_v2.sh',
-                                  privileged: false
+                                privileged: false
     config.vm.provision :shell, path: 'vagrant/general/file/setup/mnt-directories_v2.sh',
-                                  privileged: false
+                                privileged: false
     config.vm.provision :shell, path: 'vagrant/general/apt/setup/apt-get-update_v2.sh',
-                                  privileged: false
+                                privileged: false
 end
 
 def install_dse(config)
     config.vm.provision :shell, path: 'vagrant/general/apt/install/jdk7_v2.sh',
-                                  privileged: false
+                                privileged: false
     config.vm.provision :shell, path: 'vagrant/general/apt/install/datastax-enterprise_v2.sh',
                                   args: ["--datastax-user", "#{ENV['DATASTAX_USER']}",
                                          "--datastax-pass", "#{ENV['DATASTAX_PASS']}"],
-                                  privileged: false
+                                privileged: false
 end
 
 def install_opscenter(config)
     config.vm.provision :shell, path: 'vagrant/general/apt/install/jdk7_v2.sh',
-                                  privileged: false
+                                privileged: false
     config.vm.provision :shell, path: 'vagrant/general/apt/install/opscenter_v2.sh',
-                                  privileged: false
+                                privileged: false
 end
 
-def install_capstone(config)
+def install_capstone(config, git_repo=false)
     config.vm.provision :shell, path: 'vagrant/general/apt/install/jdk7_v2.sh',
-                                  privileged: false
+                                privileged: false
     config.vm.provision :shell, path: 'vagrant/general/apt/install/jdk8_v2.sh',
-                                  privileged: false
+                                privileged: false
     config.vm.provision :shell, path: 'vagrant/general/apt/configure/java/default-jdk7_v2.sh',
-                                  privileged: false
+                                privileged: false
 
     config.vm.provision :shell, path: 'vagrant/general/apt/install/dev_v2.sh',
-                                  privileged: false
+                                privileged: false
     config.vm.provision :shell, path: 'vagrant/general/apt/install/python_v2.sh',
-                                  privileged: false
+                                privileged: false
     config.vm.provision :shell, path: 'vagrant/general/apt/install/ruby_v2.sh',
-                                  privileged: false
+                                privileged: false
     config.vm.provision :shell, path: 'vagrant/general/file/install/bower_v2.sh',
-                                  privileged: false
+                                privileged: false
 
-    config.vm.provision :shell, path: 'vagrant/datastax/cornerstone/1.setup_v2.sh',
-                                  privileged: false
+    if git_repo
+        override.vm.provision :shell, path: 'vagrant/datastax/cornerstone/1.setup_v2.sh',
+                                      privileged: false
+    end
+
     config.vm.provision :shell, path: 'vagrant/datastax/cornerstone/2.install_v2.sh',
-                                  privileged: false
+                                privileged: false
 end
 
 def start_dse(config)
     config.vm.provision :shell, path: 'vagrant/general/apt/configure/datastax-enterprise/address_v2.sh',
-                                  privileged: false
+                                privileged: false
     config.vm.provision :shell, path: 'vagrant/general/apt/configure/datastax-enterprise/heap_v2.sh',
-                                  privileged: false
+                                privileged: false
     config.vm.provision :shell, path: 'vagrant/general/apt/configure/datastax-enterprise/seeds_v2.sh',
-                                  privileged: false
+                                privileged: false
     config.vm.provision :shell, path: 'vagrant/general/apt/configure/datastax-agent/stomp-interface_v2.sh',
-                                  privileged: false
+                                privileged: false
 
     config.vm.provision :shell, path: 'vagrant/general/apt/start/datastax-enterprise_v2.sh',
-                                  privileged: false
+                                privileged: false
     config.vm.provision :shell, path: 'vagrant/general/apt/start/datastax-agent_v2.sh',
-                                  privileged: false
+                                privileged: false
 end
 
 def start_opscenter(config)
     config.vm.provision :shell, path: 'vagrant/general/apt/configure/opscenter/seed-hosts_v2.sh',
-                                  privileged: false
+                                privileged: false
 
     config.vm.provision :shell, path: 'vagrant/general/apt/start/opscenter_v2.sh',
-                                  privileged: false
+                                privileged: false
 end
 
 def start_cornerstone(config)
     config.vm.provision :shell, path: 'vagrant/datastax/cornerstone/3.start_v2.sh',
-                                  privileged: false
+                                privileged: false
 end
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
