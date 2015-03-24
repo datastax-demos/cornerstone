@@ -12,6 +12,6 @@ if [ -f Vagrantfile ]; then
 fi
 
 # copy correct Vagrantfile in place
-ln -s vagrantfiles/datastax/cornerstone/Vagrantfile Vagrantfile
+ln -s vagrantfiles/datastax/cornerstone Vagrantfile
 
 vagrant up

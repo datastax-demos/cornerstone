@@ -12,5 +12,5 @@ Vagrantfile.bak.*
 .DS_Store
 .dockercfg
 application.cfg
-./Vagrantfile
+Vagrantfile
 
