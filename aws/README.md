@@ -1,19 +1,21 @@
-# Installer AWS Provider
+Please ignore. Used for a class setup. Better instructions coming soon.
+
+### Install AWS Provider
 
     vagrant plugin install vagrant-aws
 
-# Clear Living Nodes
+### Clear Living Nodes
 
     vagrant destroy -f
 
-# Start AWS Nodes
+### Start AWS Nodes
 
     vagrant up --provider aws dev0
     
-# Find IP Address
+### Find IP Address
 
     vagrant awsinfo -m dev0 -k public_ip
 
-# SSH into Node
+### SSH into Node
 
     vagrant ssh dev0
