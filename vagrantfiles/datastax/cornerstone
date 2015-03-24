@@ -1,5 +1,8 @@
 VAGRANTFILE_API_VERSION = '2'
 
+# overwrite for class purposes
+# ENV['DEMO_SECURITY_GROUP'] = 'cornerstone'
+
 # max number of dse nodes this script will generate
 MAX_DSE_NODES = 3
 
@@ -117,7 +120,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # disable default synced folder for all machines
     config.vm.synced_folder '.', '/vagrant', disabled: true
 
-    # define the a single-machine setup machine
+    # define the a single-machine developer setup
     config.vm.define 'singlenode', autostart: true do |singlenode|
 
         # define virtualbox machine
@@ -154,6 +157,65 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         start_opscenter(config)
         start_cornerstone(config)
 
+    end
+
+    # define the a single-machine class setup
+    (0..20).each do |i|
+        config.vm.define "singlenode#{i}", autostart: false do |singlenode|
+
+            # define virtualbox machine
+            singlenode.vm.provider :aws do |aws, override|
+
+                # set the machine's image and the default username for the machine
+                override.vm.box = 'aws-dummy'
+                override.ssh.username = 'ubuntu'
+
+                # setup basic aws configurations
+                aws.access_key_id = ENV['DEMO_AWS_ACCESS_KEY']
+                aws.secret_access_key = ENV['DEMO_AWS_SECRET_KEY']
+                aws.region = ENV['DEMO_AWS_REGION']
+                aws.availability_zone = ENV['DEMO_AWS_AZ']
+                aws.ami = ami_list[aws.region]
+                aws.instance_type = 'm3.2xlarge'
+
+                # setup keypair configuration
+                aws.keypair_name = ENV['DEMO_KEYPAIR_NAME']
+                override.ssh.private_key_path = ENV['DEMO_KEYPAIR_LOCATION']
+
+                # setup security groups
+                aws.security_groups = [ENV['DEMO_SECURITY_GROUP']]
+
+                # setup AWS Tags
+                aws.tags = {
+                    'Name' => "cornerstone-aws-vagrant-singlenode#{i}",
+                    'Owner' => ENV['DEMO_USER'],
+                    'Email' => ENV['DEMO_EMAIL']
+                }
+
+                override.vm.post_up_message = <<-eos
+                    Using security group: #{ENV['DEMO_SECURITY_GROUP']}
+                eos
+            end
+
+            # give class access
+            config.vm.provision :file,
+                                source: '../keys/classkey.pub',
+                                destination: '~/.ssh/classkey.pub'
+            config.vm.provision :shell,
+                                inline: 'cat .ssh/classkey.pub >> .ssh/authorized_keys'
+
+            # provision machine
+            setup(config)
+
+            install_dse(config)
+            install_opscenter(config)
+            install_capstone(config, true)
+
+            start_dse(config)
+            start_opscenter(config)
+            start_cornerstone(config)
+
+        end
     end
 
     # define MAX_DSE_NODES dse machines
