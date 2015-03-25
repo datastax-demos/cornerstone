@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -x # echo on
 
 LISTEN_ADDRESS='localhost'
 RPC_ADDRESS='localhost'

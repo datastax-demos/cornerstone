@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -x # echo on
 
 FILENAME=ruby_v1.sh
 

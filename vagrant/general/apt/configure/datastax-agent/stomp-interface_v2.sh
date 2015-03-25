@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -x # echo on
 
 OPSCENTER_HOST='127.0.0.1'
 

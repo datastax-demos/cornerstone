@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -x # echo on
 
 FILENAME=datastax-enterprise_v1.sh
 

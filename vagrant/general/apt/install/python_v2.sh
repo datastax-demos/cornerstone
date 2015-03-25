@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -x # echo on
 
 FILENAME=python_v1.sh
 

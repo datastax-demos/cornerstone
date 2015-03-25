@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -x # echo on
 
 if [ ! -d ${CACHE} ]; then
     sudo mkdir -p /cornerstone
