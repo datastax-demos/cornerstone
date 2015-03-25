@@ -78,8 +78,8 @@ def install_capstone(config, git_repo=false)
                                 privileged: false
 
     if git_repo
-        override.vm.provision :shell, path: 'vagrant/datastax/cornerstone/1.setup_v2.sh',
-                                      privileged: false
+        config.vm.provision :shell, path: 'vagrant/datastax/cornerstone/1.setup_v2.sh',
+                                    privileged: false
     end
 
     config.vm.provision :shell, path: 'vagrant/datastax/cornerstone/2.install_v2.sh',
