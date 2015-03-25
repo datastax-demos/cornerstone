@@ -1,8 +1,5 @@
 VAGRANTFILE_API_VERSION = '2'
 
-# overwrite for class purposes
-# ENV['DEMO_SECURITY_GROUP'] = 'cornerstone'
-
 # max number of dse nodes this script will generate
 MAX_DSE_NODES = 3
 
@@ -183,7 +180,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                 override.ssh.private_key_path = ENV['DEMO_KEYPAIR_LOCATION']
 
                 # setup security groups
-                aws.security_groups = [ENV['DEMO_SECURITY_GROUP']]
+                aws.security_groups = [ENV['DEMO_AWS_SECURITY_GROUP']]
 
                 # setup AWS Tags
                 aws.tags = {
@@ -193,7 +190,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                 }
 
                 override.vm.post_up_message = <<-eos
-                    Using security group: #{ENV['DEMO_SECURITY_GROUP']}
+                    Using security group: #{ENV['DEMO_AWS_SECURITY_GROUP']}
                 eos
             end
 
@@ -252,11 +249,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                 aws.instance_type = 'm3.medium'
 
                 # setup keypair configuration
-                aws.keypair_name = ENV['DEMO_KEYPAIR_NAME']
-                override.ssh.private_key_path = ENV['DEMO_KEYPAIR_LOCATION']
+                aws.keypair_name = ENV['DEMO_AWS_KEYPAIR_NAME']
+                override.ssh.private_key_path = ENV['DEMO_AWS_KEYPAIR_LOCATION']
 
                 # setup security groups
-                aws.security_groups = [ENV['DEMO_SECURITY_GROUP']]
+                aws.security_groups = [ENV['DEMO_AWS_SECURITY_GROUP']]
 
                 # setup AWS Tags
                 aws.tags = {
