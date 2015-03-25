@@ -5,4 +5,4 @@ gui_api = Blueprint('gui_api', __name__)
 
 @gui_api.route('/')
 def index():
-    return render_template('index.jinja2')
+    return render_template('datastax/cornerstone/index.jinja2')

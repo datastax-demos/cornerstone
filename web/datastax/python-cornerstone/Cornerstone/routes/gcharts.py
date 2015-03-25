@@ -24,7 +24,7 @@ def compose_ajax_source():
 def annotationchart():
     ajax_source = compose_ajax_source()
 
-    return render_template('gcharts/gcharts.jinja2',
+    return render_template('general/charts/google-charts/google-charts.jinja2',
                            ajax_source=ajax_source,
                            gcharts_version=1,
                            packages='annotationchart',
@@ -37,7 +37,7 @@ def annotationchart():
 def areachart():
     ajax_source = compose_ajax_source()
 
-    return render_template('gcharts/gcharts.jinja2',
+    return render_template('general/charts/google-charts/google-charts.jinja2',
                            ajax_source=ajax_source,
                            gcharts_version=1,
                            packages='corechart',
@@ -51,7 +51,7 @@ def areachart():
 def barchart():
     ajax_source = compose_ajax_source()
 
-    return render_template('gcharts/gcharts.jinja2',
+    return render_template('general/charts/google-charts/google-charts.jinja2',
                            ajax_source=ajax_source,
                            gcharts_version=1.1,
                            packages='bar',
@@ -64,7 +64,7 @@ def barchart():
 def linechart():
     ajax_source = compose_ajax_source()
 
-    return render_template('gcharts/gcharts.jinja2',
+    return render_template('general/charts/google-charts/google-charts.jinja2',
                            ajax_source=ajax_source,
                            gcharts_version=1.1,
                            packages='line',
@@ -77,7 +77,7 @@ def linechart():
 def piechart():
     ajax_source = compose_ajax_source()
 
-    return render_template('gcharts/gcharts.jinja2',
+    return render_template('general/charts/google-charts/google-charts.jinja2',
                            ajax_source=ajax_source,
                            gcharts_version=1,
                            packages='corechart',
@@ -91,7 +91,7 @@ def piechart():
 def table():
     ajax_source = compose_ajax_source()
 
-    return render_template('gcharts/gcharts.jinja2',
+    return render_template('general/charts/google-charts/google-charts.jinja2',
                            ajax_source=ajax_source,
                            gcharts_version=1,
                            packages='table',

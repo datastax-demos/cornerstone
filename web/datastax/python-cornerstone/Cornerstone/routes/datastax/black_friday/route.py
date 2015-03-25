@@ -29,5 +29,5 @@ def index():
         </li>
     </ul>
     '''
-    return render_template('index.jinja2',
+    return render_template('datastax/cornerstone/index.jinja2',
                            content=content)
