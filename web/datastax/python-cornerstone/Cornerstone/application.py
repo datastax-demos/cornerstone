@@ -1,9 +1,9 @@
 from flask import Flask
 
-from Cornerstone.routes import rest
-from Cornerstone.routes.gui import gui_api
-from Cornerstone.routes.rest import rest_api
-from Cornerstone.routes.gcharts import gcharts_api
+from Cornerstone.routes.datastax.cornerstone import rest
+from Cornerstone.routes.datastax.cornerstone.gui import gui_api
+from Cornerstone.routes.datastax.cornerstone.rest import rest_api
+from Cornerstone.routes.datastax.cornerstone.google_charts import gcharts_api
 from Cornerstone.routes.datastax.black_friday.route import black_friday_api
 
 app = Flask(__name__)
