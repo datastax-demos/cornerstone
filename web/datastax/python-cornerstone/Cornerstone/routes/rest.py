@@ -1,5 +1,7 @@
+import blist
 import datetime
 import gviz_api
+import uuid
 
 from decimal import Decimal
 from flask import Blueprint, jsonify, request
@@ -7,6 +9,7 @@ from json import loads, dumps
 
 from cassandra.cluster import Cluster
 from cassandra.query import ordered_dict_factory
+from cassandra.util import OrderedMap
 
 rest_api = Blueprint('rest_api', __name__)
 
@@ -40,6 +43,12 @@ def decimal_default(obj):
     """
     if isinstance(obj, Decimal):
         return float(obj)
+    elif isinstance(obj, uuid.UUID):
+        return str(obj)
+    elif isinstance(obj, datetime.datetime):
+        return str(obj)
+    elif isinstance(obj, OrderedMap):
+        return str(obj)
     raise TypeError
 
 
