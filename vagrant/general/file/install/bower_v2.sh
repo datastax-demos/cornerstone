@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -x # echo on
 
-FILENAME=bower_v1.sh
+FILENAME=bower_v2.sh
 
 CACHE=/cache/tar/$FILENAME
 DOWNLOADNAME=node-v0.10.35-linux-x64.tar.gz

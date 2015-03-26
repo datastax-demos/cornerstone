@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -x # echo on
 
-FILENAME=jdk7_v1.sh
+FILENAME=jdk7_v2.sh
 
 PACKAGES='oracle-java7-installer'
 CACHE=/cache/apt/$FILENAME

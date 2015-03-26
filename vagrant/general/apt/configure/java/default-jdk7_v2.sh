@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -x # echo on
 
-FILENAME=java-default-jdk7_v1.sh
+FILENAME=default-jdk7_v2.sh
 
 PACKAGES='oracle-java7-set-default'
 CACHE=/cache/apt/$FILENAME

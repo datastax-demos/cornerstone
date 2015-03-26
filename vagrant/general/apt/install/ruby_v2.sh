@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -x # echo on
 
-FILENAME=ruby_v1.sh
+FILENAME=ruby_v2.sh
 
 PACKAGES='ruby-dev'
 CACHE=/cache/apt/$FILENAME

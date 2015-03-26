@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -x # echo on
 
-FILENAME=jdk8_v1.sh
+FILENAME=jdk8_v2.sh
 
 PACKAGES='oracle-java8-installer'
 CACHE=/cache/apt/$FILENAME

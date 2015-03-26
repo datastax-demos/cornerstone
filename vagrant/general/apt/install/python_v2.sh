@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -x # echo on
 
-FILENAME=python_v1.sh
+FILENAME=python_v2.sh
 
 PACKAGES='python-pip python-dev libev4 libev-dev python-snappy'
 CACHE=/cache/apt/$FILENAME

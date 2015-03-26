@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -x # echo on
 
-FILENAME=datastax-enterprise_v1.sh
+FILENAME=datastax-enterprise_v2.sh
 
 PACKAGES='dse-full'
 CACHE=/cache/apt/$FILENAME
