@@ -18,7 +18,7 @@ esac
 shift
 done
 
-sudo pip install -r /cornerstone/web/datastax/python-cornerstone/Cornerstone/requirements.txt
+sudo pip install -r /cornerstone/web/datastax/cornerstone-python/Cornerstone/requirements.txt
 
 CACHE=/cache/tar/gviz_api_py
 DOWNLOADNAME=gviz_api_py-1.8.2.tar.gz
@@ -36,13 +36,13 @@ fi
 )
 
 (
-    cd /cornerstone/web/datastax/python-cornerstone/Cornerstone
+    cd /cornerstone/web/datastax/cornerstone-python/Cornerstone
     bower --config.analytics=false install
 )
 
-CFG=/cornerstone/web/datastax/python-cornerstone/Cornerstone/application.cfg
+CFG=/cornerstone/web/datastax/cornerstone-python/Cornerstone/application.cfg
 if [ ! -f ${CFG} ]; then
-    cp /cornerstone/web/datastax/python-cornerstone/Cornerstone/application.cfg.template ${CFG}
+    cp /cornerstone/web/datastax/cornerstone-python/Cornerstone/application.cfg.template ${CFG}
 
     SECRET_KEY=$(date +%s | sha256sum | base64 | head -c 32)
 
