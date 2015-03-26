@@ -1,0 +1,1 @@
+0 8 * * * /cornerstone/scripts/datastax/investment-manager/tick.sh
