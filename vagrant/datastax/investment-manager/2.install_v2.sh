@@ -9,3 +9,5 @@ mvn install:install-file -DgroupId=StockData -DartifactId=StockData \
 
 cd /cornerstone/web/datastax/investment-manager/Portfolio
 mvn package
+
+cp /cornerstone/web/datastax/investment-manager/Portfolio/target/Portfolio-0.0.1-SNAPSHOT.war /cache/installed/apache-tomcat-8.0.20/webapps/

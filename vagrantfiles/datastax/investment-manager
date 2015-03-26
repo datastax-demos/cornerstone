@@ -131,7 +131,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
             override.vm.post_up_message = <<-eos
                 Visit:
-                    http://192.168.101.7:5000 for Cornerstone
+                    http://192.168.101.7:8080/Portfolio for the Investment Manager
             eos
         end
 
