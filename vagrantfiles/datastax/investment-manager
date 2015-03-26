@@ -61,6 +61,11 @@ def install_investment_manager(config, git_repo=false)
     config.vm.provision :shell, path: 'vagrant/general/apt/install/jdk7_v2.sh',
                                 privileged: false
 
+    config.vm.provision :shell, path: 'vagrant/general/file/install/maven2_v1.sh',
+                                privileged: false
+    config.vm.provision :shell, path: 'vagrant/general/file/install/tomcat_v2.sh',
+                                privileged: false
+
     if git_repo
         config.vm.provision :shell, path: 'vagrant/datastax/investment-manager/1.setup_v2.sh',
                                     privileged: false
