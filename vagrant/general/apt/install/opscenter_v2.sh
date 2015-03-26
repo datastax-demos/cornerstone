@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -x # echo on
 
-FILENAME=opscenter_v1.sh
+FILENAME=opscenter_v2.sh
 
 PACKAGES='opscenter'
 CACHE=/cache/apt/$FILENAME

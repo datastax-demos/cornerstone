@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -x # echo on
 
-FILENAME=tomcat_v1.sh
+FILENAME=tomcat_v2.sh
 
 CACHE=/cache/tar/$FILENAME
 DOWNLOADNAME=apache-tomcat-8.0.20.tar.gz

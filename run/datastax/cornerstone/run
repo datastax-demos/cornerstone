@@ -13,5 +13,6 @@ fi
 
 # copy correct Vagrantfile in place
 ln -s vagrantfiles/datastax/cornerstone Vagrantfile
+ls -alh Vagrantfile
 
 vagrant up

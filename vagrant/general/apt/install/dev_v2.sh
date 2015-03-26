@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -x # echo on
 
-FILENAME=dev_v1.sh
+FILENAME=dev_v2.sh
 
 PACKAGES='build-essential git-core tree vim'
 CACHE=/cache/apt/$FILENAME

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -x # echo on
 
-FILENAME=virtualbox_v1.sh
+FILENAME=virtualbox_v2.sh
 
 PACKAGES='virtualbox-4.3 dkms'
 CACHE=/cache/apt/$FILENAME

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -x # echo on
 
-FILENAME=java-default-jdk8_v1.sh
+FILENAME=default-jdk8_v2.sh
 
 PACKAGES='oracle-java8-set-default'
 CACHE=/cache/apt/$FILENAME
