@@ -85,7 +85,7 @@ Do not contribute placeholder files where there is no need.
 
 All future references assume files will be placed within these project directories.
 
-### cql
+### cql/
 
 All schemas should be placed into the `cql/` directory and separated by keyspace
 for easier navigation. They should also use the `.cql` extension since
@@ -100,13 +100,129 @@ commands may be useful, but are a bit harder to read and may not be future-proof
 when future DataStax Enterprise releases improve schema defaults.
 Instead commit only what's required for the current demo.
 
-### docs
-### keys
-### run
-### scripts
-### tools
-#### datastax/metagener
-### vagrant
-#### general
-### vagrantfiles
-### web
+### docs/
+
+All documentation pertaining to the demo should be placed in the `docs/` directory.
+
+Additional files are accepted for in-depth topics, but two are required:
+README.md and SCRIPT.md.
+
+#### README.md
+
+This file will help technical users navigate the demo. The file is expected to
+give a rundown of any noteworthy features, scripts, or modeling choices.
+
+This file should be directed at audiences that will collaborate or enhance the
+demo as well as audiences that are looking to apply or dissect the demo to
+further their own projects.
+
+#### SCRIPT.md
+
+This file will help non-technical users see the functionality behind the
+demo and should read like a story of why design and data choices were
+made and how they showcase the power of DataStax Enterprise.
+
+### keys/
+
+This directory should remain empty, but is included for standardization for
+in-class setups.
+
+### run/
+
+Bash scripts in this directory will follow the same basic flow:
+
+* announce working directory
+* backup existing Vagrantfiles to prevent overwrite
+* link project Vagrantfile to ./Vagrantfile
+* set the required credentials
+* launch the demo using Vagrant
+
+Additional scripts, like `run-aws`, will include the additional commands needed
+when provisioning within cloud environments. The additional caveats for
+cloud-specific launches are:
+
+* collecting IP addresses of launched nodes
+* multiple provisioning steps for launching and configuring the nodes, due to
+native IP unawareness
+
+### scripts/
+
+All additional cron, data import, data generation, etc scripts should be placed
+into the `scripts/` directory along with their relevant files.
+
+The directory system here is relaxed, but should be easy for those unfamiliar
+with the project to navigate.
+
+### tools/
+
+The idea behind the `tools/` directory is that all tools that may be reused
+between projects can be housed here. All directories here should include their
+own README.md.
+
+Currently we have 2 directories under `tools/datastax/`:
+
+#### tools/datastax/metagener/
+
+The `tools/datastax/metagener/` directory houses the latest build of
+[metagener](https://github.com/jshook/metagener):
+A meta-programming library and conceptual power tool for flexible
+and highly-concurrent statistical data generation.
+
+The recipes for metagener are stored within the familiar classification
+sub-directories contributions, datastax, and showcase and further divided using
+the project's `lowercase-project-directory-name`.
+
+Do be aware that metagener requires Java 8 while DataStax Enterprise requires
+Java 7 as of March 2015.
+
+#### tools/datastax/vagrant/
+
+The `tools/datastax/vagrant/` directory houses maintenance scripts required
+for the Cornerstone project that should not be expected to be run by contributors.
+
+### vagrant/
+
+All provisioning scripts that will be run by the `Vagrantfile` should be housed
+here and ideally be placed within 3 files:
+
+#### vagrant/.../1.setup.sh
+
+The setup script will be used for Vagrant scenarios without synced_folders as is
+standard for our cloud setups.
+
+#### vagrant/.../2.install.sh
+
+This script should install all other prerequisites and perform all actions that
+do not require a DataStax Enterprise cluster.
+
+Feel free to break this script up into multiple files when necessary.
+The system here is relaxed, but should be easy for those unfamiliar
+with the project to navigate.
+
+#### vagrant/.../3.start.sh
+
+This script will perform all remaining commands that require a DataStax Enterprise
+cluster, which is guaranteed to be live by the time this script is executed.
+
+The launching of the web service should be the final command.
+
+#### vagrant/.../4.post.sh
+
+This script will perform all remaining commands that require the web service to
+be active.
+
+Feel free to break this script up into multiple files when necessary.
+The system here is relaxed, but should be easy for those unfamiliar
+with the project to navigate.
+
+#### vagrant/general/
+
+This final sub-directory is a special case of versioned immutable files that
+are shared across all demos in order to aid with the installation, configuration,
+and starting of prerequisites.
+
+Additional scripts and improvements are welcomed through additional files where
+the version is incremented to ensure backwards-compatibility.
+
+### vagrantfiles/
+### web/

@@ -75,11 +75,11 @@ def install_capstone(config, git_repo=false)
                                 privileged: false
 
     if git_repo
-        config.vm.provision :shell, path: 'vagrant/datastax/cornerstone/1.setup_v2.sh',
+        config.vm.provision :shell, path: 'vagrant/datastax/cornerstone/1.setup.sh',
                                     privileged: false
     end
 
-    config.vm.provision :shell, path: 'vagrant/datastax/cornerstone/2.install_v2.sh',
+    config.vm.provision :shell, path: 'vagrant/datastax/cornerstone/2.install.sh',
                                 privileged: false
 end
 
@@ -108,7 +108,7 @@ def start_opscenter(config)
 end
 
 def start_cornerstone(config)
-    config.vm.provision :shell, path: 'vagrant/datastax/cornerstone/3.start_v2.sh',
+    config.vm.provision :shell, path: 'vagrant/datastax/cornerstone/3.start.sh',
                                 privileged: false
 end
 
