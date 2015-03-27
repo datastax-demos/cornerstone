@@ -271,6 +271,24 @@ CREATE TABLE stocks.stock_listing (
   PRIMARY KEY ((symbol))
 );
 
+CREATE CUSTOM INDEX stocks_stock_listing_exchange_index ON stocks.stock_listing (exchange) USING 'com.datastax.bdp.search.solr.Cql3SolrSecondaryIndex';
+
+CREATE CUSTOM INDEX stocks_stock_listing_industry_index ON stocks.stock_listing (industry) USING 'com.datastax.bdp.search.solr.Cql3SolrSecondaryIndex';
+
+CREATE CUSTOM INDEX stocks_stock_listing_lasttradedate_index ON stocks.stock_listing (lasttradedate) USING 'com.datastax.bdp.search.solr.Cql3SolrSecondaryIndex';
+
+CREATE CUSTOM INDEX stocks_stock_listing_lasttradepriceonly_index ON stocks.stock_listing (lasttradepriceonly) USING 'com.datastax.bdp.search.solr.Cql3SolrSecondaryIndex';
+
+CREATE CUSTOM INDEX stocks_stock_listing_marketcap_index ON stocks.stock_listing (marketcap) USING 'com.datastax.bdp.search.solr.Cql3SolrSecondaryIndex';
+
+CREATE CUSTOM INDEX stocks_stock_listing_name_index ON stocks.stock_listing (name) USING 'com.datastax.bdp.search.solr.Cql3SolrSecondaryIndex';
+
+CREATE CUSTOM INDEX stocks_stock_listing_sector_index ON stocks.stock_listing (sector) USING 'com.datastax.bdp.search.solr.Cql3SolrSecondaryIndex';
+
+CREATE CUSTOM INDEX stocks_stock_listing_solr_query_index ON stocks.stock_listing (solr_query) USING 'com.datastax.bdp.search.solr.Cql3SolrSecondaryIndex';
+
+CREATE CUSTOM INDEX stocks_stock_listing_zid_index ON stocks.stock_listing (zid) USING 'com.datastax.bdp.search.solr.Cql3SolrSecondaryIndex';
+
 CREATE TABLE stocks.stock_listing2 (
   exchange text,
   symbol text,
@@ -301,25 +319,3 @@ CREATE TABLE stocks.user (
   password_hash text,
   PRIMARY KEY ((email_address))
 );
-
--- DSP-5111
--- Must use the USE statement to create the following CUSTOM INDEXes
-USE stocks;
-
-CREATE CUSTOM INDEX stocks_stock_listing_exchange_index ON stock_listing (exchange) USING 'com.datastax.bdp.search.solr.Cql3SolrSecondaryIndex';
-
-CREATE CUSTOM INDEX stocks_stock_listing_industry_index ON stock_listing (industry) USING 'com.datastax.bdp.search.solr.Cql3SolrSecondaryIndex';
-
-CREATE CUSTOM INDEX stocks_stock_listing_lasttradedate_index ON stock_listing (lasttradedate) USING 'com.datastax.bdp.search.solr.Cql3SolrSecondaryIndex';
-
-CREATE CUSTOM INDEX stocks_stock_listing_lasttradepriceonly_index ON stock_listing (lasttradepriceonly) USING 'com.datastax.bdp.search.solr.Cql3SolrSecondaryIndex';
-
-CREATE CUSTOM INDEX stocks_stock_listing_marketcap_index ON stock_listing (marketcap) USING 'com.datastax.bdp.search.solr.Cql3SolrSecondaryIndex';
-
-CREATE CUSTOM INDEX stocks_stock_listing_name_index ON stock_listing (name) USING 'com.datastax.bdp.search.solr.Cql3SolrSecondaryIndex';
-
-CREATE CUSTOM INDEX stocks_stock_listing_sector_index ON stock_listing (sector) USING 'com.datastax.bdp.search.solr.Cql3SolrSecondaryIndex';
-
-CREATE CUSTOM INDEX stocks_stock_listing_solr_query_index ON stock_listing (solr_query) USING 'com.datastax.bdp.search.solr.Cql3SolrSecondaryIndex';
-
-CREATE CUSTOM INDEX stocks_stock_listing_zid_index ON stock_listing (zid) USING 'com.datastax.bdp.search.solr.Cql3SolrSecondaryIndex';
