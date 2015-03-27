@@ -67,11 +67,11 @@ def install_investment_manager(config, git_repo=false)
                                 privileged: false
 
     if git_repo
-        config.vm.provision :shell, path: 'vagrant/datastax/investment-manager/1.setup_v2.sh',
+        config.vm.provision :shell, path: 'vagrant/datastax/investment-manager/1.setup.sh',
                                     privileged: false
     end
 
-    config.vm.provision :shell, path: 'vagrant/datastax/investment-manager/2.install_v2.sh',
+    config.vm.provision :shell, path: 'vagrant/datastax/investment-manager/2.install.sh',
                                 privileged: false
 end
 
@@ -100,7 +100,7 @@ def start_opscenter(config)
 end
 
 def start_investment_manager(config)
-    config.vm.provision :shell, path: 'vagrant/datastax/investment-manager/3.start_v2.sh',
+    config.vm.provision :shell, path: 'vagrant/datastax/investment-manager/3.start.sh',
                                 privileged: false
 end
 
