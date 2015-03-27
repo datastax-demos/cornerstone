@@ -15,4 +15,7 @@ fi
 ln -s vagrantfiles/datastax/cornerstone Vagrantfile
 ls -alh Vagrantfile
 
+echo "Setting credentials using: ./set_credentials.sh"
+source set_credentials.sh || exit 1
+
 vagrant up

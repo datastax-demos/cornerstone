@@ -33,9 +33,14 @@ https://www.virtualbox.org/wiki/Downloads
 VirtualBox will be the main virtual machine provider of the Cornerstone project.
 This will enable free orchestration across all platforms for all users.
 
+## Setup
+
+`set_credentials.sh.template` must be copied and configured using the filename
+`set_credentials.sh` within Cornerstone's base directory.
+
 ## Starting a Demo
 
-You can start any demo locally by running the appropriate file located in the
+Any demo can be started locally by running the appropriate file located in the
 `run/` directory.
 
 To start the base Cornerstone project, run:
