@@ -11,16 +11,14 @@ Vagrant will be used to orchestrate launching machines in all supported platform
 
 #### Vagrant AWS Provider Plugin
 
-In order to get AWS support through Vagrant, you must run the following commands
-to install the AWS provider:
+In order to get AWS support through Vagrant, the following commands must be run:
 
     vagrant plugin install vagrant-aws
     vagrant box add dummy https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box
 
 #### Vagrant Azure Provider Plugin
 
-In order to get Azure support through Vagrant, you must run the following commands
-to install the Azure provider:
+In order to get Azure support through Vagrant, the following commands must be run:
 
     vagrant plugin install vagrant-azure
     vagrant box add azure https://github.com/msopentech/vagrant-azure/raw/master/dummy.box
@@ -58,9 +56,9 @@ to this:
     ==> singlenode:                 Visit:
     ==> singlenode:                     http://192.168.101.7:5000 for Cornerstone
 
-Following the mentioned URLs will give you access to the web interface.
+Following the mentioned URLs will allow access to the web interface.
 
-Running the following command will give you access to the development machine:
+Running the following command will allow access to the development machine:
 
     vagrant ssh singlenode
 
@@ -69,8 +67,8 @@ Running the following command will give you access to the development machine:
 The base directory of the Cornerstone project, `.`, on the host machine will
 always be mapped to the `/cornerstone` directory on the guest VM.
 
-The `cache/` directory within your Cornerstone project on the host machine
-will also be mapped to the `/cache` directory on the guest VM.
+The `cache/` directory within the base directory of the Cornerstone project on
+the host machine will also be mapped to the `/cache` directory on the guest VM.
 
 This functionality is provided by Vagrant's
 [synced folders](http://docs.vagrantup.com/v2/synced-folders/basic_usage.html)
@@ -82,8 +80,8 @@ the guest VM.
 When running in the cloud, synced folders will be disabled and git clones of the
 Cornerstone repo will be used.
 
-If your cache becomes a problem, deleting the entire `cache/` directory will
-force a full download on the next `vagrant up` command.
+If the existing cache becomes a problem, deleting the entire `cache/` directory
+will force a full download on the next `vagrant up` command.
 
 ## Destroying a Demo
 
@@ -93,7 +91,7 @@ To destroy all machines launched from the current directory, run:
 
 ## Contributing
 
-If you wish to contribute to the Cornerstone project, or wish to use the
-Cornerstone project for your own projects, take a look at the documentation
+To contribute to the Cornerstone project, or to fork the
+Cornerstone project for other projects, take a look at the documentation
 provided in the [contributing guide](CONTRIBUTING.md) and the
 [documentation](docs/datastax/cornerstone) directory.
