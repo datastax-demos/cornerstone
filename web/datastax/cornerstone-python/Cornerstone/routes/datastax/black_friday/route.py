@@ -27,6 +27,11 @@ def index():
                 Google Charts: Tabular Example
             </a>
         </li>
+        <li>
+            <a href="/gcharts/barchart/?url=/api/paging/retail/products&result_size=100&gcharts_columns=product_id,price&gcharts_datatable_order_by=price">
+                Google Charts: Bar Chart Example
+            </a>
+        </li>
     </ul>
     '''
     return render_template('datastax/cornerstone/index.jinja2',
