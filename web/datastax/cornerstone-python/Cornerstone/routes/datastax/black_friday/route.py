@@ -19,7 +19,7 @@ def index():
         </li>
         <li>
             <a href="/api/paging/retail/products?result_size=5&paging_keys=product_id&paging_values=B000ET7AZK">
-                API: Sample Query with Custom Values (will not work out of box)
+                API: Sample Query with Custom Values
             </a>
         </li>
         <li>
