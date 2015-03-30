@@ -2,9 +2,7 @@
 public final class Util {
 	static final long NUM_100NS_INTERVALS_SINCE_UUID_EPOCH = 0x01b21dd213814000L;
 	static final String CASH = "*CASH";
-	//static final String NODE = "172.16.232.149";
-	static final String NODE = "dse02";
-	//static final String NODE = "75.126.138.100";
+	static final String NODE = "127.0.0.1";
 	//static final int LOAD = 4;
 	static final int LOAD = 9;
 	static final int SLEEP = 2000;

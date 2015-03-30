@@ -1,6 +1,6 @@
 CREATE KEYSPACE stocks WITH replication = {
   'class': 'NetworkTopologyStrategy',
-  'Analytics': '4'
+  'Analytics': '3'
 };
 
 CREATE TABLE stocks.correction (
