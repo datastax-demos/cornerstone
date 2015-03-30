@@ -7,7 +7,7 @@ do
 key="$1"
 case $key in
     -y|--yaml)
-    $YAML="$2"
+    YAML="$2"
     shift
     ;;
     *)
@@ -29,7 +29,7 @@ fi
 
 (
     (
-        cd /cornerstone/tools/metagener;
+        cd /cornerstone/tools/datastax/metagener;
         export PATH=/usr/lib/jvm/java-8-oracle/bin:$PATH;
         export JAVA_HOME=/usr/lib/jvm/java-8-oracle;
         java -jar metagener-webapi-1.0-SNAPSHOT.jar server $YAML

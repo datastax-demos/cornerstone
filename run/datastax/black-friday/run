@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+cd $DIR/../../../
+echo "Running script from: $(pwd)"
+
+# backup existing Vagrantfile
+if [ -f Vagrantfile ]; then
+    VERSION=$(date +"%Y%m%d_%H%M%S")
+    mv Vagrantfile{,.bak.$VERSION}
+    echo "Backing up current Vagrantfile to: Vagrantfile.$VERSION"
+fi
+
+# copy correct Vagrantfile in place
+ln -s vagrantfiles/datastax/black-friday Vagrantfile
+ls -alh Vagrantfile
+
+echo "Setting credentials using: ./set_credentials.sh"
+source set_credentials.sh || exit 1
+
+vagrant up
