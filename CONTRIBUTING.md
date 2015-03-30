@@ -225,4 +225,25 @@ Additional scripts and improvements are welcomed through additional files where
 the version is incremented to ensure backwards-compatibility.
 
 ### vagrantfiles/
+
+This directory contains the Vagrantfiles to be used for each specific project.
+They are symlinked into the root directory using the `run/` scripts to allow
+editing and committing file changes directly while still being able to use the
+file to interact with launched clusters.
+
+Breaking the file down into functions is essential for support of future
+platforms. If you require help with cloud platforms, feel free to request help
+in the pull request and instead focus on implementing the `singlenode` machine
+that uses the Virtualbox provider.
+
 ### web/
+
+This directory will house your web application in the language of your choice.
+
+Directory structure will be different for each project, but do lean towards
+clean and heavily documented code.
+
+#### web/datastax/cornerstone-*
+
+For more information on the Cornerstone projects, visit the
+[Cornerstone documentation](docs/datastax/cornerstone/).
