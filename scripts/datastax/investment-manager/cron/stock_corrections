@@ -1,0 +1,1 @@
+/5 8-17 * * * /cornerstone/scripts/datastax/investment-manager/spark/stock_nightly.sh

@@ -1,0 +1,249 @@
+VAGRANTFILE_API_VERSION = '2'
+
+# max number of dse nodes this script will generate
+MAX_DSE_NODES = 3
+
+# Ubuntu 14.04 LTS
+# http://cloud-images.ubuntu.com/locator/ec2/
+# "trusty instance-store amd64 aki"
+ami_list = {
+    'ap-northeast-1' => 'ami-40e1e641',
+    'ap-southeast-1' => 'ami-07597455',
+    'ap-southeast-2' => 'ami-39086103',
+    'eu-west-1' => 'ami-5a4bfb2d',
+    'eu-central-1' => 'ami-d21223cf',
+    'sa-east-1' => 'ami-798f3e64',
+    'us-east-1' => 'ami-92f569fa',
+    'us-west-1' => 'ami-71150534',
+    'us-west-2' => 'ami-8b84d0bb'
+}
+
+required_envars = ['DATASTAX_USER', 'DATASTAX_PASS']
+for envar in required_envars
+    if !ENV[envar]
+        print "\n$#{envar} must be set! \n"\
+              "If performing a specific command, you must specify a "\
+              "machine name. Example: \n"\
+                "\t vagrant ssh demo \n"\
+                "\t vagrant destroy demo \n\n"
+        exit
+    end
+end
+
+def setup(config)
+    config.vm.provision :shell, path: 'vagrant/general/file/setup/cache_v2.sh',
+                                privileged: false
+    config.vm.provision :shell, path: 'vagrant/general/file/setup/sbin_v2.sh',
+                                privileged: false
+    config.vm.provision :shell, path: 'vagrant/general/file/setup/mnt-directories_v2.sh',
+                                privileged: false
+    config.vm.provision :shell, path: 'vagrant/general/apt/setup/apt-get-update_v2.sh',
+                                privileged: false
+end
+
+def install_dse(config)
+    config.vm.provision :shell, path: 'vagrant/general/apt/install/jdk7_v2.sh',
+                                privileged: false
+    config.vm.provision :shell, path: 'vagrant/general/apt/install/datastax-enterprise_v2.sh',
+                                  args: ["--datastax-user", "#{ENV['DATASTAX_USER']}",
+                                         "--datastax-pass", "#{ENV['DATASTAX_PASS']}"],
+                                privileged: false
+end
+
+def install_opscenter(config)
+    config.vm.provision :shell, path: 'vagrant/general/apt/install/jdk7_v2.sh',
+                                privileged: false
+    config.vm.provision :shell, path: 'vagrant/general/apt/install/opscenter_v2.sh',
+                                privileged: false
+end
+
+def install_investment_manager(config, git_repo=false)
+    config.vm.provision :shell, path: 'vagrant/general/apt/install/jdk7_v2.sh',
+                                privileged: false
+
+    config.vm.provision :shell, path: 'vagrant/general/apt/install/maven2_v1.sh',
+                                privileged: false
+    config.vm.provision :shell, path: 'vagrant/general/file/install/tomcat_v2.sh',
+                                privileged: false
+
+    if git_repo
+        config.vm.provision :shell, path: 'vagrant/datastax/investment-manager/1.setup.sh',
+                                    privileged: false
+    end
+
+    config.vm.provision :shell, path: 'vagrant/datastax/investment-manager/2.install.sh',
+                                privileged: false
+end
+
+def start_dse(config)
+    config.vm.provision :shell, path: 'vagrant/datastax/investment-manager/dse-node.sh',
+                                privileged: false
+
+    config.vm.provision :shell, path: 'vagrant/general/apt/configure/datastax-enterprise/enable_analytics_v1.sh',
+                                privileged: false
+    config.vm.provision :shell, path: 'vagrant/general/apt/configure/datastax-enterprise/address_v2.sh',
+                                privileged: false
+    config.vm.provision :shell, path: 'vagrant/general/apt/configure/datastax-enterprise/heap_v2.sh',
+                                privileged: false
+    config.vm.provision :shell, path: 'vagrant/general/apt/configure/datastax-enterprise/seeds_v2.sh',
+                                privileged: false
+    config.vm.provision :shell, path: 'vagrant/general/apt/configure/datastax-agent/stomp-interface_v2.sh',
+                                privileged: false
+
+    config.vm.provision :shell, path: 'vagrant/general/apt/start/datastax-enterprise_v2.sh',
+                                privileged: false
+    config.vm.provision :shell, path: 'vagrant/general/apt/start/datastax-agent_v2.sh',
+                                privileged: false
+end
+
+def start_opscenter(config)
+    config.vm.provision :shell, path: 'vagrant/general/apt/configure/opscenter/seed-hosts_v2.sh',
+                                privileged: false
+
+    config.vm.provision :shell, path: 'vagrant/general/apt/start/opscenter_v2.sh',
+                                privileged: false
+end
+
+def start_investment_manager(config)
+    config.vm.provision :shell, path: 'vagrant/datastax/investment-manager/3.start.sh',
+                                privileged: false
+end
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+    # disable default synced folder for all machines
+    config.vm.synced_folder '.', '/vagrant', disabled: true
+
+    # define the a single-machine developer setup
+    config.vm.define 'singlenode', autostart: true do |singlenode|
+
+        # define virtualbox machine
+        singlenode.vm.provider :virtualbox do |vb, override|
+
+            # sync this project folder to /cornerstone on the guest machine
+            override.vm.synced_folder '.', '/cornerstone', create: true
+
+            # sync this ./cache folder to /cache on the guest machine
+            override.vm.synced_folder 'cache', '/cache', create: true
+
+            # set the machine's image and network options
+            override.vm.box = 'ubuntu/trusty64'
+            override.vm.network :private_network, ip: '192.168.101.7'
+
+            # set the machine's memory and cpu utilization
+            vb.memory = 4096
+            vb.cpus = 3
+
+            override.vm.post_up_message = <<-eos
+                Visit:
+                    http://192.168.101.7:8080/Portfolio for the Investment Manager
+            eos
+        end
+
+        # provision machine
+        setup(config)
+
+        install_dse(config)
+        install_opscenter(config)
+        install_investment_manager(config)
+
+        start_dse(config)
+        start_opscenter(config)
+        start_investment_manager(config)
+
+    end
+
+    # define MAX_DSE_NODES dse machines
+    (0..MAX_DSE_NODES).each do |i|
+        config.vm.define "dse#{i}", autostart: false do |dse|
+
+            # define virtualbox dse machines
+            dse.vm.provider :virtualbox do |vb, override|
+
+                # sync this ./cache folder to /cache on the guest machine
+                override.vm.synced_folder 'cache', '/cache', create: true
+
+                # set the machine's image and network options
+                override.vm.box = 'ubuntu/trusty64'
+                override.vm.network :private_network, ip: "192.168.101.#{i+10}"
+
+                # set the machine's memory and cpu utilization
+                vb.memory = 2048
+                vb.cpus = 1
+            end
+
+            dse.vm.provider :aws do |aws, override|
+
+                # set the machine's image and the default username for the machine
+                override.vm.box = 'aws-dummy'
+                override.ssh.username = 'ubuntu'
+
+                # setup basic aws configurations
+                aws.access_key_id = ENV['DEMO_AWS_ACCESS_KEY']
+                aws.secret_access_key = ENV['DEMO_AWS_SECRET_KEY']
+                aws.region = ENV['DEMO_AWS_REGION']
+                aws.availability_zone = ENV['DEMO_AWS_AZ']
+                aws.ami = ami_list[aws.region]
+                aws.instance_type = 'm3.medium'
+
+                # setup keypair configuration
+                aws.keypair_name = ENV['DEMO_AWS_KEYPAIR_NAME']
+                override.ssh.private_key_path = ENV['DEMO_AWS_KEYPAIR_LOCATION']
+
+                # setup security groups
+                aws.security_groups = [ENV['DEMO_AWS_SECURITY_GROUP']]
+
+                # setup AWS Tags
+                aws.tags = {
+                    'Name' => 'vagrant',
+                    'Owner' => ENV['DEMO_USER'],
+                    'Email' => ENV['DEMO_EMAIL']
+                }
+            end
+        end
+    end
+
+    config.vm.define "opscenter", autostart: false do |opscenter|
+        # define virtualbox machine
+        opscenter.vm.provider :virtualbox do |vb, override|
+
+            # sync this ./cache folder to /cache on the guest machine
+            override.vm.synced_folder 'cache', '/cache', create: true
+
+            # set the machine's image and network options
+            override.vm.box = 'ubuntu/trusty64'
+            override.vm.network :private_network, ip: '192.168.101.8'
+
+            # set the machine's memory and cpu utilization
+            vb.memory = 768
+            vb.cpus = 1
+
+            override.vm.post_up_message = <<-eos
+                Visit:
+                    http://192.168.101.8:8888 for OpsCenter
+            eos
+        end
+    end
+
+    # define the demo machine
+    config.vm.define 'demo', autostart: false do |demo|
+
+        # define virtualbox machine
+        demo.vm.provider :virtualbox do |vb, override|
+
+            # sync this project folder to /cornerstone on the guest machine
+            override.vm.synced_folder '.', '/cornerstone', create: true
+
+            # sync this ./cache folder to /cache on the guest machine
+            override.vm.synced_folder 'cache', '/cache', create: true
+
+            # set the machine's image and network options
+            override.vm.box = 'ubuntu/trusty64'
+            override.vm.network :private_network, ip: '192.168.101.9'
+
+            # set the machine's memory and cpu utilization
+            vb.memory = 1024
+            vb.cpus = 1
+        end
+    end
+end
