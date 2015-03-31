@@ -32,8 +32,9 @@ and all template files should be added to a `black-friday` directory
 
 ### Time Requirement
 
-Since this is an open ended screening I would like to set the time suggestion
-to be of something close to an hour. What I'm looking for is a candidate that:
+Since this is an open ended screening I would like to set the implementation time
+suggestion to be of something close to an hour. What I'm looking for is a
+candidate that:
 
 * has a basic understanding of how the platform is integrated,
 * is able to produce at least one additional chart based on the provided data,
