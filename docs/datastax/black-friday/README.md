@@ -37,8 +37,8 @@ to be of something close to an hour. What I'm looking for is a candidate that:
 
 * has a basic understanding of how the platform is integrated,
 * is able to produce at least one additional chart based on the provided data,
-* is able to implement at least,
-[one additional chart type](https://google-developers.appspot.com/chart/interactive/docs/gallery)
+* is able to implement at least
+[one additional chart type](https://google-developers.appspot.com/chart/interactive/docs/gallery),
 * and optionally sketch out a general layout for a future interface and/or
 future data (vision, not polish, will be evaluated).
 
