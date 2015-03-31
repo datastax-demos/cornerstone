@@ -9,23 +9,24 @@ The job description for the Data Visualization Engineering Intern can be found
 ## Setup
 
 This project should follow the same
-[documentation](docs/datastax/cornerstone) as the `cornerstone` project and
-should have all documentation updates there until `black-friday` is fully built out.
+[documentation](../../docs/datastax/cornerstone) as the `cornerstone` project and
+should have all documentation updates there until `black-friday` project
+is fully built out.
 
 The script that links the `black-friday` project with the `cornerstone-python`
 project can be found
-[here](vagrant/datastax/black-friday/3.start.sh).
+[here](../../vagrant/datastax/black-friday/3.start.sh).
 
 Through the use of symlinks we are allowed to keep a [minimal project specific
-layout](web/datastax/black-friday) while directly benefiting
+layout](../../web/datastax/black-friday) while directly benefiting
 from the `cornerstone-python` project as well as enhancing it.
 
-All modifications to the Flask routing should take place
-[here](web/datastax/cornerstone-python/Cornerstone/routes/datastax/black_friday),
+All modifications to Flask routing should take place
+[here](../../web/datastax/cornerstone-python/Cornerstone/routes/datastax/black_friday),
 all static files should be added to their `datastax/black-friday` directory
-[here](web/datastax/cornerstone-python/Cornerstone/static),
+[here](../../web/datastax/cornerstone-python/Cornerstone/static),
 and all template files should be added to a `black-friday` directory
-[here](web/datastax/cornerstone-python/Cornerstone/templates/datastax).
+[here](../../web/datastax/cornerstone-python/Cornerstone/templates/datastax).
 
 ## Technical Screening
 
