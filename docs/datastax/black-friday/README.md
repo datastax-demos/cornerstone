@@ -38,10 +38,23 @@ candidate that:
 
 * has a basic understanding of how the platform is integrated,
 * is able to produce at least one additional chart based on the provided data,
-* is able to implement at least
-[one additional chart type](https://google-developers.appspot.com/chart/interactive/docs/gallery),
-* and optionally sketch out a general layout for a future interface and/or
-future data (vision, not polish, will be evaluated).
+* and is able to implement at least
+[one additional chart type](https://google-developers.appspot.com/chart/interactive/docs/gallery).
+
+Additionally, sketch out a general layout for a future interface and/or future data.
+Evaluation criteria is as follows:
+
+* main evaluation points:
+    * futuristic/innovative use cases
+    * ability to execute
+    * intuitive design
+* implementation preference, in order of highest preference:
+    * React.js
+    * Angular.js
+    * Backbone.js
+    * HTML
+* web design:
+    * vanilla Bootstrap implementation is all that's expected
 
 ### Summary
 
