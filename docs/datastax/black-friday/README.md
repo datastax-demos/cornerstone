@@ -89,3 +89,8 @@ that cannot be found online and help clarify the current use cases.
 You can connect using your favorite IRC client
 ([Textual for OS X](http://www.codeux.com/textual) is my client of choice),
 or [webchat](https://webchat.freenode.net).
+
+Do be aware that other candidates may also be sitting in the room, feel free
+to help each other at a high level, but please refrain from sharing implementation
+details. Also, I'm never actively watching my IRC channel. If it's apparent I'm
+not active on the channel, feel free to mention my name so I get a notification.
