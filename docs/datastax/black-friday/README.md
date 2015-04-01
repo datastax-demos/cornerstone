@@ -55,6 +55,8 @@ Evaluation criteria is as follows:
     * HTML
 * web design:
     * vanilla Bootstrap implementation is all that's expected
+* polish:
+    * having placeholder charts, images, or text is all that's expected
 
 ### Summary
 
