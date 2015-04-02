@@ -36,8 +36,8 @@ and receiving all future improvements and updates.
 
 After creating a new git repo with the desired name, run the following commands:
 
-    git remote add cornerstone git@github.com:datastax-demos/cornerstone.git
-    git pull cornerstone master
+    git remote add upstream git@github.com:datastax-demos/cornerstone.git
+    git pull upstream master
 
 This will ensure the new repo is downstream from the Cornerstone repo which will
 allow for pull requests to and updates from the main Cornerstone repo.
