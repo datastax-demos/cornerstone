@@ -73,14 +73,16 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                                     privileged: false
         config.vm.provision :shell, path: 'vagrant/general/apt/install/datastax-opscenter_v3.sh',
                                     privileged: false
-        config.vm.provision :shell, path: 'vagrant/datastax/cornerstone-python/install-cornerstone-python.sh',
+        config.vm.provision :shell, path: 'vagrant/datastax/cornerstone-python/2.install.sh',
                                     privileged: false
 
         config.vm.provision :shell, path: 'vagrant/general/apt/first-start/datastax/cassandra_v1.sh',
                                     privileged: false
         config.vm.provision :shell, path: 'vagrant/general/apt/first-start/datastax/opscenter_v1.sh',
                                     privileged: false
-        config.vm.provision :shell, path: 'vagrant/datastax/black-friday/start-black-friday.sh',
+        config.vm.provision :shell, path: 'vagrant/datastax/black-friday/3.start.sh',
+                                    privileged: false
+        config.vm.provision :shell, path: 'vagrant/datastax/black-friday/4.post.sh',
                                     privileged: false
     end
 
@@ -141,14 +143,16 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                                         privileged: false
             config.vm.provision :shell, path: 'vagrant/general/apt/install/datastax-opscenter_v3.sh',
                                         privileged: false
-            config.vm.provision :shell, path: 'vagrant/datastax/cornerstone-python/install-cornerstone-python.sh',
+            config.vm.provision :shell, path: 'vagrant/datastax/cornerstone-python/2.install.sh',
                                         privileged: false
 
             config.vm.provision :shell, path: 'vagrant/general/apt/first-start/datastax/cassandra_v1.sh',
                                         privileged: false
             config.vm.provision :shell, path: 'vagrant/general/apt/first-start/datastax/opscenter_v1.sh',
                                         privileged: false
-            config.vm.provision :shell, path: 'vagrant/datastax/black-friday/start-black-friday.sh',
+            config.vm.provision :shell, path: 'vagrant/datastax/black-friday/3.start.sh',
+                                        privileged: false
+            config.vm.provision :shell, path: 'vagrant/datastax/black-friday/4.post.sh',
                                         privileged: false
         end
     end
