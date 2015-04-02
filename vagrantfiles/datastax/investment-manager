@@ -76,7 +76,7 @@ def install_investment_manager(config, git_repo=false)
 end
 
 def start_dse(config)
-    config.vm.provision :shell, path: 'vagrant/datastax/investment-manager/dse-node.sh',
+    config.vm.provision :shell, path: 'vagrant/datastax/investment-manager/dse-node0-cronjobs.sh',
                                 privileged: false
 
     config.vm.provision :shell, path: 'vagrant/general/apt/configure/datastax-enterprise/enable_analytics_v1.sh',
