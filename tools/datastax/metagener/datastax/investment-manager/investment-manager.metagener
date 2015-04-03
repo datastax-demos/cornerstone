@@ -1,0 +1,66 @@
+sampler stocks.quote <- murmur3();
+entity stocks.quote pop=6569
+
+    # required
+    field Symbol:text    <- filesample(/cornerstone/tools/datastax/metagener/datastax/investment-manager/stocks.stock_listing.csv,uniform);
+    field LastTradePriceOnly:decimal    <- filebasis_and_crawl(/cornerstone/tools/datastax/metagener/datastax/investment-manager/stocks.stock_listing.csv,uniform);
+    field LastTradeDay:decimal
+    field LastTradeDate:date
+    field LastTradeTime:date
+
+    # stored when available
+
+    # static fields
+    field MarketCapitalization:decimal
+    field PreviousClose:decimal
+    field Revenue:decimal
+    field TwoHundreddayMovingAverage:decimal
+    field YearHigh:decimal
+    field YearLow:decimal
+
+    # advanced memory
+    field DaysHigh:decimal
+    field DaysLow:decimal
+
+    # unsure of static or dynamic
+    field AverageDailyVolume:decimal
+
+    # dynamic fields
+    field Ask:decimal
+    field Bid:decimal
+    field BookValuePerShare:decimal
+    field Change:decimal
+    field ChangeInPercent:decimal
+    field DividendPayDate:decimal
+    field TrailingAnnualDividendYield:decimal
+    field TrailingAnnualDividendYieldInPercent:decimal
+    field DilutedEPS:decimal
+    field EBITDA:decimal
+    field EPSEstimateCurrentYear:decimal
+    field EPSEstimateNextQuarter:decimal
+    field EPSEstimateNextYear:decimal
+    field ExDividendDate:decimal
+    field FiftydayMovingAverage:decimal
+    field LowLimit:decimal
+    field Name:decimal
+    field OneyrTargetPrice:decimal
+    field Open:decimal
+    field PEGRatio:decimal
+    field PERatio:decimal
+    field ChangeInPercentFromYearHigh:decimal
+    field PercentChangeFromYearLow:decimal
+    field PriceBook:decimal
+    field PriceEPSEstimateCurrentYear:decimal
+    field PriceEPSEstimateNextYear:decimal
+    field PricePaid:decimal
+    field PriceSales:decimal
+    field TradeDate:decimal
+    field Volume:decimal
+
+    # spark ?
+    field ChangeFromFiftydayMovingAverage:decimal
+    field ChangeFromTwoHundreddayMovingAverage:decimal
+    field ChangeFromYearHigh:decimal
+    field ChangeFromYearLow:decimal
+    field PercentChangeFromFiftydayMovingAverage:decimal
+    field PercentChangeFromTwoHundreddayMovingAverage:decimal
