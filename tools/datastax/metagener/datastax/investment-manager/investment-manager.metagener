@@ -5,13 +5,14 @@ entity stocks.quote pop=6569
     field Symbol:text    <- filesample(/cornerstone/tools/datastax/metagener/datastax/investment-manager/stocks.stock_listing.csv,uniform);
     field LastTradePriceOnly:decimal    <- filebasis_and_crawl(/cornerstone/tools/datastax/metagener/datastax/investment-manager/stocks.stock_listing.csv,uniform);
     field LastTradeDay:decimal
-    field LastTradeDate:date
-    field LastTradeTime:date
+    field LastTradeDate:timestamp
+    field LastTradeTime:text
 
     # stored when available
 
     # static fields
-    field MarketCapitalization:decimal
+    field Name:text
+    field MarketCapitalization:text
     field PreviousClose:decimal
     field Revenue:decimal
     field TwoHundreddayMovingAverage:decimal
@@ -31,7 +32,7 @@ entity stocks.quote pop=6569
     field BookValuePerShare:decimal
     field Change:decimal
     field ChangeInPercent:decimal
-    field DividendPayDate:decimal
+    field DividendPayDate:timestamp
     field TrailingAnnualDividendYield:decimal
     field TrailingAnnualDividendYieldInPercent:decimal
     field DilutedEPS:decimal
@@ -42,7 +43,6 @@ entity stocks.quote pop=6569
     field ExDividendDate:decimal
     field FiftydayMovingAverage:decimal
     field LowLimit:decimal
-    field Name:decimal
     field OneyrTargetPrice:decimal
     field Open:decimal
     field PEGRatio:decimal
@@ -54,7 +54,7 @@ entity stocks.quote pop=6569
     field PriceEPSEstimateNextYear:decimal
     field PricePaid:decimal
     field PriceSales:decimal
-    field TradeDate:decimal
+    field TradeDate:timestamp
     field Volume:decimal
 
     # spark ?
@@ -64,3 +64,13 @@ entity stocks.quote pop=6569
     field ChangeFromYearLow:decimal
     field PercentChangeFromFiftydayMovingAverage:decimal
     field PercentChangeFromTwoHundreddayMovingAverage:decimal
+
+sampler stocks.user <- murmur3();
+entity stocks.user pop=50000
+
+    field name:text    <- filesample(first_names.txt,uniform) + filesample(last_names.txt,uniform);
+    field email_address:text <- "first.last@gmail.com";
+    field risk_tolerance:text <- select('low,medium,high);
+    field preferred_investmentTypes:text <- select(money market,bonds,stocks,international securities);
+    field retirement_age:int <- rangedrandom(50,90);
+    field withdrawal_year:int <- rangedrandom(2015, 3000);

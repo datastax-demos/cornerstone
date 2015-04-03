@@ -317,5 +317,9 @@ CREATE TABLE stocks.user (
   email_address text,
   name text,
   password_hash text,
+  risk_tolerance text,
+  preferred_investmentTypes text,
+  retirement_age int,
+  withdrawal_year int,
   PRIMARY KEY ((email_address))
 );
