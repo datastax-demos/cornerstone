@@ -65,7 +65,7 @@ entity stocks.quote pop=6569
     field PercentChangeFromFiftydayMovingAverage:decimal
     field PercentChangeFromTwoHundreddayMovingAverage:decimal
 
-sampler stocks.user <- murmur3();
+sampler stocks.user <- linear();
 entity stocks.user pop=50000
 
     field name:text    <- filesample(first_names.txt,uniform) + filesample(last_names.txt,uniform);
@@ -74,3 +74,21 @@ entity stocks.user pop=50000
     field preferred_investmentTypes:text <- select(money market,bonds,stocks,international securities);
     field retirement_age:int <- rangedrandom(50,90);
     field withdrawal_year:int <- rangedrandom(2015, 3000);
+
+sampler stocks.portfolio <- linear();
+entity stocks.portfolio pop=50000
+    field email_address:text
+    field portfolio_id:timeuuid
+    field description:text <- filesample(/cornerstone/tools/datastax/metagener/datastax/investment-manager/portfolio_descriptions.txt,uniform)) + rangedrandom(999999,9999999);
+
+sampler stocks.transaction <- linear();
+entity stocks.transaction pop=5000000
+    field transaction_type:text <- select('Deposit,Trade,Correction');
+
+    # if Deposit
+    field effective_date:date
+    field symbol:text
+    field quantity:decimal <- rangedrandom(0,5000)
+
+    # if Correction
+    field past_date:date
