@@ -79,16 +79,22 @@ to the repository under their Github account.
 
 ### Questions?
 
-If something is unclear, feel free to find me in the \#datastax-demos channel
-on irc.freenode.net under the `joaquin` handle between the hours of 9am-5pm CST.
+**Note:** Please use
+[HipChat](https://www.hipchat.com/gUPdWxUUx)
+to ask questions instead
+of IRC. HipChat will allow for persistent questions for around-the-clock
+communication without the fear of me missing anything. I realized that my new
+IRCCloud account wasn't sending notifications and I apologize for the missed pings
+from ataxia. This new process should prevent that from happening again.
+
+If something is unclear, feel free to find me on
+[HipChat](https://www.hipchat.com/gUPdWxUUx) between the hours of 9am-5pm CST.
+If I don't respond within 10 minutes during the above availability hours,
+feel free to @mention my name so I get a notification.
 This should also be seen as
 reminiscent of a normal day in this position and thus will be evaluated as part
 of the interview process. I will be available to help field all questions
 that cannot be found online and help clarify the current use cases.
-
-You can connect using your favorite IRC client
-([Textual for OS X](http://www.codeux.com/textual) is my client of choice),
-or [webchat](https://webchat.freenode.net).
 
 Do be aware that other candidates may also be sitting in the channel, feel free
 to help each other at a high level, but please refrain from sharing implementation
