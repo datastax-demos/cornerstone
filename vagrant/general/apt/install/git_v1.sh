@@ -6,6 +6,9 @@ FILENAME=git_v1.sh
 PACKAGES='git-core'
 CACHE=/cache/apt/$FILENAME
 
+sudo mkdir -p /cache/tar
+sudo chown -R $(whoami):$(whoami) /cache
+
 if [ ! -d ${CACHE} ]; then
     mkdir -p ${CACHE}
     sudo apt-get update
