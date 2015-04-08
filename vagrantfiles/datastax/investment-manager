@@ -108,7 +108,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         end
 
         singlenode.vm.provider :azure do |azure, override|
-            azure.tcp_endpoints = '22,8080'
+            azure.tcp_endpoints = '8080'
 
             override.vm.post_up_message = <<-eos
                 Visit:
