@@ -64,7 +64,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         singlenode.vm.provider :azure do |azure, override|
             override.vm.box = 'azure'
 
-            azure.vm_size = 'Large'
+            azure.vm_size = 'ExtraLarge'
             azure.vm_location = 'West US'
 
             azure.mgmt_endpoint = 'https://management.core.windows.net'
