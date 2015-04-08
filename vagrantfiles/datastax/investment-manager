@@ -30,6 +30,63 @@ for envar in required_envars
     end
 end
 
+vb_setup = Proc.new do |vb, override|
+    override.vm.synced_folder '.', '/cornerstone', create: true
+
+    override.vm.synced_folder 'cache', '/cache', create: true
+
+    override.vm.box = 'ubuntu/trusty64'
+
+    vb.memory = 4096
+    vb.cpus = 3
+end
+
+azure_setup = Proc.new do |azure, override|
+    override.vm.box = 'azure'
+
+    azure.vm_size = 'ExtraLarge'
+    azure.vm_location = 'West US'
+
+    azure.mgmt_endpoint = 'https://management.core.windows.net'
+    azure.mgmt_certificate = ENV['AZURE_MGMT_CERT_PEM']
+    azure.subscription_id = ENV['AZURE_SUBSCRIPTION_ID']
+
+    azure.vm_image = 'b39f27a8b8c64d52b05eac6a62ebad85__Ubuntu-14_04_2_LTS-amd64-server-20150309-en-us-30GB'
+    azure.vm_name = "investment-manager-#{ENV['DEMO_USER_WORD']}"
+
+    azure.private_key_file = ENV['AZURE_PRIVATE_KEY']
+    azure.certificate_file = ENV['AZURE_CERT']
+    azure.vm_user = ENV['AZURE_SSH_USER']
+    azure.vm_password = ENV['AZURE_SSH_PASS']
+    override.ssh.username = ENV['AZURE_SSH_USER']
+    override.ssh.password = ENV['AZURE_SSH_PASS']
+
+    azure.ssh_port = '22'
+end
+
+aws_setup = Proc.new do |aws, override|
+    override.vm.box = 'aws-dummy'
+    override.ssh.username = 'ubuntu'
+
+    aws.access_key_id = ENV['DEMO_AWS_ACCESS_KEY']
+    aws.secret_access_key = ENV['DEMO_AWS_SECRET_KEY']
+    aws.region = ENV['DEMO_AWS_REGION']
+    aws.availability_zone = ENV['DEMO_AWS_AZ']
+    aws.ami = ami_list[aws.region]
+    aws.instance_type = 'm3.medium'
+
+    aws.keypair_name = ENV['DEMO_AWS_KEYPAIR_NAME']
+    override.ssh.private_key_path = ENV['DEMO_AWS_KEYPAIR_LOCATION']
+
+    aws.security_groups = [ENV['DEMO_AWS_SECURITY_GROUP']]
+
+    aws.tags = {
+        'Name' => 'vagrant',
+        'Owner' => ENV['DEMO_USER'],
+        'Email' => ENV['DEMO_EMAIL']
+    }
+end
+
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     # disable default synced folder for all machines
@@ -40,56 +97,34 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
         # define virtualbox machine
         singlenode.vm.provider :virtualbox do |vb, override|
-
-            # sync this project folder to /cornerstone on the guest machine
-            override.vm.synced_folder '.', '/cornerstone', create: true
-
-            # sync this ./cache folder to /cache on the guest machine
-            override.vm.synced_folder 'cache', '/cache', create: true
-
-            # set the machine's image and network options
-            override.vm.box = 'ubuntu/trusty64'
             override.vm.network :private_network, ip: '192.168.101.7'
-
-            # set the machine's memory and cpu utilization
-            vb.memory = 4096
-            vb.cpus = 3
 
             override.vm.post_up_message = <<-eos
                 Visit:
                     http://192.168.101.7:8080/Portfolio for the Investment Manager
             eos
+
+            vb_setup.call vb, override
         end
 
         singlenode.vm.provider :azure do |azure, override|
-            override.vm.box = 'azure'
-
-            azure.vm_size = 'ExtraLarge'
-            azure.vm_location = 'West US'
-
-            azure.mgmt_endpoint = 'https://management.core.windows.net'
-            azure.mgmt_certificate = ENV['AZURE_MGMT_CERT_PEM']
-            azure.subscription_id = ENV['AZURE_SUBSCRIPTION_ID']
-
-            azure.vm_image = 'b39f27a8b8c64d52b05eac6a62ebad85__Ubuntu-14_04_2_LTS-amd64-server-20150309-en-us-30GB'
-            azure.vm_name = "investment-manager-#{ENV['DEMO_USER_WORD']}"
-
-            azure.private_key_file = ENV['AZURE_PRIVATE_KEY']
-            azure.certificate_file = ENV['AZURE_CERT']
-            azure.vm_user = ENV['AZURE_SSH_USER']
-            azure.vm_password = ENV['AZURE_SSH_PASS']
-            override.ssh.username = ENV['AZURE_SSH_USER']
-            override.ssh.password = ENV['AZURE_SSH_PASS']
-
-            azure.ssh_port = '22'
+            azure.tcp_endpoints = '22,8080'
 
             override.vm.post_up_message = <<-eos
                 Visit:
-                    http://<ip>:8080/Portfolio for the Investment Manager
+                    http://<host>:8080/Portfolio for the Investment Manager
+
+                Use the following command to find <host>:
+                    vagrant ssh-config singlenode | grep HostName
             eos
+
+            azure_setup.call azure, override
         end
 
-        # provision machine
+        singlenode.vm.provider :aws do |aws, override|
+            aws_setup.call aws, override
+        end
+
         config.vm.provision :shell, path: 'vagrant/general/apt/install/git_v1.sh',
                                     privileged: false
         config.vm.provision :shell, path: 'vagrant/general/file/install/cornerstone_v1.sh',
@@ -116,97 +151,47 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     end
 
-    # define MAX_DSE_NODES dse machines
     (0..MAX_DSE_NODES).each do |i|
+
         config.vm.define "dse#{i}", autostart: false do |dse|
 
-            # define virtualbox dse machines
             dse.vm.provider :virtualbox do |vb, override|
-
-                # sync this ./cache folder to /cache on the guest machine
-                override.vm.synced_folder 'cache', '/cache', create: true
-
-                # set the machine's image and network options
-                override.vm.box = 'ubuntu/trusty64'
-                override.vm.network :private_network, ip: "192.168.101.#{i+10}"
-
-                # set the machine's memory and cpu utilization
                 vb.memory = 2048
                 vb.cpus = 1
-            end
 
-            dse.vm.provider :aws do |aws, override|
+                override.vm.network :private_network, ip: "192.168.101.#{i+10}"
 
-                # set the machine's image and the default username for the machine
-                override.vm.box = 'aws-dummy'
-                override.ssh.username = 'ubuntu'
-
-                # setup basic aws configurations
-                aws.access_key_id = ENV['DEMO_AWS_ACCESS_KEY']
-                aws.secret_access_key = ENV['DEMO_AWS_SECRET_KEY']
-                aws.region = ENV['DEMO_AWS_REGION']
-                aws.availability_zone = ENV['DEMO_AWS_AZ']
-                aws.ami = ami_list[aws.region]
-                aws.instance_type = 'm3.medium'
-
-                # setup keypair configuration
-                aws.keypair_name = ENV['DEMO_AWS_KEYPAIR_NAME']
-                override.ssh.private_key_path = ENV['DEMO_AWS_KEYPAIR_LOCATION']
-
-                # setup security groups
-                aws.security_groups = [ENV['DEMO_AWS_SECURITY_GROUP']]
-
-                # setup AWS Tags
-                aws.tags = {
-                    'Name' => 'vagrant',
-                    'Owner' => ENV['DEMO_USER'],
-                    'Email' => ENV['DEMO_EMAIL']
-                }
+                vb_setup.call vb, override
             end
         end
     end
 
     config.vm.define "opscenter", autostart: false do |opscenter|
-        # define virtualbox machine
+
         opscenter.vm.provider :virtualbox do |vb, override|
-
-            # sync this ./cache folder to /cache on the guest machine
-            override.vm.synced_folder 'cache', '/cache', create: true
-
-            # set the machine's image and network options
-            override.vm.box = 'ubuntu/trusty64'
-            override.vm.network :private_network, ip: '192.168.101.8'
-
-            # set the machine's memory and cpu utilization
             vb.memory = 768
             vb.cpus = 1
+
+            override.vm.network :private_network, ip: '192.168.101.8'
 
             override.vm.post_up_message = <<-eos
                 Visit:
                     http://192.168.101.8:8888 for OpsCenter
             eos
+
+            vb_setup.call vb, override
         end
     end
 
-    # define the demo machine
     config.vm.define 'demo', autostart: false do |demo|
 
-        # define virtualbox machine
         demo.vm.provider :virtualbox do |vb, override|
-
-            # sync this project folder to /cornerstone on the guest machine
-            override.vm.synced_folder '.', '/cornerstone', create: true
-
-            # sync this ./cache folder to /cache on the guest machine
-            override.vm.synced_folder 'cache', '/cache', create: true
-
-            # set the machine's image and network options
-            override.vm.box = 'ubuntu/trusty64'
-            override.vm.network :private_network, ip: '192.168.101.9'
-
-            # set the machine's memory and cpu utilization
             vb.memory = 1024
             vb.cpus = 1
+
+            override.vm.network :private_network, ip: '192.168.101.9'
+
+            vb_setup.call vb, override
         end
     end
 end
