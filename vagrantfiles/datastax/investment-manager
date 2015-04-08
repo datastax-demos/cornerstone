@@ -64,20 +64,22 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         singlenode.vm.provider :azure do |azure, override|
             override.vm.box = 'azure'
 
-            azure.mgmt_certificate = ENV['AZURE_MGMT_CERT_PEM']
+            azure.vm_size = 'Large'
+            azure.vm_location = 'West US'
+
             azure.mgmt_endpoint = 'https://management.core.windows.net'
+            azure.mgmt_certificate = ENV['AZURE_MGMT_CERT_PEM']
             azure.subscription_id = ENV['AZURE_SUBSCRIPTION_ID']
 
             azure.vm_image = 'b39f27a8b8c64d52b05eac6a62ebad85__Ubuntu-14_04_2_LTS-amd64-server-20150309-en-us-30GB'
+            azure.vm_name = "investment-manager-#{ENV['DEMO_USER_WORD']}"
+
+            azure.private_key_file = ENV['AZURE_PRIVATE_KEY']
+            azure.certificate_file = ENV['AZURE_CERT']
             azure.vm_user = ENV['AZURE_SSH_USER']
             azure.vm_password = ENV['AZURE_SSH_PASS']
             override.ssh.username = ENV['AZURE_SSH_USER']
             override.ssh.password = ENV['AZURE_SSH_PASS']
-
-            azure.vm_name = "investment-manager-#{ENV['DEMO_USER_WORD']}"
-            azure.vm_location = 'West US'
-            azure.private_key_file = ENV['AZURE_PRIVATE_KEY']
-            azure.certificate_file = ENV['AZURE_CERT']
 
             azure.ssh_port = '22'
         end
