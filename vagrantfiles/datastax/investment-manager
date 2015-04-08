@@ -82,6 +82,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             override.ssh.password = ENV['AZURE_SSH_PASS']
 
             azure.ssh_port = '22'
+
+            override.vm.post_up_message = <<-eos
+                Visit:
+                    http://<ip>:8080/Portfolio for the Investment Manager
+            eos
         end
 
         # provision machine
