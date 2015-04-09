@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+cd $DIR/../../../
+echo "Running script from: $(pwd)"
+
+openssl req -x509 -nodes -days 365 -newkey rsa:1024 -keyout keys/mycert.key -out keys/mycert.pem
+openssl req -x509 -nodes -days 365 -newkey rsa:1024 -keyout keys/mycert_mgmt.key -out keys/mycert_mgmt.pem
+openssl x509 -inform pem -in keys/mycert_mgmt.pem -outform der -out keys/mycert_mgmt.cer
+cat keys/mycert_mgmt.pem keys/mycert_mgmt.key > keys/mycert_mgmt.combined.pem
+
+echo
+echo Upload keys/mycert_mgmt.cer: https://manage.windowsazure.com/#Workspaces/AdminTasks/ListManagementCertificates
