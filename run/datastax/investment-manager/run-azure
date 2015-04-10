@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+
+DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+cd $DIR/../../../
+echo "Running script from: $(pwd)"
+
+# backup existing Vagrantfile
+if [ -f Vagrantfile ]; then
+    VERSION=$(date +"%Y%m%d_%H%M%S")
+    mv Vagrantfile{,.bak.$VERSION}
+    echo "Backing up current Vagrantfile to: Vagrantfile.$VERSION"
+fi
+
+# copy correct Vagrantfile in place
+ln -s vagrantfiles/datastax/investment-manager Vagrantfile
+ls -alh Vagrantfile
+
+echo "Setting credentials using: ./set_credentials.sh"
+source set_credentials.sh || exit 1
+
+# clear envars
+unset SEEDS GATHER_IPS OPSCENTER_HOST DEMO_HOST WEB_PORT
+
+# start machines, install, do not provision
+vagrant up --provider azure dse0 dse1 dse2 opscenter demo
+
+# collect DSE seeds
+export GATHER_IPS=1
+DSE0=$(vagrant provision dse0 | grep GATHER_IPS | awk '{print $4}')
+DSE1=$(vagrant provision dse1 | grep GATHER_IPS | awk '{print $4}')
+DSE2=$(vagrant provision dse2 | grep GATHER_IPS | awk '{print $4}')
+export OPSCENTER_HOST=$(vagrant provision opscenter | grep GATHER_IPS | awk '{print $4}')
+export DEMO_HOST=$(vagrant provision demo | grep GATHER_IPS | awk '{print $4}')
+unset GATHER_IPS
+
+export SEEDS=$DSE0,$DSE1,$DSE2
+
+# finish configuration, start
+vagrant provision dse0
+vagrant provision dse1
+vagrant provision dse2
+vagrant provision opscenter
+vagrant provision demo
+
+# gather web ports
+export WEB_PORT=1
+OPSCENTER_PORT=$(vagrant provision opscenter | grep WEB_PORT | awk '{print $4}')
+DEMO_PORT=$(vagrant provision demo | grep WEB_PORT | awk '{print $4}')
+unset WEB_PORT
+
+# display urls
+OPSCENTER_PUBLIC_HOST=$(vagrant ssh-config opscenter | grep HostName | awk '{print $2}')
+DEMO_PUBLIC_HOST=$(vagrant ssh-config demo | grep HostName | awk '{print $2}')
+echo -e "OpsCenter address: \n    http://${OPSCENTER_PUBLIC_HOST}:${OPSCENTER_PORT}"
+echo -e "Demo address: \n    http://${DEMO_PUBLIC_HOST}:${DEMO_PORT}"

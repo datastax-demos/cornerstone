@@ -6,7 +6,7 @@ MAX_DSE_NODES = 3
 # Ubuntu 14.04 LTS
 # http://cloud-images.ubuntu.com/locator/ec2/
 # "trusty instance-store amd64 aki"
-ami_list = {
+AMI_LIST = {
     'ap-northeast-1' => 'ami-40e1e641',
     'ap-southeast-1' => 'ami-07597455',
     'ap-southeast-2' => 'ami-39086103',
@@ -17,6 +17,10 @@ ami_list = {
     'us-west-1' => 'ami-71150534',
     'us-west-2' => 'ami-8b84d0bb'
 }
+
+PUBLIC_DSE_PORTS='4040,7080,7081,8983,8012,50030,50060'
+PRIVATE_DSE_PORTS='7000,7001,7199,9160,7077,8984,9042,9290,10000,61621'
+PRIVATE_OPSCENTER_PORTS='61620'
 
 required_envars = ['DATASTAX_USER', 'DATASTAX_PASS']
 for envar in required_envars
@@ -53,6 +57,7 @@ azure_setup = Proc.new do |azure, override|
 
     azure.vm_image = 'b39f27a8b8c64d52b05eac6a62ebad85__Ubuntu-14_04_2_LTS-amd64-server-20150309-en-us-30GB'
     azure.vm_name = "investment-manager-#{ENV['DEMO_USER_WORD']}"
+    # azure.vm_virtual_network_name = "investment-manager-#{ENV['DEMO_USER_WORD']}-vnet"
 
     azure.private_key_file = ENV['AZURE_PRIVATE_KEY']
     azure.certificate_file = ENV['AZURE_CERT']
@@ -72,7 +77,7 @@ aws_setup = Proc.new do |aws, override|
     aws.secret_access_key = ENV['DEMO_AWS_SECRET_KEY']
     aws.region = ENV['DEMO_AWS_REGION']
     aws.availability_zone = ENV['DEMO_AWS_AZ']
-    aws.ami = ami_list[aws.region]
+    aws.ami = AMI_LIST[aws.region]
     aws.instance_type = 'm3.medium'
 
     aws.keypair_name = ENV['DEMO_AWS_KEYPAIR_NAME']
@@ -85,6 +90,13 @@ aws_setup = Proc.new do |aws, override|
         'Owner' => ENV['DEMO_USER'],
         'Email' => ENV['DEMO_EMAIL']
     }
+end
+
+bootstrap = Proc.new do |config|
+    config.vm.provision :shell, path: 'vagrant/general/apt/install/git_v1.sh',
+                                privileged: false
+    config.vm.provision :shell, path: 'vagrant/general/file/install/cornerstone_v1.sh',
+                                privileged: false
 end
 
 dse_install = Proc.new do |config, node_index|
@@ -118,11 +130,6 @@ opscenter_start = Proc.new do |config|
 end
 
 demo_install = Proc.new do |config|
-    config.vm.provision :shell, path: 'vagrant/general/apt/install/git_v1.sh',
-                                privileged: false
-    config.vm.provision :shell, path: 'vagrant/general/file/install/cornerstone_v1.sh',
-                                privileged: false
-
     config.vm.provision :shell, path: 'vagrant/datastax/investment-manager/2.install.sh',
                                 privileged: false
 end
@@ -140,6 +147,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     # define the a single-machine developer setup
     config.vm.define 'singlenode', autostart: true do |singlenode|
+        WEB_PORT = '8080'
 
         # define virtualbox machine
         singlenode.vm.provider :virtualbox do |vb, override|
@@ -153,7 +161,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
             azure.vm_size = 'ExtraLarge'
 
-            azure.tcp_endpoints = '8080'
+            azure.tcp_endpoints = WEB_PORT
         end
 
         singlenode.vm.provider :aws do |aws, override|
@@ -163,8 +171,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         if ENV['GATHER_IPS']
             config.vm.provision 'shell', inline: "echo GATHER_IPS $(hostname -i)"
         elsif ENV['WEB_PORT']
-            config.vm.provision 'shell', inline: 'echo WEB_PORT 8080/Portfolio'
+            config.vm.provision 'shell', inline: "echo WEB_PORT #{WEB_PORT}/Portfolio"
         else
+            bootstrap.call config
+
             dse_install.call config, 0
             opscenter_install.call config
             demo_install.call config
@@ -191,11 +201,20 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                 override.vm.network :private_network, ip: "192.168.101.#{i+10}"
             end
 
+            dse.vm.provider :azure do |azure, override|
+                azure_setup.call azure, override
+
+                azure.vm_size = 'ExtraLarge'
+
+                azure.tcp_endpoints = "#{PUBLIC_DSE_PORTS},#{PRIVATE_DSE_PORTS}"
+            end
+
             if ENV['GATHER_IPS']
                 config.vm.provision 'shell', inline: "echo GATHER_IPS $(hostname -i)"
             elsif ENV['SEEDS'] and ENV['OPSCENTER_HOST']
                 dse_start.call config
             else
+                bootstrap.call config
                 dse_install.call config, i
             end
         end
@@ -203,6 +222,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
 
     config.vm.define 'opscenter', autostart: false do |opscenter|
+        WEB_PORT = '8888'
 
         opscenter.vm.provider :virtualbox do |vb, override|
             vb_setup.call vb, override
@@ -213,18 +233,28 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             override.vm.network :private_network, ip: '192.168.101.8'
         end
 
+        opscenter.vm.provider :azure do |azure, override|
+            azure_setup.call azure, override
+
+            azure.vm_size = 'Large'
+
+            azure.tcp_endpoints = "#{WEB_PORT},#{PRIVATE_OPSCENTER_PORTS},#{PRIVATE_DSE_PORTS}"
+        end
+
         if ENV['GATHER_IPS']
             config.vm.provision 'shell', inline: 'echo GATHER_IPS $(hostname -i)'
         elsif ENV['WEB_PORT']
-            config.vm.provision 'shell', inline: 'echo WEB_PORT 8888'
+            config.vm.provision 'shell', inline: "echo WEB_PORT #{WEB_PORT}"
         elsif ENV['SEEDS']
             opscenter_start.call config
         else
+            bootstrap.call config
             opscenter_install.call config
         end
     end
 
     config.vm.define 'demo', autostart: false do |demo|
+        WEB_PORT = '8080'
 
         demo.vm.provider :virtualbox do |vb, override|
             vb_setup.call vb, override
@@ -235,13 +265,22 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             override.vm.network :private_network, ip: '192.168.101.9'
         end
 
+        demo.vm.provider :azure do |azure, override|
+            azure_setup.call azure, override
+
+            azure.vm_size = 'Large'
+
+            azure.tcp_endpoints = "#{WEB_PORT},#{PRIVATE_DSE_PORTS}"
+        end
+
         if ENV['GATHER_IPS']
             config.vm.provision 'shell', inline: 'echo GATHER_IPS $(hostname -i)'
         elsif ENV['WEB_PORT']
-            config.vm.provision 'shell', inline: 'echo WEB_PORT 8080/Portfolio'
+            config.vm.provision 'shell', inline: "echo WEB_PORT #{WEB_PORT}/Portfolio"
         elsif ENV['SEEDS']
             demo_start.call config
         else
+            bootstrap.call config
             demo_install.call config
         end
     end
