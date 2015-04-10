@@ -92,7 +92,7 @@ will force a full download on the next `vagrant up` command.
 
 To destroy all machines launched from the current directory, run:
 
-    vagrant destroy -f
+    vagrant destroy -f [machine-name]
 
 ## Contributing
 
