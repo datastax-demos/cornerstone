@@ -28,4 +28,6 @@ ln -s /cornerstone/web/datastax/cornerstone-python/Cornerstone/static .
 export PYTHONPATH=/cornerstone/web/datastax/cornerstone-python:${PYTHONPATH}
 echo "export PYTHONPATH=/cornerstone/web/datastax/cornerstone-python:${PYTHONPATH}" >> ${HOME}/.profile
 
-nohup /cornerstone/web/datastax/black-friday/run &
+(
+    nohup /cornerstone/web/datastax/black-friday/run
+) &
