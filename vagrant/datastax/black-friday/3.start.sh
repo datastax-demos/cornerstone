@@ -25,6 +25,7 @@ sed -i -e "s/^DSE_CLUSTER.*/DSE_CLUSTER = '${SEEDS}'/" ${CFG}
 ln -s /cornerstone/web/datastax/cornerstone-python/Cornerstone/templates .
 ln -s /cornerstone/web/datastax/cornerstone-python/Cornerstone/static .
 
-export PYTHONPATH=/cornerstone/web/datastax/cornerstone-python:$PYTHONPATH
+export PYTHONPATH=/cornerstone/web/datastax/cornerstone-python:${PYTHONPATH}
+echo "export PYTHONPATH=/cornerstone/web/datastax/cornerstone-python:${PYTHONPATH}" >> ${HOME}/.profile
 
 nohup /cornerstone/web/datastax/black-friday/run &
