@@ -9,23 +9,6 @@ bash /cornerstone/vagrant/general/apt/install/python_v2.sh
 bash /cornerstone/vagrant/general/apt/install/ruby_v2.sh
 bash /cornerstone/vagrant/general/file/install/bower_v2.sh
 
-SEEDS='127.0.0.1'
-
-while [[ $# > 1 ]]
-do
-key="$1"
-case $key in
-    -s|--seeds)
-    SEEDS="$2"
-    shift
-    ;;
-    *)
-    # unknown option
-    ;;
-esac
-shift
-done
-
 sudo pip install -r /cornerstone/web/datastax/cornerstone-python/Cornerstone/requirements.txt
 
 CACHE=/cache/tar/gviz_api_py
@@ -55,5 +38,4 @@ if [ ! -f ${CFG} ]; then
     SECRET_KEY=$(date +%s | sha256sum | base64 | head -c 32)
 
     sed -i -e "s/^SECRET_KEY.*/SECRET_KEY = '${SECRET_KEY}'/" ${CFG}
-    sed -i -e "s/^DSE_CLUSTER.*/DSE_CLUSTER = '${SEEDS}'/" ${CFG}
 fi

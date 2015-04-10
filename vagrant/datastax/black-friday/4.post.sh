@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 set -x # echo on
 
-HOST='127.0.0.1'
+SEEDS='127.0.0.1'
 
 while [[ $# > 1 ]]
 do
 key="$1"
 case $key in
-    -h|--host)
-    HOST="$2"
+    -s|--seeds)
+    SEEDS="$2"
     shift
     ;;
     *)
@@ -18,7 +18,8 @@ esac
 shift
 done
 
-cqlsh -f /cornerstone/cql/datastax/black-friday/retail.cql
+SINGLE_SEED="${SEEDS%%,*}"
+cqlsh $SINGLE_SEED -f /cornerstone/cql/datastax/black-friday/retail.cql
 
 /cornerstone/scripts/datastax/black-friday/1.seed_zipcode_data/1.zipcodes-to-cassandra.py
 
