@@ -61,27 +61,35 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             eos
         end
 
-        # provision machine
-        config.vm.provision :shell, path: 'vagrant/general/apt/install/git_v1.sh',
-                                    privileged: false
-        config.vm.provision :shell, path: 'vagrant/general/file/install/cornerstone_v1.sh',
-                                    privileged: false
+        if ENV['GATHER_IPS']
+            config.vm.provision 'shell', inline: 'echo GATHER_IPS $(hostname -i)'
+        elsif ENV['WEB_PORT']
+            config.vm.provision 'shell', inline: 'echo WEB_PORT 5000'
+        elsif ENV['SEEDS']
+            config.vm.provision :shell, path: 'vagrant/general/apt/first-start/datastax/opscenter_v1.sh',
+                                        args: ['--seeds', ENV['SEEDS']],
+                                        privileged: false
+            config.vm.provision :shell, path: 'vagrant/datastax/cornerstone-python/3.start.sh',
+                                        args: ['--seeds', ENV['SEEDS']],
+                                        privileged: false
+        else
+            # provision machine
+            config.vm.provision :shell, path: 'vagrant/general/apt/install/git_v1.sh',
+                                        privileged: false
+            config.vm.provision :shell, path: 'vagrant/general/file/install/cornerstone_v1.sh',
+                                        privileged: false
 
-        config.vm.provision :shell, path: 'vagrant/general/apt/install/datastax-enterprise_v3.sh',
-                                    args: ["--datastax-user", "#{ENV['DATASTAX_USER']}",
-                                           "--datastax-pass", "#{ENV['DATASTAX_PASS']}"],
-                                    privileged: false
-        config.vm.provision :shell, path: 'vagrant/general/apt/install/datastax-opscenter_v3.sh',
-                                    privileged: false
-        config.vm.provision :shell, path: 'vagrant/datastax/cornerstone-python/2.install.sh',
-                                    privileged: false
-
-        config.vm.provision :shell, path: 'vagrant/general/apt/first-start/datastax/cassandra_v1.sh',
-                                    privileged: false
-        config.vm.provision :shell, path: 'vagrant/general/apt/first-start/datastax/opscenter_v1.sh',
-                                    privileged: false
-        config.vm.provision :shell, path: 'vagrant/datastax/cornerstone-python/3.start.sh',
-                                    privileged: false
+            config.vm.provision :shell, path: 'vagrant/general/apt/install/datastax-enterprise_v3.sh',
+                                        args: ["--datastax-user", "#{ENV['DATASTAX_USER']}",
+                                               "--datastax-pass", "#{ENV['DATASTAX_PASS']}"],
+                                        privileged: false
+            config.vm.provision :shell, path: 'vagrant/general/apt/install/datastax-opscenter_v3.sh',
+                                        privileged: false
+            config.vm.provision :shell, path: 'vagrant/datastax/cornerstone-python/2.install.sh',
+                                        privileged: false
+            config.vm.provision :shell, path: 'vagrant/general/apt/first-start/datastax/cassandra_v1.sh',
+                                        privileged: false
+        end
     end
 
     # define the a single-machine class setup

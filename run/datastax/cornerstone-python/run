@@ -18,4 +18,25 @@ ls -alh Vagrantfile
 echo "Setting credentials using: ./set_credentials.sh"
 source set_credentials.sh || exit 1
 
+# clear envars
+unset SEEDS GATHER_IPS DEMO_HOST WEB_PORT
+
 vagrant up
+
+# collect DSE seeds
+export GATHER_IPS=1
+export DEMO_HOST=$(vagrant provision singlenode | grep GATHER_IPS | awk '{print $5}')
+unset GATHER_IPS
+
+export SEEDS=$DEMO_HOST
+
+# finish configuration, start
+vagrant provision singlenode
+
+# gather web ports
+export WEB_PORT=1
+DEMO_PORT=$(vagrant provision singlenode | grep WEB_PORT | awk '{print $4}')
+unset WEB_PORT
+
+# display urls
+echo -e "Demo address: \n    http://${DEMO_HOST}:${DEMO_PORT}"
