@@ -19,4 +19,4 @@ shift
 done
 
 sudo mkdir -p /etc/opscenter/clusters
-echo "[cassandra]\nseed_hosts = ${SEEDS}" | sudo tee /etc/opscenter/clusters/Demo.conf
+echo -e "[cassandra]\nseed_hosts = ${SEEDS}" | sudo tee /etc/opscenter/clusters/Demo.conf
