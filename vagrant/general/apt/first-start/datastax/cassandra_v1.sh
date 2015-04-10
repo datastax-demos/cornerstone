@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -x # echo on
 
-THIS_HOST=$(hostname -i | awk '{ print $2}')
+THIS_HOST=$(hostname -i | awk '{ print $NF}')
 SEEDS=$THIS_HOST
 OPSCENTER_HOST=$THIS_HOST
 
