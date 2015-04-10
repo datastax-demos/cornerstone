@@ -22,8 +22,8 @@ CFG=/cornerstone/web/datastax/cornerstone-python/Cornerstone/application.cfg
 sed -i -e "s/^DSE_CLUSTER.*/DSE_CLUSTER = '${SEEDS}'/" ${CFG}
 
 
-ln -s /cornerstone/web/datastax/cornerstone-python/Cornerstone/templates .
-ln -s /cornerstone/web/datastax/cornerstone-python/Cornerstone/static .
+ln -s /cornerstone/web/datastax/cornerstone-python/Cornerstone/templates /cornerstone/web/datastax/black-friday/
+ln -s /cornerstone/web/datastax/cornerstone-python/Cornerstone/static /cornerstone/web/datastax/black-friday/
 
 export PYTHONPATH=/cornerstone/web/datastax/cornerstone-python:${PYTHONPATH}
 echo "export PYTHONPATH=/cornerstone/web/datastax/cornerstone-python:${PYTHONPATH}" >> ${HOME}/.profile
