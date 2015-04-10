@@ -37,8 +37,8 @@ vb_setup = Proc.new do |vb, override|
 
     override.vm.box = 'ubuntu/trusty64'
 
-    vb.memory = 4096
-    vb.cpus = 3
+    vb.memory = 512
+    vb.cpus = 1
 end
 
 azure_setup = Proc.new do |azure, override|
