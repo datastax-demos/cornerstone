@@ -44,7 +44,7 @@ end
 azure_setup = Proc.new do |azure, override|
     override.vm.box = 'azure'
 
-    azure.vm_size = 'ExtraLarge'
+    azure.vm_size = 'Medium'
     azure.vm_location = 'West US'
 
     azure.mgmt_endpoint = 'https://management.core.windows.net'
@@ -150,6 +150,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
         singlenode.vm.provider :azure do |azure, override|
             azure_setup.call azure, override
+
+            azure.vm_size = 'ExtraLarge'
 
             azure.tcp_endpoints = '8080'
         end
