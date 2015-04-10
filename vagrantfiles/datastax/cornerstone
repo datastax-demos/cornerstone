@@ -150,7 +150,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                                         privileged: false
             config.vm.provision :shell, path: 'vagrant/general/apt/first-start/datastax/opscenter_v1.sh',
                                         privileged: false
-            config.vm.provision :shell, path: 'vagrant/datastax/cornerstone/3.start.sh',
+            config.vm.provision :shell, path: 'vagrant/datastax/cornerstone-python/3.start.sh',
                                         privileged: false
 
         end
