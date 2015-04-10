@@ -14,6 +14,6 @@ fi
 sudo dpkg -i ${CACHE}/*
 
 SETTINGS=/etc/maven2/settings.xml
-FIND_LINE=$(grep -n localRepository $SETTINGS | tail -n 1 | cut -f 1 -d ':')
+FIND_LINE=$(grep -n localRepository $SETTINGS | sed -n 2p | cut -f 1 -d ':')
 INSERT_LINE=$(expr $FIND_LINE + 2)
-sudo sed -i "${INSERT_LINE}i <localRepository>/cache/installed/m2/repository</localRepository>" $SETTINGS
+sudo sed -i "${INSERT_LINE}s <localRepository>/cache/installed/m2/repository</localRepository>" $SETTINGS
