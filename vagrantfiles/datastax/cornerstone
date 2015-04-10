@@ -123,11 +123,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             end
 
             # give class access
-            config.vm.provision :file,
-                                source: '../keys/classkey.pub',
-                                destination: '~/.ssh/classkey.pub'
-            config.vm.provision :shell,
-                                inline: 'cat .ssh/classkey.pub >> .ssh/authorized_keys'
+            if File.exist?('keys/classkey.pub')
+                config.vm.provision :file,
+                                    source: 'keys/classkey.pub',
+                                    destination: '~/.ssh/classkey.pub'
+                config.vm.provision :shell,
+                                    inline: 'cat .ssh/classkey.pub >> .ssh/authorized_keys'
+            end
 
             # provision machine
             config.vm.provision :shell, path: 'vagrant/general/apt/install/git_v1.sh',
