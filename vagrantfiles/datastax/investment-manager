@@ -194,6 +194,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
             ENV['SEEDS'] = '127.0.0.1'
             ENV['OPSCENTER_HOST'] = '127.0.0.1'
+            ENV['SPARK'] = 1
 
             dse_start.call config
             opscenter_start.call config
