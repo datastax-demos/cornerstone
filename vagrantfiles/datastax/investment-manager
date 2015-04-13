@@ -166,6 +166,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         singlenode.vm.provider :virtualbox do |vb, override|
             vb_setup.call vb, override
 
+            vb.memory = 2048
+            vb.cpus = 3
+
             override.vm.network :private_network, ip: '192.168.101.7'
         end
 
@@ -192,8 +195,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             opscenter_install.call config
             demo_install.call config
 
-            ENV['SEEDS'] = '127.0.0.1'
-            ENV['OPSCENTER_HOST'] = '127.0.0.1'
+            ENV['SEEDS'] = '192.168.101.7'
+            ENV['OPSCENTER_HOST'] = '192.168.101.7'
             ENV['SPARK'] = '1'
 
             dse_start.call config
