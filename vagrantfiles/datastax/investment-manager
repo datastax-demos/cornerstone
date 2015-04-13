@@ -48,7 +48,7 @@ end
 azure_setup = Proc.new do |azure, override|
     override.vm.box = 'azure'
 
-    azure.vm_size = 'Medium'
+    azure.vm_size = 'Standard_G1'
     azure.vm_location = 'West US'
 
     azure.mgmt_endpoint = 'https://management.core.windows.net'
@@ -159,7 +159,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         singlenode.vm.provider :azure do |azure, override|
             azure_setup.call azure, override
 
-            azure.vm_size = 'ExtraLarge'
+            azure.vm_size = 'Standard_G3'
 
             azure.tcp_endpoints = WEB_PORT
         end
@@ -204,7 +204,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             dse.vm.provider :azure do |azure, override|
                 azure_setup.call azure, override
 
-                azure.vm_size = 'ExtraLarge'
+                azure.vm_size = 'Standard_G2'
 
                 azure.tcp_endpoints = "#{PUBLIC_DSE_PORTS},#{PRIVATE_DSE_PORTS}"
             end
@@ -236,8 +236,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         opscenter.vm.provider :azure do |azure, override|
             azure_setup.call azure, override
 
-            azure.vm_size = 'Large'
-
             azure.tcp_endpoints = "#{WEB_PORT},#{PRIVATE_OPSCENTER_PORTS},#{PRIVATE_DSE_PORTS}"
         end
 
@@ -267,8 +265,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
         demo.vm.provider :azure do |azure, override|
             azure_setup.call azure, override
-
-            azure.vm_size = 'Large'
 
             azure.tcp_endpoints = "#{WEB_PORT},#{PRIVATE_DSE_PORTS}"
         end
