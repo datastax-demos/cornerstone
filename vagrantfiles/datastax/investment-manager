@@ -1,7 +1,7 @@
 VAGRANTFILE_API_VERSION = '2'
 
 # max number of dse nodes this script will generate
-MAX_DSE_NODES = 3
+MAX_DSE_NODES = 10
 
 # Ubuntu 14.04 LTS
 # http://cloud-images.ubuntu.com/locator/ec2/
