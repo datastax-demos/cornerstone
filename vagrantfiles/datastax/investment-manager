@@ -112,10 +112,23 @@ dse_install = Proc.new do |config, node_index|
 end
 
 dse_start = Proc.new do |config|
-    config.vm.provision :shell, path: 'vagrant/general/apt/first-start/datastax/spark_v1.sh',
-                                args: ['--seeds', ENV['SEEDS'],
-                                       '--opscenter-host', ENV['OPSCENTER_HOST']],
-                                privileged: false
+
+    if ENV['SPARK']
+        config.vm.provision :shell, path: 'vagrant/general/apt/first-start/datastax/spark_v1.sh',
+                                    args: ['--seeds', ENV['SEEDS'],
+                                           '--opscenter-host', ENV['OPSCENTER_HOST']],
+                                    privileged: false
+    elsif ENV['SOLR']
+        config.vm.provision :shell, path: 'vagrant/general/apt/first-start/datastax/solr_v1.sh',
+                                    args: ['--seeds', ENV['SEEDS'],
+                                           '--opscenter-host', ENV['OPSCENTER_HOST']],
+                                    privileged: false
+    else
+        config.vm.provision :shell, path: 'vagrant/general/apt/first-start/datastax/cassandra_v1.sh',
+                                    args: ['--seeds', ENV['SEEDS'],
+                                           '--opscenter-host', ENV['OPSCENTER_HOST']],
+                                    privileged: false
+    end
 end
 
 opscenter_install = Proc.new do |config|

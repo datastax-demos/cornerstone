@@ -24,6 +24,6 @@ esac
 shift
 done
 
-bash /cornerstone/vagrant/general/apt/configure/datastax-enterprise/enable_spark_v1.sh
+bash /cornerstone/vagrant/general/apt/configure/datastax-enterprise/enable_solr_v1.sh
 bash /cornerstone/vagrant/general/apt/first-start/datastax/cassandra_v1.sh \
     --seeds $SEEDS --opscenter-host $OPSCENTER_HOST

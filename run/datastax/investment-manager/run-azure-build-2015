@@ -22,26 +22,40 @@ source set_credentials.sh || exit 1
 unset SEEDS GATHER_IPS OPSCENTER_HOST DEMO_HOST WEB_PORT SPARK SOLR
 
 # start machines, install, do not provision
-vagrant up --provider azure dse0 dse1 dse2 opscenter demo
+vagrant up --provider azure dse0 dse1 dse2 dse3 dse4 dse5 dse6 dse7 dse8 dse9 opscenter demo
 
 # collect DSE seeds
 export GATHER_IPS=1
 DSE0=$(vagrant provision dse0 | grep GATHER_IPS | awk '{print $4}')
 DSE1=$(vagrant provision dse1 | grep GATHER_IPS | awk '{print $4}')
 DSE2=$(vagrant provision dse2 | grep GATHER_IPS | awk '{print $4}')
+DSE3=$(vagrant provision dse3 | grep GATHER_IPS | awk '{print $4}')
+DSE4=$(vagrant provision dse4 | grep GATHER_IPS | awk '{print $4}')
+DSE5=$(vagrant provision dse5 | grep GATHER_IPS | awk '{print $4}')
+DSE6=$(vagrant provision dse6 | grep GATHER_IPS | awk '{print $4}')
+DSE7=$(vagrant provision dse7 | grep GATHER_IPS | awk '{print $4}')
+DSE8=$(vagrant provision dse8 | grep GATHER_IPS | awk '{print $4}')
+DSE9=$(vagrant provision dse9 | grep GATHER_IPS | awk '{print $4}')
 export OPSCENTER_HOST=$(vagrant provision opscenter | grep GATHER_IPS | awk '{print $4}')
 export DEMO_HOST=$(vagrant provision demo | grep GATHER_IPS | awk '{print $4}')
 unset GATHER_IPS
 
-export SEEDS=$DSE0,$DSE1,$DSE2
+export SEEDS=$DSE0,$DSE1,$DSE2,$DSE3,$DSE4,$DSE5,$DSE6,$DSE7,$DSE8,$DSE9
 
 # finish configuration, start
-vagrant provision dse0
 export SPARK=1
+    vagrant provision dse0
     vagrant provision dse1
+    vagrant provision dse2
+    vagrant provision dse3
+    vagrant provision dse4
 unset SPARK
 export SOLR=1
-    vagrant provision dse2
+    vagrant provision dse5
+    vagrant provision dse6
+    vagrant provision dse7
+    vagrant provision dse8
+    vagrant provision dse9
 unset SOLR
 vagrant provision opscenter
 vagrant provision demo
