@@ -48,7 +48,7 @@ end
 azure_setup = Proc.new do |azure, override|
     override.vm.box = 'azure'
 
-    azure.vm_size = 'Standard_G1'
+    azure.vm_size = 'Medium'
     azure.vm_location = 'West US'
 
     azure.mgmt_endpoint = 'https://management.core.windows.net'
@@ -57,7 +57,7 @@ azure_setup = Proc.new do |azure, override|
 
     azure.vm_image = 'b39f27a8b8c64d52b05eac6a62ebad85__Ubuntu-14_04_2_LTS-amd64-server-20150309-en-us-30GB'
     azure.vm_name = "investment-manager-#{ENV['DEMO_USER_WORD']}"
-    # azure.vm_virtual_network_name = "investment-manager-#{ENV['DEMO_USER_WORD']}-vnet"
+    azure.vm_virtual_network_name = "investment-manager-#{ENV['DEMO_USER_WORD']}-vnet"
 
     azure.private_key_file = ENV['AZURE_PRIVATE_KEY']
     azure.certificate_file = ENV['AZURE_CERT']
@@ -159,7 +159,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         singlenode.vm.provider :azure do |azure, override|
             azure_setup.call azure, override
 
-            azure.vm_size = 'Standard_G3'
+            azure.vm_size = 'ExtraLarge'
 
             azure.tcp_endpoints = WEB_PORT
         end
@@ -204,9 +204,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             dse.vm.provider :azure do |azure, override|
                 azure_setup.call azure, override
 
-                azure.vm_size = 'Standard_G2'
+                azure.vm_size = 'ExtraLarge'
 
-                azure.tcp_endpoints = "#{PUBLIC_DSE_PORTS},#{PRIVATE_DSE_PORTS}"
+                azure.tcp_endpoints = "#{PUBLIC_DSE_PORTS}"
             end
 
             if ENV['GATHER_IPS']
@@ -236,7 +236,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         opscenter.vm.provider :azure do |azure, override|
             azure_setup.call azure, override
 
-            azure.tcp_endpoints = "#{WEB_PORT},#{PRIVATE_OPSCENTER_PORTS},#{PRIVATE_DSE_PORTS}"
+            azure.vm_size = 'Large'
+
+            azure.tcp_endpoints = "#{WEB_PORT}"
         end
 
         if ENV['GATHER_IPS']
@@ -266,7 +268,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         demo.vm.provider :azure do |azure, override|
             azure_setup.call azure, override
 
-            azure.tcp_endpoints = "#{WEB_PORT},#{PRIVATE_DSE_PORTS}"
+            azure.vm_size = 'Large'
+
+            azure.tcp_endpoints = "#{WEB_PORT}"
         end
 
         if ENV['GATHER_IPS']

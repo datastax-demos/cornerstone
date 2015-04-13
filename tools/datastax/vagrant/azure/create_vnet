@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+azure account download
+azure network vnet create --vnet "${PROJECT_NAME}-${DEMO_USER_WORD}-vnet" --location "West US" --create-new-affinity-group
+
