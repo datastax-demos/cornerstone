@@ -24,7 +24,7 @@ unset SEEDS GATHER_IPS OPSCENTER_HOST DEMO_HOST WEB_PORT
 # start machines, install, do not provision
 vagrant up dse0 dse1 dse2 opscenter demo
 
-# collect DSE seeds
+# collect IPs
 export GATHER_IPS=1
 DSE0=$(vagrant provision dse0 | grep GATHER_IPS | awk '{print $5}')
 DSE1=$(vagrant provision dse1 | grep GATHER_IPS | awk '{print $5}')
