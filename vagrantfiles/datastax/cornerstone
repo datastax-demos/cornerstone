@@ -1,12 +1,17 @@
 VAGRANTFILE_API_VERSION = '2'
 
+DEMO_NAME = 'cornerstone'
+
 # max number of dse nodes this script will generate
-MAX_DSE_NODES = 3
+MAX_DSE_NODES = 10
+
+# number of students in the classroom
+CLASSROOM_SIZE = 0
 
 # Ubuntu 14.04 LTS
 # http://cloud-images.ubuntu.com/locator/ec2/
 # "trusty instance-store amd64 aki"
-ami_list = {
+AMI_LIST = {
     'ap-northeast-1' => 'ami-40e1e641',
     'ap-southeast-1' => 'ami-07597455',
     'ap-southeast-2' => 'ami-39086103',
@@ -18,16 +23,140 @@ ami_list = {
     'us-west-2' => 'ami-8b84d0bb'
 }
 
+PUBLIC_DSE_PORTS='4040,7080,7081,8983,8012,50030,50060'
+PRIVATE_DSE_PORTS='7000,7001,7199,9160,7077,8984,9042,9290,10000,61621'
+PRIVATE_OPSCENTER_PORTS='61620'
+
 required_envars = ['DATASTAX_USER', 'DATASTAX_PASS']
 for envar in required_envars
     if !ENV[envar]
-        print "\n$#{envar} must be set! \n"\
-              "If performing a specific command, you must specify a "\
-              "machine name. Example: \n"\
-                "\t vagrant ssh demo \n"\
-                "\t vagrant destroy demo \n\n"
+        print "\n$#{envar} must be set in the current shell! \n\tNo actions performed!\n\n"
         exit
     end
+end
+
+vb_setup = Proc.new do |vb, override|
+    override.vm.synced_folder '.', '/cornerstone', create: true
+
+    override.vm.synced_folder 'cache', '/cache', create: true
+
+    override.vm.box = 'ubuntu/trusty64'
+
+    vb.memory = 512
+    vb.cpus = 1
+end
+
+azure_setup = Proc.new do |azure, override|
+    override.vm.box = 'azure'
+
+    azure.vm_size = 'Medium'
+    azure.vm_location = 'West US'
+
+    azure.mgmt_endpoint = 'https://management.core.windows.net'
+    azure.mgmt_certificate = ENV['AZURE_MGMT_CERT_PEM']
+    azure.subscription_id = ENV['AZURE_SUBSCRIPTION_ID']
+
+    azure.vm_image = 'b39f27a8b8c64d52b05eac6a62ebad85__Ubuntu-14_04_2_LTS-amd64-server-20150309-en-us-30GB'
+    azure.vm_name = "#{DEMO_NAME}-#{ENV['DEMO_USER_WORD']}"
+    azure.vm_virtual_network_name = "#{DEMO_NAME}-#{ENV['DEMO_USER_WORD']}-vnet"
+
+    azure.private_key_file = ENV['AZURE_PRIVATE_KEY']
+    azure.certificate_file = ENV['AZURE_CERT']
+    azure.vm_user = ENV['AZURE_SSH_USER']
+    azure.vm_password = ENV['AZURE_SSH_PASS']
+    override.ssh.username = ENV['AZURE_SSH_USER']
+    override.ssh.password = ENV['AZURE_SSH_PASS']
+
+    azure.ssh_port = '22'
+end
+
+aws_setup = Proc.new do |aws, override|
+    override.vm.box = 'aws-dummy'
+    override.ssh.username = 'ubuntu'
+
+    aws.access_key_id = ENV['DEMO_AWS_ACCESS_KEY']
+    aws.secret_access_key = ENV['DEMO_AWS_SECRET_KEY']
+    aws.region = ENV['DEMO_AWS_REGION']
+    aws.availability_zone = ENV['DEMO_AWS_AZ']
+    aws.ami = AMI_LIST[aws.region]
+    aws.instance_type = 'm3.medium'
+
+    aws.keypair_name = ENV['DEMO_AWS_KEYPAIR_NAME']
+    override.ssh.private_key_path = ENV['DEMO_AWS_KEYPAIR_LOCATION']
+
+    aws.security_groups = [ENV['DEMO_AWS_SECURITY_GROUP']]
+
+    aws.tags = {
+        'Name' => "#{DEMO_NAME}-vagrant",
+        'Owner' => ENV['DEMO_USER'],
+        'Email' => ENV['DEMO_EMAIL']
+    }
+end
+
+bootstrap = Proc.new do |config|
+    config.vm.provision :shell, path: 'vagrant/general/apt/install/git_v1.sh',
+                                privileged: false
+    config.vm.provision :shell, path: 'vagrant/general/file/install/cornerstone_v1.sh',
+                                privileged: false
+end
+
+class_bootstrap = Proc.new do |config|
+    if File.exist?('keys/classkey.pub')
+        config.vm.provision :file,
+                            source: 'keys/classkey.pub',
+                            destination: '~/.ssh/classkey.pub'
+        config.vm.provision :shell,
+                            inline: 'cat .ssh/classkey.pub >> .ssh/authorized_keys'
+    end
+end
+
+dse_install = Proc.new do |config, node_index|
+    config.vm.provision :shell, path: 'vagrant/general/apt/install/datastax-enterprise_v3.sh',
+                                args: ['--datastax-user', "#{ENV['DATASTAX_USER']}",
+                                       '--datastax-pass', "#{ENV['DATASTAX_PASS']}"],
+                                privileged: false
+end
+
+dse_start = Proc.new do |config|
+
+    if ENV['SPARK']
+        config.vm.provision :shell, path: 'vagrant/general/apt/first-start/datastax/spark_v1.sh',
+                                    args: ['--seeds', ENV['SEEDS'],
+                                           '--opscenter-host', ENV['OPSCENTER_HOST']],
+                                    privileged: false
+    elsif ENV['SOLR']
+        config.vm.provision :shell, path: 'vagrant/general/apt/first-start/datastax/solr_v1.sh',
+                                    args: ['--seeds', ENV['SEEDS'],
+                                           '--opscenter-host', ENV['OPSCENTER_HOST']],
+                                    privileged: false
+    else
+        config.vm.provision :shell, path: 'vagrant/general/apt/first-start/datastax/cassandra_v1.sh',
+                                    args: ['--seeds', ENV['SEEDS'],
+                                           '--opscenter-host', ENV['OPSCENTER_HOST']],
+                                    privileged: false
+    end
+end
+
+opscenter_install = Proc.new do |config|
+    config.vm.provision :shell, path: 'vagrant/general/apt/install/datastax-opscenter_v3.sh',
+                                privileged: false
+end
+
+opscenter_start = Proc.new do |config|
+    config.vm.provision :shell, path: 'vagrant/general/apt/first-start/datastax/opscenter_v1.sh',
+                                args: ['--seeds', ENV['SEEDS']],
+                                privileged: false
+end
+
+demo_install = Proc.new do |config|
+    config.vm.provision :shell, path: 'vagrant/datastax/cornerstone-python/2.install.sh',
+                                privileged: false
+end
+
+demo_start = Proc.new do |config|
+    config.vm.provision :shell, path: 'vagrant/datastax/cornerstone-python/3.start.sh',
+                                args: ['--seeds', ENV['SEEDS']],
+                                privileged: false
 end
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
@@ -37,224 +166,181 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     # define the a single-machine developer setup
     config.vm.define 'singlenode', autostart: true do |singlenode|
+        WEB_PORT = '5000'
 
         # define virtualbox machine
         singlenode.vm.provider :virtualbox do |vb, override|
+            vb_setup.call vb, override
 
-            # sync this project folder to /cornerstone on the guest machine
-            override.vm.synced_folder '.', '/cornerstone', create: true
-
-            # sync this ./cache folder to /cache on the guest machine
-            override.vm.synced_folder 'cache', '/cache', create: true
-
-            # set the machine's image and network options
-            override.vm.box = 'ubuntu/trusty64'
-            override.vm.network :private_network, ip: '192.168.101.7'
-
-            # set the machine's memory and cpu utilization
-            vb.memory = 3072
+            vb.memory = 2048
             vb.cpus = 3
 
-            override.vm.post_up_message = <<-eos
-                Visit:
-                    http://192.168.101.7:5000 for Cornerstone
-            eos
+            override.vm.network :private_network, type: 'dhcp'
+        end
+
+        singlenode.vm.provider :azure do |azure, override|
+            azure_setup.call azure, override
+
+            azure.vm_size = 'ExtraLarge'
+
+            azure.tcp_endpoints = WEB_PORT
+        end
+
+        singlenode.vm.provider :aws do |aws, override|
+            aws_setup.call aws, override
+
+            aws.instance_type = 'm3.2xlarge'
+        end
+
+        if ENV['GATHER_IPS']
+            config.vm.provision 'shell', inline: "echo GATHER_IPS $(hostname -i)"
+        elsif ENV['WEB_PORT']
+            config.vm.provision 'shell', inline: "echo WEB_PORT #{WEB_PORT}"
+        else
+            bootstrap.call config
+
+            dse_install.call config, 0
+            opscenter_install.call config
+            demo_install.call config
+
+            ENV['SEEDS'] = '127.0.0.1'
+            ENV['OPSCENTER_HOST'] = '127.0.0.1'
+            ENV['SPARK'] = '1'
+
+            dse_start.call config
+            opscenter_start.call config
+            demo_start.call config
+        end
+    end
+
+    (0..CLASSROOM_SIZE).each do |i|
+        # define the a classroom setup
+        config.vm.define "singlenode#{i}", autostart: true do |singlenode|
+            WEB_PORT = '5000'
+
+            singlenode.vm.provider :aws do |aws, override|
+                aws_setup.call aws, override
+
+                aws.instance_type = 'm3.2xlarge'
+            end
+
+            if ENV['GATHER_IPS']
+                config.vm.provision 'shell', inline: "echo GATHER_IPS $(hostname -i)"
+            elsif ENV['WEB_PORT']
+                config.vm.provision 'shell', inline: "echo WEB_PORT #{WEB_PORT}"
+            else
+                class_bootstrap.call config
+                bootstrap.call config
+
+                dse_install.call config, 0
+                opscenter_install.call config
+                demo_install.call config
+
+                ENV['SEEDS'] = '127.0.0.1'
+                ENV['OPSCENTER_HOST'] = '127.0.0.1'
+                ENV['SPARK'] = '1'
+
+                dse_start.call config
+                opscenter_start.call config
+                demo_start.call config
+            end
+        end
+    end
+
+    (0..MAX_DSE_NODES).each do |i|
+
+        config.vm.define "dse#{i}", autostart: false do |dse|
+
+            dse.vm.provider :virtualbox do |vb, override|
+                vb_setup.call vb, override
+
+                vb.memory = 2048
+                vb.cpus = 1
+
+                override.vm.network :private_network, type: 'dhcp'
+            end
+
+            dse.vm.provider :azure do |azure, override|
+                azure_setup.call azure, override
+
+                azure.vm_size = 'ExtraLarge'
+
+                azure.tcp_endpoints = "#{PUBLIC_DSE_PORTS}"
+            end
+
+            if ENV['GATHER_IPS']
+                config.vm.provision 'shell', inline: "echo GATHER_IPS $(hostname -i)"
+            elsif ENV['SEEDS'] and ENV['OPSCENTER_HOST']
+                dse_start.call config
+            else
+                bootstrap.call config
+                dse_install.call config, i
+            end
+        end
+    end
+
+
+    config.vm.define 'opscenter', autostart: false do |opscenter|
+        WEB_PORT = '8888'
+
+        opscenter.vm.provider :virtualbox do |vb, override|
+            vb_setup.call vb, override
+
+            vb.memory = 768
+            vb.cpus = 1
+
+            override.vm.network :private_network, type: 'dhcp'
+        end
+
+        opscenter.vm.provider :azure do |azure, override|
+            azure_setup.call azure, override
+
+            azure.vm_size = 'Large'
+
+            azure.tcp_endpoints = "#{WEB_PORT}"
         end
 
         if ENV['GATHER_IPS']
             config.vm.provision 'shell', inline: 'echo GATHER_IPS $(hostname -i)'
         elsif ENV['WEB_PORT']
-            config.vm.provision 'shell', inline: 'echo WEB_PORT 5000'
+            config.vm.provision 'shell', inline: "echo WEB_PORT #{WEB_PORT}"
         elsif ENV['SEEDS']
-            config.vm.provision :shell, path: 'vagrant/general/apt/first-start/datastax/opscenter_v1.sh',
-                                        args: ['--seeds', ENV['SEEDS']],
-                                        privileged: false
-            config.vm.provision :shell, path: 'vagrant/datastax/cornerstone-python/3.start.sh',
-                                        args: ['--seeds', ENV['SEEDS']],
-                                        privileged: false
+            opscenter_start.call config
         else
-            # provision machine
-            config.vm.provision :shell, path: 'vagrant/general/apt/install/git_v1.sh',
-                                        privileged: false
-            config.vm.provision :shell, path: 'vagrant/general/file/install/cornerstone_v1.sh',
-                                        privileged: false
-
-            config.vm.provision :shell, path: 'vagrant/general/apt/install/datastax-enterprise_v3.sh',
-                                        args: ["--datastax-user", "#{ENV['DATASTAX_USER']}",
-                                               "--datastax-pass", "#{ENV['DATASTAX_PASS']}"],
-                                        privileged: false
-            config.vm.provision :shell, path: 'vagrant/general/apt/install/datastax-opscenter_v3.sh',
-                                        privileged: false
-            config.vm.provision :shell, path: 'vagrant/datastax/cornerstone-python/2.install.sh',
-                                        privileged: false
-            config.vm.provision :shell, path: 'vagrant/general/apt/first-start/datastax/cassandra_v1.sh',
-                                        privileged: false
+            bootstrap.call config
+            opscenter_install.call config
         end
     end
 
-    # define the a single-machine class setup
-    (0..20).each do |i|
-        config.vm.define "singlenode#{i}", autostart: false do |singlenode|
-
-            # define virtualbox machine
-            singlenode.vm.provider :aws do |aws, override|
-
-                # set the machine's image and the default username for the machine
-                override.vm.box = 'aws-dummy'
-                override.ssh.username = 'ubuntu'
-
-                # setup basic aws configurations
-                aws.access_key_id = ENV['DEMO_AWS_ACCESS_KEY']
-                aws.secret_access_key = ENV['DEMO_AWS_SECRET_KEY']
-                aws.region = ENV['DEMO_AWS_REGION']
-                aws.availability_zone = ENV['DEMO_AWS_AZ']
-                aws.ami = ami_list[aws.region]
-                aws.instance_type = 'm3.2xlarge'
-
-                # setup keypair configuration
-                aws.keypair_name = ENV['DEMO_KEYPAIR_NAME']
-                override.ssh.private_key_path = ENV['DEMO_KEYPAIR_LOCATION']
-
-                # setup security groups
-                aws.security_groups = [ENV['DEMO_AWS_SECURITY_GROUP']]
-
-                # setup AWS Tags
-                aws.tags = {
-                    'Name' => "cornerstone-aws-vagrant-singlenode#{i}",
-                    'Owner' => ENV['DEMO_USER'],
-                    'Email' => ENV['DEMO_EMAIL']
-                }
-
-                override.vm.post_up_message = <<-eos
-                    Using security group: #{ENV['DEMO_AWS_SECURITY_GROUP']}
-                eos
-            end
-
-            # give class access
-            if File.exist?('keys/classkey.pub')
-                config.vm.provision :file,
-                                    source: 'keys/classkey.pub',
-                                    destination: '~/.ssh/classkey.pub'
-                config.vm.provision :shell,
-                                    inline: 'cat .ssh/classkey.pub >> .ssh/authorized_keys'
-            end
-
-            # provision machine
-            config.vm.provision :shell, path: 'vagrant/general/apt/install/git_v1.sh',
-                                        privileged: false
-            config.vm.provision :shell, path: 'vagrant/general/file/install/cornerstone_v1.sh',
-                                        privileged: false
-
-            config.vm.provision :shell, path: 'vagrant/general/apt/install/datastax-enterprise_v3.sh',
-                                        args: ["--datastax-user", "#{ENV['DATASTAX_USER']}",
-                                               "--datastax-pass", "#{ENV['DATASTAX_PASS']}"],
-                                        privileged: false
-            config.vm.provision :shell, path: 'vagrant/general/apt/install/datastax-opscenter_v3.sh',
-                                        privileged: false
-            config.vm.provision :shell, path: 'vagrant/datastax/cornerstone-python/2.install.sh',
-                                        privileged: false
-
-            config.vm.provision :shell, path: 'vagrant/general/apt/first-start/datastax/cassandra_v1.sh',
-                                        privileged: false
-            config.vm.provision :shell, path: 'vagrant/general/apt/first-start/datastax/opscenter_v1.sh',
-                                        privileged: false
-            config.vm.provision :shell, path: 'vagrant/datastax/cornerstone-python/3.start.sh',
-                                        privileged: false
-
-        end
-    end
-
-    # define MAX_DSE_NODES dse machines
-    (0..MAX_DSE_NODES).each do |i|
-        config.vm.define "dse#{i}", autostart: false do |dse|
-
-            # define virtualbox dse machines
-            dse.vm.provider :virtualbox do |vb, override|
-
-                # sync this ./cache folder to /cache on the guest machine
-                override.vm.synced_folder 'cache', '/cache', create: true
-
-                # set the machine's image and network options
-                override.vm.box = 'ubuntu/trusty64'
-                override.vm.network :private_network, ip: "192.168.101.#{i+10}"
-
-                # set the machine's memory and cpu utilization
-                vb.memory = 2048
-                vb.cpus = 1
-            end
-
-            dse.vm.provider :aws do |aws, override|
-
-                # set the machine's image and the default username for the machine
-                override.vm.box = 'aws-dummy'
-                override.ssh.username = 'ubuntu'
-
-                # setup basic aws configurations
-                aws.access_key_id = ENV['DEMO_AWS_ACCESS_KEY']
-                aws.secret_access_key = ENV['DEMO_AWS_SECRET_KEY']
-                aws.region = ENV['DEMO_AWS_REGION']
-                aws.availability_zone = ENV['DEMO_AWS_AZ']
-                aws.ami = ami_list[aws.region]
-                aws.instance_type = 'm3.medium'
-
-                # setup keypair configuration
-                aws.keypair_name = ENV['DEMO_AWS_KEYPAIR_NAME']
-                override.ssh.private_key_path = ENV['DEMO_AWS_KEYPAIR_LOCATION']
-
-                # setup security groups
-                aws.security_groups = [ENV['DEMO_AWS_SECURITY_GROUP']]
-
-                # setup AWS Tags
-                aws.tags = {
-                    'Name' => 'vagrant',
-                    'Owner' => ENV['DEMO_USER'],
-                    'Email' => ENV['DEMO_EMAIL']
-                }
-            end
-        end
-    end
-
-    config.vm.define "opscenter", autostart: false do |opscenter|
-        # define virtualbox machine
-        opscenter.vm.provider :virtualbox do |vb, override|
-
-            # sync this ./cache folder to /cache on the guest machine
-            override.vm.synced_folder 'cache', '/cache', create: true
-
-            # set the machine's image and network options
-            override.vm.box = 'ubuntu/trusty64'
-            override.vm.network :private_network, ip: '192.168.101.8'
-
-            # set the machine's memory and cpu utilization
-            vb.memory = 768
-            vb.cpus = 1
-
-            override.vm.post_up_message = <<-eos
-                Visit:
-                    http://192.168.101.8:8888 for OpsCenter
-            eos
-        end
-    end
-
-    # define the demo machine
     config.vm.define 'demo', autostart: false do |demo|
+        WEB_PORT = '5000'
 
-        # define virtualbox machine
         demo.vm.provider :virtualbox do |vb, override|
+            vb_setup.call vb, override
 
-            # sync this project folder to /cornerstone on the guest machine
-            override.vm.synced_folder '.', '/cornerstone', create: true
-
-            # sync this ./cache folder to /cache on the guest machine
-            override.vm.synced_folder 'cache', '/cache', create: true
-
-            # set the machine's image and network options
-            override.vm.box = 'ubuntu/trusty64'
-            override.vm.network :private_network, ip: '192.168.101.9'
-
-            # set the machine's memory and cpu utilization
             vb.memory = 1024
             vb.cpus = 1
+
+            override.vm.network :private_network, type: 'dhcp'
+        end
+
+        demo.vm.provider :azure do |azure, override|
+            azure_setup.call azure, override
+
+            azure.vm_size = 'Large'
+
+            azure.tcp_endpoints = "#{WEB_PORT}"
+        end
+
+        if ENV['GATHER_IPS']
+            config.vm.provision 'shell', inline: 'echo GATHER_IPS $(hostname -i)'
+        elsif ENV['WEB_PORT']
+            config.vm.provision 'shell', inline: "echo WEB_PORT #{WEB_PORT}"
+        elsif ENV['SEEDS']
+            demo_start.call config
+        else
+            bootstrap.call config
+            demo_install.call config
         end
     end
 end
