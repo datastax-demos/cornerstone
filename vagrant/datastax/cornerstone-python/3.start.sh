@@ -24,3 +24,5 @@ sed -i -e "s/^DSE_CLUSTER.*/DSE_CLUSTER = '${SEEDS}'/" ${CFG}
 (
     nohup /cornerstone/web/datastax/cornerstone-python/run
 ) &
+
+sleep 2
