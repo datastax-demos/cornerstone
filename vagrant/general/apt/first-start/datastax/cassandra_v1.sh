@@ -24,6 +24,10 @@ esac
 shift
 done
 
+if [ "$SEEDS" == "127.0.0.1" ]; then
+    THIS_HOST='127.0.0.1'
+fi
+
 bash /cornerstone/vagrant/general/apt/configure/datastax-enterprise/address_v2.sh \
     --listen-address $THIS_HOST --rpc-address $THIS_HOST
 bash /cornerstone/vagrant/general/apt/configure/datastax-enterprise/heap_v2.sh
