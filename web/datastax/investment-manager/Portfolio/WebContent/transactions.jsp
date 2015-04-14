@@ -426,7 +426,7 @@
         </div>
 
 
-        <div id="itemblistdetails10" class="itemblistdetailsclass">
+        <div id="itemblistdetails11" class="itemblistdetailsclass">
             <table id="details-list">
                 <tbody>
                 <tr>
