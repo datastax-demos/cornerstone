@@ -148,8 +148,10 @@ demo_install = Proc.new do |config|
 end
 
 demo_start = Proc.new do |config|
-    config.vm.provision :shell, path: 'vagrant/datastax/investment-manager/3.start.sh',
+    config.vm.provision :shell, path: 'vagrant/datastax/investment-manager/3.build.sh',
                                 args: ['--seeds', ENV['SEEDS']],
+                                privileged: false
+    config.vm.provision :shell, path: 'vagrant/datastax/investment-manager/4.start.sh',
                                 privileged: false
 end
 
