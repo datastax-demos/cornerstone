@@ -28,6 +28,7 @@ fi
 
 (
     cd /cornerstone/web/datastax/cornerstone-python/Cornerstone
+    source ${HOME}/.profile
     bower --config.analytics=false install
 )
 
