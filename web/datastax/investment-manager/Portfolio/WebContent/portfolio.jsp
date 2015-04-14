@@ -130,7 +130,7 @@
             </td>
         </tr>
 
-        <tr id="itemblistutton6">
+        <tr id="itemblistutton7">
             <td class="tapcell1">
                 <a href="#">SBUX</a></td>
             <td class="tapcell2">
@@ -141,7 +141,7 @@
             </td>
         </tr>
 
-        <tr id="itemblistutton7">
+        <tr id="itemblistutton8">
             <td class="tapcell1">
                 <a href="#">NFLX</a></td>
             <td class="tapcell2">
@@ -152,7 +152,7 @@
             </td>
         </tr>
 
-        <tr id="itemblistutton8">
+        <tr id="itemblistutton9">
             <td class="tapcell1">
                 <a href="#">GPS</a></td>
             <td class="tapcell2">
@@ -163,7 +163,7 @@
             </td>
         </tr>
 
-        <tr id="itemblistutton9">
+        <tr id="itemblistutton10">
             <td class="tapcell1">
                 <a href="#">GOOG</a></td>
             <td class="tapcell2">
