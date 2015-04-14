@@ -12,12 +12,12 @@ body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;}
 
 .header-top{background:#007b98;padding:15px 20px 10px;}
 .header-top .logo-app{display:block;width:116px;height:13px;margin:0 auto;text-indent:-66666px;
-  background:url(images/img_logo_app.jpg) no-repeat 0 0;}
+  background:url(../images/img_logo_app.jpg) no-repeat 0 0;}
 
 .content{width:100%;margin:0 auto;padding-bottom:50px;}
 .content .header-content{height:42px;padding:10px 20px 12px;}
 .content .header-content .logo-orbeus{float:left;width:41px;height:42px;text-indent:-6666px;
-  background:url(images/img_logo_orbeus.jpg) no-repeat 0 0;}
+  background:url(../images/img_logo_orbeus.jpg) no-repeat 0 0;}
 .content .header-content p{text-align:center;padding:0 0 0 42px;line-height:42px;font-size:14px;}
 .content .header-content .txt-error{color:#ba0000;}
 .content .header-content p a:link,

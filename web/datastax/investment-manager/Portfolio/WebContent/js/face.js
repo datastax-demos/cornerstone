@@ -290,7 +290,7 @@
                 self.showAttr(mainFaceAttr);
                 var match = mainFaceAttr.matches[0]
                 if(match.score > 0.8){
-                    $txtWelcome.removeClass("txt-error").html("Welcome back "+match.tag+"!<a href=\"/Portfolio/Manage\">ENTER</a>");
+                    $txtWelcome.removeClass("txt-error").html("Welcome back "+match.tag+"!<a href=\"disclaimer.jsp\">ENTER</a>");
                     $btnUpload.hide();
                 }else{
                     $txtWelcome.addClass("txt-error").html("Not Verified, please try again.");

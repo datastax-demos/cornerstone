@@ -67,7 +67,7 @@ public class Login extends PortfolioServlet {
 			return;
 		}
 		
-		request.getRequestDispatcher("Manage").forward(request, response);
+		request.getRequestDispatcher("orbeus.jsp").forward(request, response);
 	}
 	
 	
