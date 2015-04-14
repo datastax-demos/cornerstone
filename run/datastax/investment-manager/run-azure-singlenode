@@ -19,3 +19,12 @@ echo "Setting credentials using: ./set_credentials.sh"
 source set_credentials.sh || exit 1
 
 vagrant up --provider=azure singlenode
+
+# gather web ports
+export WEB_PORT=1
+DEMO_PORT=$(vagrant provision singlenode | grep WEB_PORT | awk '{print $4}')
+unset WEB_PORT
+
+# display urls
+DEMO_PUBLIC_HOST=$(vagrant ssh-config singlenode | grep HostName | awk '{print $2}')
+echo -e "Demo address: \n    http://${DEMO_PUBLIC_HOST}:${DEMO_PORT}"
