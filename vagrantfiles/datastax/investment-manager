@@ -200,7 +200,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             ENV['SPARK'] = '1'
 
             dse_start.call config
-            opscenter_start.call config
+            # opscenter_start.call config
             demo_start.call config
         end
     end
