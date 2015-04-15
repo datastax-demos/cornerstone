@@ -5,9 +5,9 @@
         var $itemImage = $areaResult.find(".item-image");
         var $itemLoading = $areaResult.find(".item-loading");
         var $imageFace = $itemImage.find("img");
-        var $itemAttr = $areaResult.find(".list-attr");
         var $txtWelcome = $("#txtWelcome");
         var $btnUpload = $("#btnAdd");
+        var $btnEnter = $("#btnEnter");
         var demoImage = function(imgdata, imginfo, rawData){
             var self = this;
             this.rawData = rawData;
@@ -290,8 +290,9 @@
                 self.showAttr(mainFaceAttr);
                 var match = mainFaceAttr.matches[0]
                 if(match.score > 0.8){
-                    $txtWelcome.removeClass("txt-error").html("Welcome back "+match.tag+"!<a href=\"disclaimer.jsp\">ENTER</a>");
+                    $txtWelcome.removeClass("txt-error").html("Welcome back "+match.tag+"!");
                     $btnUpload.hide();
+                    $btnEnter.css({display:"block"})
                 }else{
                     $txtWelcome.addClass("txt-error").html("Not Verified, please try again.");
                 }
@@ -308,7 +309,6 @@
                 domAttrs += self.arrayAttrs.attrsDisplay[key](data[key]);
                 }
             }
-        $itemAttr.empty().append(domAttrs);
         }
     });
 })(window);

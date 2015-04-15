@@ -32,11 +32,11 @@
           <p>ANALYZING...</p>
         </div>
       </div>
-      <div class="list-attr">
-      </div>
     </div>
     <div id="areaUpload" class="area-upload">
-      <a id="btnAdd" class='btn-add' href="#">ADD IMAGE</a>
+      <p>Secure Sign-on via Facial Recognition</p>
+      <a id="btnAdd" class='btn-add' href="#">ADD PHOTO</a>
+      <a id="btnEnter" class='btn-enter' href="disclaimer.jsp">CONTINUE</a>
       <input id="fileUpload" class="file-upload" name="fileToUpload[]" type="file" />
     </div>
   </div>

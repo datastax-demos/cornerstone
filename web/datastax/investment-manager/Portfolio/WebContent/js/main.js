@@ -86,6 +86,7 @@
             $itemImage.hide();
             $areaResult.show();
             $itemLoading.show();
+            $areaUpload.find("p").hide();
             var files = $(this)[0].files;
             var numFiles = files.length;
             $(files).each(function(i) {

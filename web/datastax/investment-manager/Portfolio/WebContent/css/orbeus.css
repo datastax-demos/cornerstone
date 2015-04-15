@@ -20,21 +20,6 @@ body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;}
   background:url(../images/img_logo_orbeus.jpg) no-repeat 0 0;}
 .content .header-content p{text-align:center;padding:0 0 0 42px;line-height:42px;font-size:14px;}
 .content .header-content .txt-error{color:#ba0000;}
-.content .header-content p a:link,
-.content .header-content p a:visited{display:inline-block;margin-left:5px;height:24px;padding:0 6px;margin-top:9px;line-height:24px;vertical-align:top;color:#007b98;text-decoration:none;
-  background:#08b8e2;color:#fff;
-  -moz-border-radius:3px;
-  -webkit-border-radius:3px;
-  border-radius:3px;}
-.content .header-content p a:hover,
-.content .header-content p a:active{}
-
-
-.list-attr{overflow:hidden;*zoom:1;width:320px;margin:20px auto 0;}
-.list-attr dl{float:left;width:49%;margin-top:3px;line-height:20px;font-size:12px;background:#ddd;border-right:1px solid #eee;}
-.list-attr dt{float:left;margin-right:5px;padding-left:10px;}
-.list-attr dd{float:left;}
-.list-attr dd p{float:left;}
 
 .area-result{display:none;padding:10px 0;background:#eee;}
 .area-result .item-image{display:none;position:relative;width:240px;height:240px;margin:0 auto;}
@@ -42,14 +27,21 @@ body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;}
 .area-result .item-loading{display:none;}
 
 .area-upload{padding-top:50px;}
+.area-upload p{padding:20px 0 25px;font-size:18px;text-align:center;}
 .area-upload .btn-add:link,
-.area-upload .btn-add:visited{display:block;width:300px;height:80px;margin:0 auto;text-align:center;line-height:80px;font-size:20px;text-decoration:none;
+.area-upload .btn-add:visited,
+.area-upload .btn-enter:link,
+.area-upload .btn-enter:visited{display:block;width:300px;height:80px;margin:0 auto;text-align:center;line-height:80px;font-size:20px;text-decoration:none;
   background:#08b8e2;color:#fff;
   -moz-border-radius:5px;
   -webkit-border-radius:5px;
   border-radius:5px;}
+.area-upload .btn-enter:link,
+.area-upload .btn-enter:visited{display:none;}
 .area-upload .btn-add:hover,
-.area-upload .btn-add:active{background:#159cbc;}
+.area-upload .btn-add:active,
+.area-upload .btn-enter:hover,
+.area-upload .btn-enter:active{background:#159cbc;}
 .area-upload  .file-upload{display:none;}
 
 .item-loading{height:240px;padding-top:95px;}
@@ -63,5 +55,7 @@ bounce_followingBallsG{0%{left:0;background-color:#CCC}50%{left:90%;background-c
 .item-loading p{margin-top:5px;text-align:center;font-size:16px;line-height:24px;color:#333;}
 @media (max-width: 400px){
   .area-upload .btn-add:link,
-  .area-upload .btn-add:visited{width:240px;}
+  .area-upload .btn-add:visited,
+  .area-upload .btn-enter:link,
+  .area-upload .btn-enter:visited{width:240px;}
 }
