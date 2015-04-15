@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-java -jar ??????????????/TickData.jar `hostname`
+java -jar /cornerstone/web/datastax/investment-manager/StockData/target/TickData.jar `hostname -i`
