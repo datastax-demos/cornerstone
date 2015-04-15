@@ -29,7 +29,7 @@ cqlsh $SINGLE_SEED -f /cornerstone/cql/datastax/black-friday/retail.cql
 /cornerstone/scripts/datastax/black-friday/3.scan_data/1.extract-ids.py
 /cornerstone/scripts/datastax/black-friday/3.scan_data/2.extract-zipcodes.py
 /cornerstone/scripts/datastax/black-friday/3.scan_data/3.start-metagener.sh
-sleep 4
+sleep 20
 /cornerstone/scripts/datastax/black-friday/3.scan_data/4.metagener-to-cassandra-stores-employees.py
 
 mkdir -p /mnt/log/spark_streaming/

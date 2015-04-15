@@ -31,3 +31,5 @@ echo "export PYTHONPATH=/cornerstone/web/datastax/cornerstone-python:${PYTHONPAT
 (
     nohup /cornerstone/web/datastax/black-friday/run
 ) &
+
+sleep 2
