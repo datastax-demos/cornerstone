@@ -215,7 +215,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     (0..CLASSROOM_SIZE).each do |i|
         # define the a classroom setup
-        config.vm.define "singlenode#{i}", autostart: true do |singlenode|
+        config.vm.define "singlenode#{i}", autostart: false do |singlenode|
             WEB_PORT = '5000'
 
             singlenode.vm.provider :aws do |aws, override|
