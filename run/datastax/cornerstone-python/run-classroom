@@ -21,19 +21,17 @@ source set_credentials.sh || exit 1
 # clear envars
 unset SEEDS GATHER_IPS DEMO_HOST WEB_PORT
 
-vagrant up singlenode0
-#vagrant up singlenode1
-#vagrant up singlenode2
+export NODE=0; vagrant up singlenode${NODE}
+#export NODE=1; vagrant up singlenode${NODE}
+#export NODE=2; vagrant up singlenode${NODE}
 
 # collect DSE seeds
-vagrant awsinfo -m singlenode0 -k public_ip
-#vagrant awsinfo -m singlenode1 -k public_ip
-#vagrant awsinfo -m singlenode2 -k public_ip
+vagrant awsinfo -m singlenode${NODE} -k public_ip
 
 # gather web ports
 export WEB_PORT=1
-DEMO_PORT=$(vagrant provision singlenode0 | grep WEB_PORT | awk '{print $4}')
+DEMO_PORT=$(vagrant provision singlenode${NODE} | grep WEB_PORT | awk '{print $4}')
 unset WEB_PORT
 
 # display urls
-echo -e "Demo address: \n    http://$(vagrant awsinfo -m singlenode0 -k public_ip):${DEMO_PORT}"
+echo -e "Demo address: \n    http://$(vagrant awsinfo -m singlenode${NODE} -k public_ip):${DEMO_PORT}"
