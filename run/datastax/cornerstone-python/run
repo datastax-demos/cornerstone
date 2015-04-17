@@ -21,7 +21,7 @@ source set_credentials.sh || exit 1
 # clear envars
 unset SEEDS GATHER_IPS DEMO_HOST WEB_PORT
 
-vagrant up singlenode
+vagrant up --provider virtualbox singlenode
 
 # collect DSE seeds
 export GATHER_IPS=1

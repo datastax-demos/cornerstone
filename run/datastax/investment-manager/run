@@ -20,7 +20,7 @@ source set_credentials.sh || exit 1
 
 unset GATHER_IPS OPSCENTER_HOST DEMO_HOST WEB_PORT
 
-vagrant up singlenode
+vagrant up --provider virtualbox singlenode
 
 # collect IPs
 export GATHER_IPS=1

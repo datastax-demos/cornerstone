@@ -22,7 +22,7 @@ source set_credentials.sh || exit 1
 unset SEEDS GATHER_IPS OPSCENTER_HOST DEMO_HOST WEB_PORT
 
 # start machines, install, do not provision
-vagrant up dse0 dse1 dse2 opscenter demo
+vagrant up --provider virtualbox dse0 dse1 dse2 opscenter demo
 
 # collect IPs
 export GATHER_IPS=1
