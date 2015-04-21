@@ -122,7 +122,7 @@ AMEX,NCQ,NovaCopper Inc.,Basic Industries,$32.15M,17-Apr-2015,38600,0.63,0.66,0.
 AMEX,THM,International Tower Hill Mines Ltd,Basic Industries,$53.92M,17-Apr-2015,143200,0.36,0.37,0.35,0.37
 AMEX,NCB,Nuveen California Municipal Value Fund 2,n/a,$55.57M,17-Apr-2015,1600,16.6,16.59,16.59,16.6
 AMEX,IFMI,"Institutional Financial Markets, Inc.",Finance,$25.31M,17-Apr-2015,3700,1.49,1.49,1.48,1.49
-AMEX,WTT,"Wireless Telecom Group,  Inc.",Capital Goods,$61.99M,17-Apr-2015,26500,2.36,2.37,2.33,2.37
+AMEX,WTT,"Wireless Telecom Group, Inc.",Capital Goods,$61.99M,17-Apr-2015,26500,2.36,2.37,2.33,2.37
 AMEX,HRT,Arrhythmia Research Technology Inc.,Health Care,$21.22M,17-Apr-2015,11300,6.55,6.79,6.53,6.99
 AMEX,TPI,"Tianyin Pharmaceutical Co., Inc.",Health Care,$16.78M,17-Apr-2015,32200,0.48,0.46,0.45,0.49
 AMEX,ACY,AeroCentury Corp.,Technology,$12.59M,17-Apr-2015,1100,12.35,12.89,12.35,12.9
@@ -684,7 +684,7 @@ NYSE,NIO,"Nuveen Municipal Opportunity Fund, Inc.",n/a,$1.39B,17-Apr-2015,70000,
 NYSE,PDT,John Hancock Premium Dividend Fund,n/a,$709.62M,17-Apr-2015,96800,14,13.97,13.96,14.01
 NYSE,PDS,Precision Drilling Corporation,Energy,$1.68B,17-Apr-2015,4048700,7.1,7.04,6.92,7.18
 NYSE,SNOW,"Intrawest Resorts Holdings, Inc.",Consumer Services,$443.36M,17-Apr-2015,117300,9.13,9.24,9.05,9.31
-NYSE,CWT,California Water  Service Group Holding,Public Utilities,$1.18B,17-Apr-2015,227100,24.28,24.13,24.07,24.48
+NYSE,CWT,California Water Service Group Holding,Public Utilities,$1.18B,17-Apr-2015,227100,24.28,24.13,24.07,24.48
 NYSE,VCO,Vina Concha Y Toro,Consumer Non-Durables,$1.5B,17-Apr-2015,10800,39.55,39.75,39.55,41
 NYSE,FRM,Furmanite Corporation,Basic Industries,$282.56M,17-Apr-2015,95300,8.01,7.77,7.73,8.01
 NYSE,VCV,Invesco California Value Municipal Income Trust,n/a,$636.98M,17-Apr-2015,42100,13.3,13.31,13.26,13.32
@@ -1755,7 +1755,7 @@ NYSE,CIVI,"Civitas Solutions, Inc.",Health Care,$705.75M,17-Apr-2015,41400,19.03
 NYSE,SIG,Signet Jewelers Limited,Consumer Services,$9.63B,17-Apr-2015,352200,133.14,132.41,132,133.64
 NYSE,JWN,"Nordstrom, Inc.",Consumer Services,$15.08B,17-Apr-2015,2087100,77.95,76.43,76.33,78.11
 NYSE,SID,National Steel Company,Capital Goods,$2.37B,17-Apr-2015,2845100,2.05,1.97,1.95,2.08
-NYSE,TAP,Molson Coors Brewing  Company,Consumer Non-Durables,$11.84B,17-Apr-2015,1820700,76.43,76.97,76.38,77.26
+NYSE,TAP,Molson Coors Brewing Company,Consumer Non-Durables,$11.84B,17-Apr-2015,1820700,76.43,76.97,76.38,77.26
 NYSE,RLGY,Realogy Holdings Corp.,Finance,$6.92B,17-Apr-2015,1746600,45.35,45.1,44.88,45.6
 NYSE,RYI,Ryerson Holding Corporation,Basic Industries,$220.42M,17-Apr-2015,101800,6.01,5.91,5.85,6.14
 NYSE,AVAL,Grupo Aval Acciones y Valores S.A.,Finance,$8.05B,17-Apr-2015,417700,9.47,9.36,9.25,9.68
@@ -1862,7 +1862,7 @@ NYSE,LTM,Life Time Fitness,Consumer Services,$2.19B,17-Apr-2015,371600,71.33,71.
 NYSE,ADPT,Adeptus Health Inc.,Health Care,$696.55M,17-Apr-2015,119600,50.07,51.24,50,51.86
 NYSE,JHP,Nuveen Quality Preferred Income Fund 3,n/a,$205.81M,17-Apr-2015,29100,8.69,8.68,8.67,8.72
 NYSE,VSLR,"Vivint Solar, Inc.",Capital Goods,$863.49M,17-Apr-2015,1318400,14.02,13.45,13.32,14.02
-NYSE,SU,Suncor Energy  Inc.,Energy,$44.15B,17-Apr-2015,3458100,32.8,32.82,32.44,33.05
+NYSE,SU,Suncor Energy Inc.,Energy,$44.15B,17-Apr-2015,3458100,32.8,32.82,32.44,33.05
 NYSE,SO,Southern Company (The),Public Utilities,$43.8B,17-Apr-2015,4251100,44.02,44.11,43.97,44.41
 NYSE,SN,Sanchez Energy Corporation,Energy,$944.22M,17-Apr-2015,1469600,15.14,14.8,14.56,15.2
 NYSE,SM,SM Energy Company,Energy,$3.09B,17-Apr-2015,2281000,56,58.22,55.97,59.28
@@ -2026,7 +2026,7 @@ NYSE,RMD,ResMed Inc.,Health Care,$8.96B,17-Apr-2015,721500,71.9,71.88,71.29,72.0
 NYSE,XL,XL Group plc,Finance,$9.23B,17-Apr-2015,1723600,37.55,37.3,37.19,37.57
 NYSE,GTI,GrafTech International Ltd,Energy,$519.76M,17-Apr-2015,758200,4.37,4.44,4.36,4.48
 NYSE,GTN,"Gray Television, Inc.",Consumer Services,$579.38M,17-Apr-2015,549700,14.07,13.8,13.69,14.07
-NYSE,VTN,Invesco Trust  for Investment Grade New York Municipal,n/a,$269.71M,17-Apr-2015,35900,13.78,13.85,13.75,13.85
+NYSE,VTN,Invesco Trust for Investment Grade New York Municipal,n/a,$269.71M,17-Apr-2015,35900,13.78,13.85,13.75,13.85
 NYSE,TMO,Thermo Fisher Scientific Inc,Capital Goods,$50.02B,17-Apr-2015,2040200,131.81,132.1,130.87,132.29
 NYSE,GTS,Triple-S Management Corporation,Finance,$635.24M,17-Apr-2015,129300,19.82,19.15,18.93,19.88
 NYSE,GTT,"GTT Communications, Inc.",Public Utilities,$363.48M,17-Apr-2015,122300,18.04,18.02,17.64,18.17
@@ -2147,7 +2147,7 @@ NYSE,ANF,Abercrombie & Fitch Company,Consumer Services,$1.68B,17-Apr-2015,283210
 NYSE,NVS,Novartis AG,Health Care,$245.31B,17-Apr-2015,1244300,102.61,102.46,101.87,102.81
 NYSE,NVR,"NVR, Inc.",Capital Goods,$5.45B,17-Apr-2015,34200,1319.25,1324.89,1311.12,1328
 NYSE,ANN,ANN INC.,Consumer Services,$1.63B,17-Apr-2015,437800,38.42,38.11,37.96,38.57
-NYSE,ANH,Anworth Mortgage Asset  Corporation,Consumer Services,$570.88M,17-Apr-2015,446300,5.23,5.27,5.23,5.27
+NYSE,ANH,Anworth Mortgage Asset Corporation,Consumer Services,$570.88M,17-Apr-2015,446300,5.23,5.27,5.23,5.27
 NYSE,ANW,Aegean Marine Petroleum Network Inc.,Energy,$684.63M,17-Apr-2015,139200,14.4,14.37,14.3,14.48
 NYSE,ANR,"Alpha Natural Resources, inc.",Energy,$276.96M,17-Apr-2015,3810500,1.04,0.99,0.98,1.04
 NYSE,NVO,Novo Nordisk A/S,Health Care,$117.7B,17-Apr-2015,964000,54.61,54.77,54.25,54.78
@@ -2414,7 +2414,7 @@ NYSE,ZQK,"Quiksilver, Inc.",Consumer Non-Durables,$400.79M,17-Apr-2015,1132900,1
 NYSE,TSNU,"Tyson Foods, Inc.",Consumer Non-Durables,n/a,17-Apr-2015,24000,48.39,48.46,48.35,48.81
 NYSE,CPS,Cooper-Standard Holdings Inc.,Capital Goods,$925.05M,17-Apr-2015,35800,62.11,61.79,60.61,62.11
 NYSE,CPT,Camden Property Trust,Consumer Services,$6.49B,17-Apr-2015,434500,75.98,75.97,75.43,76.61
-NYSE,SMI,Semiconductor  Manufacturing International Corporation,Technology,$3.17B,17-Apr-2015,176400,5.24,5.2,5.18,5.28
+NYSE,SMI,Semiconductor Manufacturing International Corporation,Technology,$3.17B,17-Apr-2015,176400,5.24,5.2,5.18,5.28
 NYSE,ARPI,"American Residential Properties, Inc.",Consumer Services,$564.15M,17-Apr-2015,135600,18.57,18.65,18.52,18.74
 NYSE,MANU,Manchester United Ltd.,Consumer Services,$677.75M,17-Apr-2015,67000,15.94,15.77,15.76,15.98
 NYSE,ALDW,"Alon USA Partners, LP",Energy,$1.11B,17-Apr-2015,166200,19.34,19.45,19.3,19.68
@@ -2672,7 +2672,7 @@ NYSE,AES,The AES Corporation,Basic Industries,$8.67B,17-Apr-2015,2823200,13.17,1
 NYSE,MUE,"Blackrock MuniHoldings Quality Fund II, Inc.",n/a,$310.95M,17-Apr-2015,21100,13.79,13.8,13.77,13.8
 NYSE,XON,Intrexon Corporation,Health Care,$3.44B,17-Apr-2015,962300,44.4,43.7,42.98,44.61
 NYSE,MUA,"Blackrock MuniAssets Fund, Inc.",n/a,$498.47M,17-Apr-2015,56600,14,14.09,13.95,14.1
-NYSE,MUC,"Blackrock MuniHoldings California Quality Fund,  Inc.",n/a,$603.55M,17-Apr-2015,88100,14.67,14.72,14.61,14.72
+NYSE,MUC,"Blackrock MuniHoldings California Quality Fund, Inc.",n/a,$603.55M,17-Apr-2015,88100,14.67,14.72,14.61,14.72
 NYSE,JBN,Select Asset Inc.,Finance,n/a,17-Apr-2015,1100,17.45,17.45,17.25,17.45
 NYSE,JBL,"Jabil Circuit, Inc.",Technology,$4.17B,17-Apr-2015,1667300,23.35,23.07,23.01,23.43
 NYSE,MUI,Blackrock Muni Intermediate Duration Fund Inc,n/a,$561.39M,17-Apr-2015,109900,14.57,14.56,14.54,14.6
@@ -2725,7 +2725,7 @@ NYSE,ITT,ITT Corporation,Capital Goods,$3.54B,17-Apr-2015,381400,41.19,40.83,40.
 NYSE,TFG,"Goldman Sachs Group, Inc. (The)",Finance,n/a,17-Apr-2015,500,26.47,26.53,26.46,26.53
 NYSE,AEG,Aegon NV,Finance,$18.54B,17-Apr-2015,776100,7.9,7.91,7.84,7.93
 NYSE,AAC,"AAC Holdings, Inc.",Health Care,$588.59M,17-Apr-2015,96500,31.65,31.62,31.5,31.87
-NYSE,AAN,"Aaron&#39;s,  Inc.",Technology,$2.26B,17-Apr-2015,386600,28.29,28.24,27.69,28.51
+NYSE,AAN,"Aaron&#39;s, Inc.",Technology,$2.26B,17-Apr-2015,386600,28.29,28.24,27.69,28.51
 NYSE,AAT,"American Assets Trust, Inc.",Consumer Services,$1.85B,17-Apr-2015,100700,40.97,41.18,40.73,41.25
 NYSE,AAV,Advantage Oil & Gas Ltd,Energy,$778.91M,17-Apr-2015,168800,5.9,6.04,5.88,6.11
 NYSE,AAP,Advance Auto Parts Inc,Consumer Services,$11.89B,17-Apr-2015,795600,149.01,149.8,147.93,149.8
