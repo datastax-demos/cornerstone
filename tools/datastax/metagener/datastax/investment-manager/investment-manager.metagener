@@ -2,8 +2,8 @@ sampler stocks.quote <- murmur3();
 entity stocks.quote pop=6569
 
     # required
-    field Symbol:text    <- csvfilesample(/cornerstone/tools/datastax/metagener/datastax/investment-manager/stocks.stock_listing.csv, symbol, uniform);
-    field LastTradePriceOnly:decimal    <- csvfilesample(/cornerstone/tools/datastax/metagener/datastax/investment-manager/stocks.stock_listing.csv, lasttradepriceonly, uniform);
+    field Symbol:text    <- csvfilesample(/cornerstone/tools/datastax/metagener/datastax/investment-manager/stock_seed_data.csv, Symbol, uniform);
+    field LastTradePrice:decimal    <- csvfilesample(/cornerstone/tools/datastax/metagener/datastax/investment-manager/stock_seed_data.csv, Open, uniform);
     field LastTradeDay:decimal
     field LastTradeDate:timestamp
     field LastTradeTime:text
