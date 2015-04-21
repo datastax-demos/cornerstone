@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+
+DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+cd $DIR/../../../
+echo "Running script from: $(pwd)"
+
+# backup existing Vagrantfile
+if [ -f Vagrantfile ]; then
+    VERSION=$(date +"%Y%m%d_%H%M%S")
+    mv Vagrantfile{,.bak.$VERSION}
+    echo "Backing up current Vagrantfile to: Vagrantfile.$VERSION"
+fi
+
+# copy correct Vagrantfile in place
+ln -s vagrantfiles/datastax/ticker Vagrantfile
+ls -alh Vagrantfile
+
+echo "Setting credentials using: ./set_credentials.sh"
+source set_credentials.sh || exit 1
+
+# clear envars
+unset SEEDS GATHER_IPS DEMO_HOST WEB_PORT
+
+vagrant up --provider virtualbox singlenode
+
+# collect DSE seeds
+export GATHER_IPS=1
+export DEMO_HOST=$(vagrant provision singlenode | grep GATHER_IPS | awk '{print $5}')
+unset GATHER_IPS
+
+# gather web ports
+export WEB_PORT=1
+DEMO_PORT=$(vagrant provision singlenode | grep WEB_PORT | awk '{print $4}')
+unset WEB_PORT
+
+# display urls
+echo -e "Demo address: \n    http://${DEMO_HOST}:${DEMO_PORT}"

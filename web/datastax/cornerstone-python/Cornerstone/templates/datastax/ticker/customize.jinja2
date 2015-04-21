@@ -1,0 +1,97 @@
+{% extends "datastax/ticker/base.jinja2" %}
+
+{% block title %}Ticker{% endblock %}
+
+{% block head %}
+    <link href="static/css/datastax/ticker/login-page.css" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+<body class="customize-body">
+<div id="page-generic">
+    {% include "datastax/ticker/top-nav.jinja2" %}
+
+    <div id="customize-form-placement-div">
+        <div id="customize-form-placement-div-sp"></div>
+        <div>
+
+
+            <form id="customize-form" action="/recommendations"
+                  method="post">
+                <ul>
+                    <li>Risk Tolerance</li>
+                    <li>
+                        <input type="radio" name="risk_tolerance"
+                               id="risk_tolerance_low"></input>
+                        <label for="risk_tolerance_low">Low</label>
+                    </li>
+                    <li>
+                        <input type="radio" name="risk_tolerance"
+                               id="risk_tolerance_medium"></input>
+                        <label for="risk_tolerance_medium">Medium</label>
+                    </li>
+                    <li>
+                        <input type="radio" name="risk_tolerance"
+                               id="risk_tolerance_high"></input>
+                        <label for="risk_tolerance_high">High</label>
+                    </li>
+                </ul>
+                <ul>
+                    <li>Preferred Investment Types</li>
+                    <li>
+                        <input type="checkbox" name="money_market"
+                               id="pit_money_market"></input>
+                        <label for="pit_money_market">Money Market</label>
+                    </li>
+                    <li>
+                        <input type="checkbox" name="bonds"
+                               id="pit_bonds"></input>
+                        <label for="pit_bonds">Bonds</label>
+                    </li>
+                    <li>
+                        <input type="checkbox" name="stocks"
+                               id="pit_money_stocks"></input>
+                        <label for="pit_money_stocks">Stocks</label>
+                    </li>
+                    <li>
+                        <input type="checkbox" name="international_securities"
+                               id="pit_international_securities"></input>
+                        <label for="pit_international_securities">International
+                            Securities</label>
+                    </li>
+                </ul>
+                <ul>
+                    <li><select id="retirementage" name="retirementage"/>
+                        <option value="retirementage" disabled selected>
+                            Retirement Age
+                        </option>
+                        <option value="3545">35-45</option>
+                        <option value="4565">45-65</option>
+                        <option value="6575">65-75</option>
+                        <option value="7585">75-85</option>
+                        <option value="8510">85+</option>
+                        </select>
+                    </li>
+                    <li><select id="drawfunds" name="drawfunds"/>
+                        <option value="drawfunds" disabled selected>When do you
+                            expect to draw funds?
+                        </option>
+                        <option value="less5">&lt; 5 years</option>
+                        <option value="5to10">5-10 years</option>
+                        <option value="10to20">10-20 years</option>
+                        <option value="20to30">20-30 years</option>
+                        <option value="30plus">30+ years</option>
+                        <option value="atretage">At retirement age</option>
+                        </select>
+                    </li>
+                    <li>
+                        <input id="submit_button" type="submit" value="SUBMIT"/>
+                    </li>
+                </ul>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="static/js/datastax/ticker/custom-v1.js"></script>
+
+{% endblock %}

@@ -1,0 +1,516 @@
+{% extends "datastax/ticker/base.jinja2" %}
+
+{% block title %}Ticker{% endblock %}
+
+{% block body %}
+<div id="page-generic">
+    {% include "datastax/ticker/navbar.jinja2" %}
+
+    <table id="item-list">
+        <thead>
+        <tr>
+            <th class="tapcell1">Symbol
+            </th>
+            <th class="tapcell2">Current
+            </th>
+            <th class="tapcell3">Gain (Loss)
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="selecteditem" id="itemblistutton1">
+            <td class="tapcell1">
+                <a href="#">AAPL</a>
+            </td>
+            <td class="tapcell2">
+                $224.00
+            </td>
+            <td class="tapcell3 pricerising">
+                + $26,700.00
+            </td>
+        </tr>
+        <tr id="itemblistutton2">
+            <td class="tapcell1">
+                TSLA
+            </td>
+            <td class="tapcell2">
+                $220.00
+            </td>
+            <td class="tapcell3 pricerising">
+                + $18,200.00
+            </td>
+        </tr>
+        <tr id="itemblistutton3">
+            <td class="tapcell1">
+                <a href="#">ONYX</a>
+            </td>
+            <td class="tapcell2">
+                $45.00
+            </td>
+            <td class="tapcell3 pricefalling">
+                - $3,000.00
+            </td>
+        </tr>
+        <tr id="itemblistutton4">
+            <td class="tapcell1">
+                <a href="#">JPM</a>
+            </td>
+            <td class="tapcell2">
+                $62.00
+            </td>
+            <td class="tapcell3 pricefalling">
+                - $2,240.00
+            </td>
+        </tr>
+        <tr id="itemblistutton5">
+            <td class="tapcell1">
+                <a href="#">V</a>
+            </td>
+            <td class="tapcell2 ">
+                $66.00
+            </td>
+            <td class="tapcell3 pricerising">
+                + $3,200.00
+            </td>
+        </tr>
+
+        <tr id="itemblistutton6">
+            <td class="tapcell1">
+                <a href="#">FB</a></td>
+            <td class="tapcell2">
+                $90.00
+            </td>
+            <td class="tapcell3 pricefalling">
+                - $7,500.00
+            </td>
+        </tr>
+
+        <tr id="itemblistutton7">
+            <td class="tapcell1">
+                <a href="#">SBUX</a></td>
+            <td class="tapcell2">
+                $48.00
+            </td>
+            <td class="tapcell3 pricefalling">
+                - $4,700.00
+            </td>
+        </tr>
+
+        <tr id="itemblistutton8">
+            <td class="tapcell1">
+                <a href="#">NFLX</a></td>
+            <td class="tapcell2">
+                $440.00
+            </td>
+            <td class="tapcell3 pricerising">
+                + $15,000.00
+            </td>
+        </tr>
+
+        <tr id="itemblistutton9">
+            <td class="tapcell1">
+                <a href="#">GPS</a></td>
+            <td class="tapcell2">
+                $42.00
+            </td>
+            <td class="tapcell3 pricefalling">
+                - $4,500.00
+            </td>
+        </tr>
+
+        <tr id="itemblistutton10">
+            <td class="tapcell1">
+                <a href="#">GOOG</a></td>
+            <td class="tapcell2">
+                $540.00
+            </td>
+            <td class="tapcell3 pricerising">
+                + $26,875.00
+            </td>
+        </tr>
+
+        </tbody>
+    </table>
+
+    <div id="details-list-block">
+
+        <div id="itemblistdetails1" class="itemblistdetailsclass">
+            <table id="details-list">
+                <tbody>
+                <tr>
+                    <td class="dlcname">
+                        <a href="#">Apple Inc.</a>
+                    </td>
+                    <td class="gencolorcode">
+                        <p class="dlcsubheader">Change (%) </p>
+
+                        <p>+ 39.73%</p></td>
+                </tr>
+                <tr>
+                    <td>
+                        <p class="dlcsubheader">Action </p>
+
+                        <p>Buy/Sell </p>
+                    </td>
+                    <td>
+                        <p class="dlcsubheader">Quantity </p>
+
+                        <p>300 </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <p class="dlcsubheader">Last Trade </p>
+
+                        <p>$135.00</p>
+                    </td>
+                    <td>
+                        <p class="dlcsubheader">Balance </p>
+
+                        <p>$67,200.00</p>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="itemblistdetails2" class="itemblistdetailsclass">
+            <table id="details-list">
+                <tbody>
+                <tr>
+                    <td class="dlcname">
+                        <a href="#">Tesla Motors, Inc. </a>
+                    </td>
+                    <td class="gencolorcode">
+                        <p class="dlcsubheader">Change (%) </p>
+
+                        <p>+ 59.09%</p></td>
+                </tr>
+                <tr>
+                    <td>
+                        <p class="dlcsubheader">Action </p>
+
+                        <p>Buy/Sell </p>
+                    </td>
+                    <td>
+                        <p class="dlcsubheader">Quantity </p>
+
+                        <p>140</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <p class="dlcsubheader">Last Trade </p>
+
+                        <p>$90.00</p>
+                    </td>
+                    <td>
+                        <p class="dlcsubheader">Balance </p>
+
+                        <p>$30,800.00</p>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="itemblistdetails3" class="itemblistdetailsclass">
+            <table id="details-list">
+                <tbody>
+                <tr>
+                    <td class="dlcname">
+                        <a href="#">Onyx Pharmaceuticals </a>
+                    </td>
+                    <td class="gencolorcode">
+                        <p class="dlcsubheader">Change (%) </p>
+
+                        <p class="genlossfld">- 33.33%</p></td>
+                </tr>
+                <tr>
+                    <td>
+                        <p class="dlcsubheader">Action </p>
+
+                        <p>Buy/Sell </p>
+                    </td>
+                    <td>
+                        <p class="dlcsubheader">Quantity </p>
+
+                        <p>200 </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <p class="dlcsubheader">Last Trade </p>
+
+                        <p>$60.00</p>
+                    </td>
+                    <td>
+                        <p class="dlcsubheader">Balance </p>
+
+                        <p>$9,000.00</p>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="itemblistdetails4" class="itemblistdetailsclass">
+            <table id="details-list">
+                <tbody>
+                <tr>
+                    <td class="dlcname">
+                        <a href="#">JPMorgan Chase</a>
+                    </td>
+                    <td>
+                        <p class="dlcsubheader">Change (%) </p>
+
+                        <p class="genlossfld">- 45.16%</p></td>
+                </tr>
+                <tr>
+                    <td>
+                        <p class="dlcsubheader">Action </p>
+
+                        <p>Buy/Sell </p>
+                    </td>
+                    <td>
+                        <p class="dlcsubheader">Quantity </p>
+
+                        <p>80 </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <p class="dlcsubheader">Last Trade </p>
+
+                        <p>$90.00 </p>
+                    </td>
+                    <td>
+                        <p class="dlcsubheader">Balance </p>
+
+                        <p>$4,960.00 </p>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="itemblistdetails5" class="itemblistdetailsclass">
+            <table id="details-list">
+                <tbody>
+                <tr>
+                    <td class="dlcname">
+                        <a href="#">Visa</a>
+                    </td>
+                    <td class="gencolorcode">
+                        <p class="dlcsubheader">Change (%) </p>
+
+                        <p>+ 24.24%</p></td>
+                </tr>
+                <tr>
+                    <td>
+                        <p class="dlcsubheader">Action </p>
+
+                        <p>Buy/Sell </p>
+                    </td>
+                    <td>
+                        <p class="dlcsubheader">Quantity </p>
+
+                        <p>200 </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <p class="dlcsubheader">Last Trade </p>
+
+                        <p>$50.00 </p>
+                    </td>
+                    <td>
+                        <p class="dlcsubheader">Balance </p>
+
+                        <p>$13,200.00 </p>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="itemblistdetails6" class="itemblistdetailsclass">
+            <table id="details-list">
+                <tbody>
+                <tr>
+                    <td class="dlcname">
+                        <a href="#">Facebook</a></td>
+                    <td class="gencolorcode">
+                        <p class="dlcsubheader">Change (%) </p>
+
+                        <p class="genlossfld">- 55.56%</p></td>
+                </tr>
+                <tr>
+                    <td>
+                        <p class="dlcsubheader">Action </p>
+
+                        <p>Buy/Sell </p></td>
+                    <td>
+                        <p class="dlcsubheader">Quantity </p>
+
+                        <p>150 </p></td>
+                </tr>
+                <tr>
+                    <td>
+                        <p class="dlcsubheader">Last Trade </p>
+
+                        <p>$140.00 </p></td>
+                    <td>
+                        <p class="dlcsubheader">Balance </p>
+
+                        <p>$13,500.00 </p></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="itemblistdetails7" class="itemblistdetailsclass">
+            <table id="details-list">
+                <tbody>
+                <tr>
+                    <td class="dlcname">
+                        <a href="#">Starbucks</a></td>
+                    <td class="gencolorcode">
+                        <p class="dlcsubheader">Change (%) </p>
+
+                        <p class="genlossfld">- 97.92%</p></td>
+                </tr>
+                <tr>
+                    <td>
+                        <p class="dlcsubheader">Action </p>
+
+                        <p>Buy/Sell </p></td>
+                    <td>
+                        <p class="dlcsubheader">Quantity </p>
+
+                        <p>100 </p></td>
+                </tr>
+                <tr>
+                    <td>
+                        <p class="dlcsubheader">Last Trade </p>
+
+                        <p>$95.00 </p></td>
+                    <td>
+                        <p class="dlcsubheader">Balance </p>
+
+                        <p>$4,800.00 </p></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="itemblistdetails8" class="itemblistdetailsclass">
+            <table id="details-list">
+                <tbody>
+                <tr>
+                    <td class="dlcname">
+                        <a href="#">Netflix</a></td>
+                    <td class="gencolorcode">
+                        <p class="dlcsubheader">Change (%) </p>
+
+                        <p>+34.09%</p></td>
+                </tr>
+                <tr>
+                    <td>
+                        <p class="dlcsubheader">Action </p>
+
+                        <p>Buy/Sell </p></td>
+                    <td>
+                        <p class="dlcsubheader">Quantity </p>
+
+                        <p>100 </p></td>
+                </tr>
+                <tr>
+                    <td>
+                        <p class="dlcsubheader">Last Trade </p>
+
+                        <p>$290.00 </p></td>
+                    <td>
+                        <p class="dlcsubheader">Balance </p>
+
+                        <p>$44,000.00 </p></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="itemblistdetails9" class="itemblistdetailsclass">
+            <table id="details-list">
+                <tbody>
+                <tr>
+                    <td class="dlcname">
+                        <a href="#">GAP</a></td>
+                    <td class="gencolorcode">
+                        <p class="dlcsubheader">Change (%) </p>
+
+                        <p class="genlossfld">- 42.86%</p></td>
+                </tr>
+                <tr>
+                    <td>
+                        <p class="dlcsubheader">Action </p>
+
+                        <p>Buy/Sell </p></td>
+                    <td>
+                        <p class="dlcsubheader">Quantity </p>
+
+                        <p>250 </p></td>
+                </tr>
+                <tr>
+                    <td>
+                        <p class="dlcsubheader">Last Trade </p>
+
+                        <p>$60.00 </p></td>
+                    <td>
+                        <p class="dlcsubheader">Balance </p>
+
+                        <p>$10,500.00 </p></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="itemblistdetails10" class="itemblistdetailsclass">
+            <table id="details-list">
+                <tbody>
+                <tr>
+                    <td class="dlcname">
+                        <a href="#">Google</a></td>
+                    <td class="gencolorcode">
+                        <p class="dlcsubheader">Change (%) </p>
+
+                        <p>+ 39.81%</p></td>
+                </tr>
+                <tr>
+                    <td>
+                        <p class="dlcsubheader">Action </p>
+
+                        <p>Buy/Sell </p></td>
+                    <td>
+                        <p class="dlcsubheader">Quantity </p>
+
+                        <p>125 </p></td>
+                </tr>
+                <tr>
+                    <td>
+                        <p class="dlcsubheader">Last Trade </p>
+
+                        <p>$325.00 </p></td>
+                    <td>
+                        <p class="dlcsubheader">Balance </p>
+
+                        <p>$67,500.00 </p></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+<script src="static/js/datastax/ticker/custom-v1.js"></script>
+{% endblock %}

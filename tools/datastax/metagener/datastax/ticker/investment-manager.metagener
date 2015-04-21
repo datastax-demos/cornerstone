@@ -1,0 +1,94 @@
+sampler stocks.quote <- murmur3();
+entity stocks.quote pop=6569
+
+    # required
+    field Symbol:text    <- csvfilesample(/cornerstone/tools/datastax/metagener/datastax/investment-manager/stock_seed_data.csv, Symbol, uniform);
+    field LastTradePrice:decimal    <- csvfilesample(/cornerstone/tools/datastax/metagener/datastax/investment-manager/stock_seed_data.csv, Open, uniform);
+    field LastTradeDay:decimal
+    field LastTradeDate:timestamp
+    field LastTradeTime:text
+
+    # stored when available
+
+    # static fields
+    field Name:text
+    field MarketCapitalization:text
+    field PreviousClose:decimal
+    field Revenue:decimal
+    field TwoHundreddayMovingAverage:decimal
+    field YearHigh:decimal
+    field YearLow:decimal
+
+    # advanced memory
+    field DaysHigh:decimal
+    field DaysLow:decimal
+
+    # unsure of static or dynamic
+    field AverageDailyVolume:decimal
+
+    # dynamic fields
+    field Ask:decimal
+    field Bid:decimal
+    field BookValuePerShare:decimal
+    field Change:decimal
+    field ChangeInPercent:decimal
+    field DividendPayDate:timestamp
+    field TrailingAnnualDividendYield:decimal
+    field TrailingAnnualDividendYieldInPercent:decimal
+    field DilutedEPS:decimal
+    field EBITDA:decimal
+    field EPSEstimateCurrentYear:decimal
+    field EPSEstimateNextQuarter:decimal
+    field EPSEstimateNextYear:decimal
+    field ExDividendDate:decimal
+    field FiftydayMovingAverage:decimal
+    field LowLimit:decimal
+    field OneyrTargetPrice:decimal
+    field Open:decimal
+    field PEGRatio:decimal
+    field PERatio:decimal
+    field ChangeInPercentFromYearHigh:decimal
+    field PercentChangeFromYearLow:decimal
+    field PriceBook:decimal
+    field PriceEPSEstimateCurrentYear:decimal
+    field PriceEPSEstimateNextYear:decimal
+    field PricePaid:decimal
+    field PriceSales:decimal
+    field TradeDate:timestamp
+    field Volume:decimal
+
+    # spark ?
+    field ChangeFromFiftydayMovingAverage:decimal
+    field ChangeFromTwoHundreddayMovingAverage:decimal
+    field ChangeFromYearHigh:decimal
+    field ChangeFromYearLow:decimal
+    field PercentChangeFromFiftydayMovingAverage:decimal
+    field PercentChangeFromTwoHundreddayMovingAverage:decimal
+
+sampler stocks.user <- linear();
+entity stocks.user pop=50000
+
+    field name:text    <- filesample(first_names.txt,uniform) + filesample(last_names.txt,uniform);
+    field email_address:text <- "first.last@gmail.com";
+    field risk_tolerance:text <- select('low,medium,high');
+    field preferred_investmentTypes:text <- select(money market,bonds,stocks,international securities);
+    field retirement_age:int <- rangedrandom(50,90);
+    field withdrawal_year:int <- rangedrandom(2015, 3000);
+
+sampler stocks.portfolio <- linear();
+entity stocks.portfolio pop=50000
+    field email_address:text
+    field portfolio_id:timeuuid
+    field description:text <- filesample(/cornerstone/tools/datastax/metagener/datastax/investment-manager/portfolio_descriptions.txt,uniform)) + rangedrandom(999999,9999999);
+
+sampler stocks.transaction <- linear();
+entity stocks.transaction pop=5000000
+    field transaction_type:text <- select('Deposit,Trade,Correction');
+
+    # if Deposit
+    field effective_date:date
+    field symbol:text
+    field quantity:decimal <- rangedrandom(0,5000)
+
+    # if Correction
+    field past_date:date
