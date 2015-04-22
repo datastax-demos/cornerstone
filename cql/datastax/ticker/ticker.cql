@@ -35,6 +35,7 @@ CREATE TABLE ticker.history (
     buy boolean,
     exchange text,
     symbol text,
+    name text,
     price double,
     quantity int,
     PRIMARY KEY ((email_address), date)
@@ -45,6 +46,7 @@ CREATE TABLE ticker.portfolio (
     exchange text,
     symbol text,
     date timestamp,
+    name text,
     buy boolean,
     price double,
     quantity int,

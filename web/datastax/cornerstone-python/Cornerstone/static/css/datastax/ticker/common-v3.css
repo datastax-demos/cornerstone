@@ -19,6 +19,9 @@ body {
   .clearfix:after {
     clear: both; }
 */
+.center {
+    text-align: center;
+}
 body {
     font-family: 'HelveticaNeueLTStd-Lt', helvetica, arial, clean, sans-serif;
     color:#555555;

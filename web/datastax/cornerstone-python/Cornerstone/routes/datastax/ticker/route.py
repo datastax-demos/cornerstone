@@ -1,4 +1,7 @@
-from flask import Blueprint, render_template, request, session
+import time
+from decimal import Decimal
+
+from flask import Blueprint, render_template, request, session, jsonify
 
 from Cornerstone.routes.datastax.cornerstone.rest import get_session
 
@@ -24,6 +27,28 @@ def preflight_check():
             preferred_investment_types, retirement_age, withdrawal_year)
         VALUES
             (?, ?, ?, ?, ?)
+    ''')
+
+    prepared_statements['get_history'] = cassandra_session.prepare('''
+        SELECT * FROM ticker.history
+        WHERE email_address = ?
+    ''')
+    prepared_statements['update_history'] = cassandra_session.prepare('''
+        INSERT INTO ticker.history
+            (email_address, date, buy, exchange, symbol, name, price, quantity)
+        VALUES
+            (?, ?, ?, ?, ?, ?, ?, ?)
+    ''')
+
+    prepared_statements['get_portfolio'] = cassandra_session.prepare('''
+        SELECT * FROM ticker.portfolio
+        WHERE email_address = ?
+    ''')
+    prepared_statements['update_portfolio'] = cassandra_session.prepare('''
+        INSERT INTO ticker.portfolio
+            (email_address, exchange, symbol, date, name, buy, price, quantity)
+        VALUES
+            (?, ?, ?, ?, ?, ?, ?, ?)
     ''')
 
 
@@ -70,8 +95,18 @@ def portfolio():
 
 @ticker_api.route('/transactions')
 def transactions():
+    preflight_check()
+    values = {
+        'email_address': session['email_address']
+    }
+    user_history = cassandra_session.execute(prepared_statements['get_history'].bind(values))
+
+    results = []
+    for row in user_history:
+        results.append(dict(row))
     return render_template('datastax/ticker/transactions.jinja2',
-                           crumb='transactions')
+                           crumb='transactions',
+                           results=results)
 
 
 @ticker_api.route('/recommendations', methods=['GET', 'POST'])
@@ -94,3 +129,23 @@ def recommendations():
 
     return render_template('datastax/ticker/recommendations.jinja2',
                            crumb='recommendations')
+
+def buy_string_to_bool(string):
+    return string.lower() in ('yes', 'true', 't', '1', 'buy')
+
+@ticker_api.route('/buy', methods=['POST'])
+def buy():
+    preflight_check()
+    values = {
+        'email_address': session['email_address'],
+        'date': request.form.get('date') if request.form.get('date') else time.time() * 1000,
+        'buy': buy_string_to_bool(request.form.get('buy')),
+        'exchange': request.form.get('exchange'),
+        'symbol': request.form.get('symbol'),
+        'name': request.form.get('name'),
+        'price': Decimal(request.form.get('price')),
+        'quantity': Decimal(request.form.get('quantity')),
+    }
+    cassandra_session.execute(prepared_statements['update_history'].bind(values))
+    cassandra_session.execute(prepared_statements['update_portfolio'].bind(values))
+    return jsonify({'status': 'ok'})
