@@ -60,6 +60,11 @@ def index():
 @ticker_api.route('/login', methods=['POST'])
 def login():
     session['email_address'] = request.form.get('email_address')
+
+    '''
+    GENERATE SEED DATA FOR THIS ACCOUNT!
+    '''
+
     return render_template('datastax/ticker/orbeus.jinja2')
 
 
