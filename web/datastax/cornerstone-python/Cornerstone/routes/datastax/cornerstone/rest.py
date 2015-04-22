@@ -67,6 +67,14 @@ def init_cassandra(ip_addresses):
     p = PreparedStatements(session)
 
 
+def get_session():
+    """
+    Grab the session object for reuse
+    :return: Cluster().connect() object
+    """
+    return session
+
+
 @rest_api.route('/')
 def base():
     f = {'status': 'OK'}

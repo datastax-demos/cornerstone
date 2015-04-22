@@ -23,9 +23,9 @@ CREATE TABLE ticker.user (
     name text,
     password_hash text,
     risk_tolerance text,
-    preferred_investment_types text,
-    retirement_age int,
-    withdrawal_year int,
+    preferred_investment_types list<text>,
+    retirement_age text,
+    withdrawal_year text,
     PRIMARY KEY ((email_address))
 );
 
