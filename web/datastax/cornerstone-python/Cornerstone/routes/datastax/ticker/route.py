@@ -57,7 +57,8 @@ def search():
 def customize():
     preflight_check()
     user_profile = cassandra_session.execute(prepared_statements['get_user'].bind((session['email_address'],)))
-    user_profile = dict(user_profile[0])
+    if user_profile:
+        user_profile = dict(user_profile[0])
     return render_template('datastax/ticker/customize.jinja2', user_profile=user_profile)
 
 
