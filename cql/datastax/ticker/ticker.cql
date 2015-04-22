@@ -3,7 +3,7 @@ CREATE KEYSPACE ticker WITH replication = {
   'Analytics': '3'
 };
 
-CREATE TABLE ticker.stocks (
+CREATE TABLE ticker.quotes (
     exchange text,
     symbol text,
     date timestamp,
