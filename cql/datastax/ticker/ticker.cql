@@ -16,26 +16,53 @@ CREATE TABLE ticker.stocks (
     low double,
     high double,
     PRIMARY KEY ((exchange, symbol), date)
-);
+) WITH CLUSTERING ORDER BY (date, DESC);
 
 CREATE TABLE ticker.user (
     email_address text,
     name text,
     password_hash text,
     risk_tolerance text,
-    preferred_investmentTypes text,
+    preferred_investment_types text,
     retirement_age int,
     withdrawal_year int,
     PRIMARY KEY ((email_address))
 );
 
+CREATE TABLE ticker.history (
+    email_address text,
+    date timestamp,
+    buy boolean,
+    exchange text,
+    symbol text,
+    price double,
+    quantity int,
+    PRIMARY KEY ((email_address), date)
+) WITH CLUSTERING ORDER BY (date DESC);
+
 CREATE TABLE ticker.portfolio (
     email_address text,
-    name text,
-    password_hash text,
+    exchange text,
+    symbol text,
+    date timestamp,
+    buy boolean,
+    price double,
+    quantity int,
+    PRIMARY KEY ((email_address), exchange, symbol, date)
+) WITH CLUSTERING ORDER BY (exchange ASC, symbol ASC, date DESC);
+
+CREATE TABLE ticker.recommendations (
     risk_tolerance text,
-    preferred_investmentTypes text,
+    preferred_investment_types text,
     retirement_age int,
     withdrawal_year int,
-    PRIMARY KEY ((email_address))
-);
+    updated_date timestamp,
+    recommendation_id uuid,
+    exchange text,
+    symbol text,
+    buy boolean,
+    quantity int,
+    projected_growth double,
+    invested_peers double,
+    PRIMARY KEY ((risk_tolerance, preferred_investment_types, retirement_age, withdrawal_year), updated_date, recommendation_id)
+) WITH CLUSTERING ORDER BY (updated_date DESC);

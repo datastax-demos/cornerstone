@@ -1,4 +1,4 @@
-Exchange,Symbol,Name,Sector,Marketcap,Date,Volume,Open,Close,Low,High
+exchange,symbol,name,sector,marketcap,date,volume,open,close,low,high
 AMEX,ISDR,Issuer Direct Corporation,Miscellaneous,$21.91M,17-Apr-2015,11000,7.53,7.3,7.05,7.59
 AMEX,NYV,Nuveen New York Municipal Value Fund 2,n/a,$35.67M,17-Apr-2015,3800,14.96,14.96,14.82,14.98
 AMEX,NYH,Eaton Vance New York Municipal Bond Fund II,n/a,$31.86M,17-Apr-2015,600,12.62,12.62,12.61,12.62
