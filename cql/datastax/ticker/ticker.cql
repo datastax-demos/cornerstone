@@ -16,7 +16,7 @@ CREATE TABLE ticker.quotes (
     low double,
     high double,
     PRIMARY KEY ((exchange, symbol), date)
-) WITH CLUSTERING ORDER BY (date, DESC);
+) WITH CLUSTERING ORDER BY (date DESC);
 
 CREATE TABLE ticker.user (
     email_address text,
