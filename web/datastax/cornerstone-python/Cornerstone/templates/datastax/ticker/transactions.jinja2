@@ -9,53 +9,26 @@
         <table id="item-list">
             <thead>
             <tr>
-                <th class="tapcell1">Symbol</th>
-                <th class="tapcell2">Action</th>
-                <th class="tapcell3">Total</th>
+                <th class="col-xs-2">Symbol</th>
+                <th class="col-xs-2">Action</th>
+                <th class="col-xs-2">Price</th>
+                <th class="col-xs-2">Quantity</th>
+                <th class="col-xs-2">Total</th>
             </tr>
             </thead>
             <tbody>
             {% for row in results %}
                 <tr {% if loop.first %}class="selecteditem"{% endif %}
                     id="itemblistutton{{ loop.index }}">
-                    <td class="tapcell1">{{ row.symbol }}</td>
-                    <td class="tapcell2">{% if row.buy %}Buy{% else %}Sell{% endif %}</td>
-                    <td class="tapcell3 {% if row.buy %}pricefalling{% else %}pricerising{% endif %}">${{ row.quantity * row.price}}</td>
+                    <td class="col-xs-2 center">{{ row.symbol }}</td>
+                    <td class="col-xs-2 center">{% if row.buy %}Buy{% else %}Sell{% endif %}</td>
+                    <td class="col-xs-2 center">${{ '%0.2f'|format(row.price) }}</td>
+                    <td class="col-xs-2 center">{{ row.quantity }}</td>
+                    <td class="col-xs-2 center {% if row.buy %}pricefalling{% else %}pricerising{% endif %}">${{ row.quantity * row.price}}</td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
-
-        <div id="details-list-block">
-            {% for row in results %}
-                <div id="itemblistdetails{{ loop.index }}" class="itemblistdetailsclass">
-                    <table id="details-list">
-                        <tbody>
-                        <tr>
-                            <td class="dlcname">{{ row.name }}</td>
-                            <td>
-                                <p class="dlcsubheader">Quantity</p>
-
-                                <p>{{ row.quantity }}</p></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <p class="dlcsubheader">&nbsp; </p>
-
-                                <p>&nbsp; </p>
-                            </td>
-                            <td>
-                                <p class="dlcsubheader">Price</p>
-
-                                <p>${{ '%0.2f'|format(row.price) }}</p>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            {% endfor %}
-        </div>
-
     </div>
     <script src="static/js/datastax/ticker/custom-v1.js"></script>
 
