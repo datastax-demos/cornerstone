@@ -115,17 +115,15 @@ def portfolio():
                 'symbol': row['symbol'],
                 'name': row['name'],
                 'quantity': 0,
-                'balance': 0,
-                'cost': 0,
+                'investment': 0,
                 'last_trade': row['price']
             }
         if row['buy']:
             current_record['quantity'] += row['quantity']
-            current_record['balance'] -= row['quantity'] * row['price']
-            current_record['cost'] += row['quantity'] * row['price']
+            current_record['investment'] -= row['quantity'] * row['price']
         else:
             current_record['quantity'] -= row['quantity']
-            current_record['balance'] += row['quantity'] * row['price']
+            current_record['investment'] += row['quantity'] * row['price']
     results.append(current_record)
 
     return render_template('datastax/ticker/portfolio.jinja2',

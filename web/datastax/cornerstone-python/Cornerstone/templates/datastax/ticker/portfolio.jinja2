@@ -18,112 +18,64 @@
             </tr>
             </thead>
             <tbody>
-            <tr class="selecteditem" id="itemblistutton1">
-                <td class="tapcell1">
-                    <a href="#">AAPL</a>
-                </td>
-                <td class="tapcell2">
-                    $224.00
-                </td>
-                <td class="tapcell3 pricerising">
-                    + $26,700.00
-                </td>
-            </tr>
-            <tr id="itemblistutton2">
-                <td class="tapcell1">
-                    TSLA
-                </td>
-                <td class="tapcell2">
-                    $220.00
-                </td>
-                <td class="tapcell3 pricerising">
-                    + $18,200.00
-                </td>
-            </tr>
+            {% for row in results %}
+                <tr class="selecteditem" id="itemblistutton{{ loop.index }}">
+                    <td class="tapcell1">
+                        <a href="#">{{ row.symbol }}</a>
+                    </td>
+                    <td class="tapcell2">
+                        $xxx
+                    </td>
+                    <td class="tapcell3 pricerising">
+                        + $xxx
+                    </td>
+                </tr>
+            {% endfor %}
             </tbody>
         </table>
 
         <div id="details-list-block">
+            {% for row in results %}
+                <div id="itemblistdetails1" class="itemblistdetailsclass">
+                    <table id="details-list">
+                        <tbody>
+                        <tr>
+                            <td class="dlcname">
+                                <a href="#">{{ row.name }}</a>
+                            </td>
+                            <td class="gencolorcode">
+                                <p class="dlcsubheader">Change (%) </p>
 
-            <div id="itemblistdetails1" class="itemblistdetailsclass">
-                <table id="details-list">
-                    <tbody>
-                    <tr>
-                        <td class="dlcname">
-                            <a href="#">Apple Inc.</a>
-                        </td>
-                        <td class="gencolorcode">
-                            <p class="dlcsubheader">Change (%) </p>
+                                <p>+ xxx%</p></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="dlcsubheader">Action </p>
 
-                            <p>+ 39.73%</p></td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <p class="dlcsubheader">Action </p>
+                                <p>Buy/Sell ???</p>
+                            </td>
+                            <td>
+                                <p class="dlcsubheader">Quantity </p>
 
-                            <p>Buy/Sell </p>
-                        </td>
-                        <td>
-                            <p class="dlcsubheader">Quantity </p>
+                                <p>{{ row.quantity }}</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="dlcsubheader">Last Trade </p>
 
-                            <p>300 </p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <p class="dlcsubheader">Last Trade </p>
+                                <p>${{ '%0.2f'|format(row.last_trade) }}</p>
+                            </td>
+                            <td>
+                                <p class="dlcsubheader">Balance </p>
 
-                            <p>$135.00</p>
-                        </td>
-                        <td>
-                            <p class="dlcsubheader">Balance </p>
-
-                            <p>$67,200.00</p>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <div id="itemblistdetails2" class="itemblistdetailsclass">
-                <table id="details-list">
-                    <tbody>
-                    <tr>
-                        <td class="dlcname">
-                            <a href="#">Tesla Motors, Inc. </a>
-                        </td>
-                        <td class="gencolorcode">
-                            <p class="dlcsubheader">Change (%) </p>
-
-                            <p>+ 59.09%</p></td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <p class="dlcsubheader">Action </p>
-
-                            <p>Buy/Sell </p>
-                        </td>
-                        <td>
-                            <p class="dlcsubheader">Quantity </p>
-
-                            <p>140</p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <p class="dlcsubheader">Last Trade </p>
-
-                            <p>$90.00</p>
-                        </td>
-                        <td>
-                            <p class="dlcsubheader">Balance </p>
-
-                            <p>$30,800.00</p>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
+                                <p>${{ '%0.2f'|format(row.investment) }}</p>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            {% endfor %}
         </div>
     </div>
 
