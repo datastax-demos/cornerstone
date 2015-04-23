@@ -94,8 +94,40 @@ def customize():
 
 @ticker_api.route('/portfolio', methods=['GET', 'POST'])
 def portfolio():
+    preflight_check()
+    values = {
+        'email_address': session['email_address']
+    }
+    user_history = cassandra_session.execute(prepared_statements['get_portfolio'].bind(values))
+
+    results = []
+    current_record = None
+    for row in user_history:
+        if current_record and current_record['symbol'] != row['symbol']:
+            results.append(current_record)
+            current_record = None
+        if not current_record:
+            current_record = {
+                'exchange': row['exchange'],
+                'symbol': row['symbol'],
+                'name': row['name'],
+                'quantity': 0,
+                'balance': 0,
+                'cost': 0,
+                'last_trade': row['price']
+            }
+        if row['buy']:
+            current_record['quantity'] += row['quantity']
+            current_record['balance'] -= row['quantity'] * row['price']
+            current_record['cost'] += row['quantity'] * row['price']
+        else:
+            current_record['quantity'] -= row['quantity']
+            current_record['balance'] += row['quantity'] * row['price']
+    results.append(current_record)
+
     return render_template('datastax/ticker/portfolio.jinja2',
-                           crumb='portfolio')
+                           crumb='portfolio',
+                           results=results)
 
 
 @ticker_api.route('/transactions')
