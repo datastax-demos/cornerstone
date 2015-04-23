@@ -18,61 +18,71 @@
             </tr>
             </thead>
             <tbody>
-            <tr class="selecteditem" id="itemblistutton1">
-                <td class="tapcell1">
-                    <a href="#">GPRO</a>
-                </td>
-                <td class="tapcell2">
-                    BUY
-                </td>
-                <td class="tapcell3">+ 45% / 55%</td>
-            </tr>
-            <tr id="itemblistutton2" class="recspricefallingtr">
-                <td class="tapcell1">
-                    FB
-                </td>
-                <td class="tapcell2">SELL</td>
-                <td class="tapcell3">- 20% / 15%</td>
-            </tr>
+            {% for row in results %}
+                <tr {% if loop.first %}class="selecteditem"{% endif %}
+                    id="itemblistutton{{ loop.index }}">
+                    <td class="tapcell1">
+                        <a href="#">{{ row.symbol }}</a>
+                    </td>
+                    <td class="tapcell2"
+                        id="{% if row.buy %}pricerising{% else %}pricefalling{% endif %}">
+                        {% if row.buy %}BUY{% else %}SELL{% endif %}
+                    </td>
+                    <td class="tapcell3">
+                        {% if row.buy %}+{% endif %}
+                        {{ '%d'|format(row.projected_growth * 100) }}% /
+                        {{ '%d'|format(row.invested_peers * 100) }}%
+                    </td>
+                </tr>
+                <script type="text/javascript">
+                    currentValues('{{ row.exchange }}', '{{ row.symbol }}', '{{ row.quantity }}', '{{ row.investment }}');
+                </script>
+            {% endfor %}
             </tbody>
         </table>
 
         <div id="details-list-block">
+            {% for row in results %}
+                <div id="itemblistdetails{{ loop.index }}" class="itemblistdetailsclass">
+                    <table id="details-list">
+                        <tbody>
+                        <tr>
+                            <td class="dlcname">
+                                <a href="#">{{ row.name }}</a>
+                            </td>
+                            <td>
+                                <p class="dlcsubheader">Quantity</p>
 
-            <div id="itemblistdetails1" class="itemblistdetailsclass">
-                <table id="details-list">
-                    <tbody>
-                    <tr>
-                        <td class="dlcname">
-                            <a href="#">GoPro Inc.</a>
-                        </td>
-                        <td>
-                            <p class="dlcsubheader">Quantity</p>
+                                <p>---</p></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="dlcsubheader">Price </p>
 
-                            <p>200</p></td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <p class="dlcsubheader">Price </p>
+                                <p>---</p>
+                            </td>
+                            <td>
+                                <p class="dlcsubheader">Balance</p>
 
-                            <p>$43.00</p>
-                        </td>
-                        <td>
-                            <p class="dlcsubheader">Balance</p>
+                                <p>---</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="gencolorcode">
+                                <p class="dlcsubheader">Why</p>
 
-                            <p>$8,600.00</p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2" class="gencolorcode">
-                            <p class="dlcsubheader">Why</p>
+                                <p>
+                                    {% if row.buy %}+{% endif %}
+                                    {{ '%d'|format(row.projected_growth * 100) }}% Gain /
+                                    {{ '%d'|format(row.invested_peers * 100) }}% of Peers Invested
+                                </p>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            {% endfor %}
 
-                            <p>+ 45% Gain / 55% of Peers Invested</p>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
 
             <div id="itemblistdetails2" class="itemblistdetailsclass">
                 <table id="details-list">

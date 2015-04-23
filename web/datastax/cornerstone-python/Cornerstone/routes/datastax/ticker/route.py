@@ -51,6 +51,12 @@ def preflight_check():
             (?, ?, ?, ?, ?, ?, ?, ?)
     ''')
 
+    prepared_statements['get_recommendations'] = cassandra_session.prepare('''
+        SELECT * FROM ticker.recommendations
+        WHERE risk_tolerance = ? AND preferred_investment_types = ?
+            AND retirement_age = ? AND withdrawal_year = ?
+    ''')
+
     prepared_statements['get_quote'] = cassandra_session.prepare('''
         SELECT * FROM ticker.quotes
         WHERE exchange = ? AND symbol = ?
@@ -172,9 +178,49 @@ def recommendations():
 
         cassandra_session.execute(
             prepared_statements['update_user'].bind(values))
+    else:
+        values = {
+            'email_address': session['email_address']
+        }
+        user = cassandra_session.execute(
+            prepared_statements['get_user'].bind(values))
+
+        values = {}
+        if user:
+            row = user[0]
+            values = {
+                'email_address': row['email_address'],
+                'risk_tolerance': row['risk_tolerance'],
+                'preferred_investment_types': row['preferred_investment_types'],
+                'retirement_age': row['retirement_age'],
+                'withdrawal_year': row['withdrawal_year'],
+            }
+
+    results = []
+    if values:
+        # this is how we'll be indexing preferred_investment_types in the
+        # recommendations table
+        values['preferred_investment_types'].sort()
+        values['preferred_investment_types'] = '_'.join(
+            values['preferred_investment_types'])
+        del values['email_address']
+
+        recommendation_results = cassandra_session.execute(
+            prepared_statements['get_recommendations'].bind(values))
+
+        update_date = None
+        for row in recommendation_results:
+            # only read the latest recommendation update
+            if not update_date:
+                update_date = row['updated_date']
+            if row['updated_date'] != update_date:
+                break
+
+            results.append(dict(row))
 
     return render_template('datastax/ticker/recommendations.jinja2',
-                           crumb='recommendations')
+                           crumb='recommendations',
+                           results=results)
 
 
 def buy_string_to_bool(string):

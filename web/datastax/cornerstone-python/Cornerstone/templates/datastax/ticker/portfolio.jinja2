@@ -19,7 +19,8 @@
             </thead>
             <tbody>
             {% for row in results %}
-                <tr class="selecteditem" id="itemblistutton{{ loop.index }}">
+                <tr {% if loop.first %}class="selecteditem"{% endif %}
+                    id="itemblistutton{{ loop.index }}">
                     <td class="tapcell1">
                         <a href="#">{{ row.symbol }}</a>
                     </td>
