@@ -20,7 +20,7 @@ entity stocks.user pop=50000
     field name:text    <- //filesample(first_names.txt,uniform) + filesample(last_names.txt,uniform);
     field email_address:text <- //"first.last@gmail.com";
     field risk_tolerance:text <- select('low,medium,high');
-    field preferred_investmentTypes:text <- select(money-market,bonds,stocks,international-securities);
+    field preferred_investmentTypes:text <- //subset(money-market,bonds,stocks,international-securities);
     field retirement_age:int <- select(35-45,45-65,65-75,75-85,85+);
     field withdrawal_year:int <- select(<5,5-10,10-20,20-30,30+,retirement-age);
 
