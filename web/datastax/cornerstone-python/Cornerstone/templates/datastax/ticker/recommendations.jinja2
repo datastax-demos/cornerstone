@@ -3,277 +3,113 @@
 {% block title %}Ticker{% endblock %}
 
 {% block body %}
-<body>
-<div id="recommendations-page-div">
-    {% include "datastax/ticker/navbar.jinja2" %}
+    <body>
+    <div id="recommendations-page-div">
+        {% include "datastax/ticker/navbar.jinja2" %}
 
-    <table id="item-list">
-        <thead>
-        <tr>
-            <th class="tapcell1">Symbol
-            </th>
-            <th class="tapcell2">Action</th>
-            <th class="tapcell3">Why
-            </th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr class="selecteditem" id="itemblistutton1">
-            <td class="tapcell1">
-                <a href="#">GPRO</a>
-            </td>
-            <td class="tapcell2">
-                BUY
-            </td>
-            <td class="tapcell3">+ 45% / 55%</td>
-        </tr>
-        <tr id="itemblistutton2" class="recspricefallingtr">
-            <td class="tapcell1">
-                FB
-            </td>
-            <td class="tapcell2">SELL</td>
-            <td class="tapcell3">- 20% / 15%</td>
-        </tr>
-        <tr id="itemblistutton3">
-            <td class="tapcell1">
-                <a href="#">AA</a>
-            </td>
-            <td class="tapcell2">BUY</td>
-            <td class="tapcell3">+ 8% / 70%</td>
-        </tr>
-        <tr id="itemblistutton4" class="recspricefallingtr">
-            <td class="tapcell1">
-                <a href="#">JPM</a>
-            </td>
-            <td class="tapcell2">SELL</td>
-            <td class="tapcell3">- 45% / 25%</td>
-        </tr>
-        <tr id="itemblistutton5">
-            <td class="tapcell1">
-                <a href="#">UAL</a>
-            </td>
-            <td class="tapcell2">BUY</td>
-            <td class="tapcell3">+ 35% / 80%</td>
-        </tr>
-        <tr id="itemblistutton6" class="recspricefallingtr">
-            <td class="tapcell1">
-                <a href="#">SBUX</a>
-            </td>
-            <td class="tapcell2">SELL</td>
-            <td class="tapcell3">- 70% / $45%</td>
-        </tr>
+        <table id="item-list">
+            <thead>
+            <tr>
+                <th class="tapcell1">Symbol
+                </th>
+                <th class="tapcell2">Action</th>
+                <th class="tapcell3">Why
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="selecteditem" id="itemblistutton1">
+                <td class="tapcell1">
+                    <a href="#">GPRO</a>
+                </td>
+                <td class="tapcell2">
+                    BUY
+                </td>
+                <td class="tapcell3">+ 45% / 55%</td>
+            </tr>
+            <tr id="itemblistutton2" class="recspricefallingtr">
+                <td class="tapcell1">
+                    FB
+                </td>
+                <td class="tapcell2">SELL</td>
+                <td class="tapcell3">- 20% / 15%</td>
+            </tr>
+            </tbody>
+        </table>
 
-        </tbody>
-    </table>
+        <div id="details-list-block">
 
-    <div id="details-list-block">
+            <div id="itemblistdetails1" class="itemblistdetailsclass">
+                <table id="details-list">
+                    <tbody>
+                    <tr>
+                        <td class="dlcname">
+                            <a href="#">GoPro Inc.</a>
+                        </td>
+                        <td>
+                            <p class="dlcsubheader">Quantity</p>
 
-        <div id="itemblistdetails1" class="itemblistdetailsclass">
-            <table id="details-list">
-                <tbody>
-                <tr>
-                    <td class="dlcname">
-                        <a href="#">GoPro Inc.</a>
-                    </td>
-                    <td>
-                        <p class="dlcsubheader">Quantity</p>
+                            <p>200</p></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p class="dlcsubheader">Price </p>
 
-                        <p>200</p></td>
-                </tr>
-                <tr>
-                    <td>
-                        <p class="dlcsubheader">Price </p>
+                            <p>$43.00</p>
+                        </td>
+                        <td>
+                            <p class="dlcsubheader">Balance</p>
 
-                        <p>$43.00</p>
-                    </td>
-                    <td>
-                        <p class="dlcsubheader">Balance</p>
+                            <p>$8,600.00</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="gencolorcode">
+                            <p class="dlcsubheader">Why</p>
 
-                        <p>$8,600.00</p>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2" class="gencolorcode">
-                        <p class="dlcsubheader">Why</p>
+                            <p>+ 45% Gain / 55% of Peers Invested</p>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
 
-                        <p>+ 45% Gain / 55% of Peers Invested</p>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+            <div id="itemblistdetails2" class="itemblistdetailsclass">
+                <table id="details-list">
+                    <tbody>
+                    <tr>
+                        <td class="dlcname">
+                            <a href="#">Facebook</a>
+                        </td>
+                        <td>
+                            <p class="dlcsubheader">Quantity</p>
+
+                            <p>150</p></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p class="dlcsubheader">Price </p>
+
+                            <p>$90.00</p>
+                        </td>
+                        <td>
+                            <p class="dlcsubheader">Balance</p>
+
+                            <p>$0.00</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="gencolorcode">
+                            <p class="dlcsubheader">Why</p>
+
+                            <p class="genlossfld">- 20% Loss / 15% of Peers
+                                Invested</p>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
-
-        <div id="itemblistdetails2" class="itemblistdetailsclass">
-            <table id="details-list">
-                <tbody>
-                <tr>
-                    <td class="dlcname">
-                        <a href="#">Facebook</a>
-                    </td>
-                    <td>
-                        <p class="dlcsubheader">Quantity</p>
-
-                        <p>150</p></td>
-                </tr>
-                <tr>
-                    <td>
-                        <p class="dlcsubheader">Price </p>
-
-                        <p>$90.00</p>
-                    </td>
-                    <td>
-                        <p class="dlcsubheader">Balance</p>
-
-                        <p>$0.00</p>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2" class="gencolorcode">
-                        <p class="dlcsubheader">Why</p>
-
-                        <p class="genlossfld">- 20% Loss / 15% of Peers
-                            Invested</p>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <div id="itemblistdetails3" class="itemblistdetailsclass">
-            <table id="details-list">
-                <tbody>
-                <tr>
-                    <td class="dlcname">
-                        <a href="#">Alcoa Inc. </a>
-                    </td>
-                    <td>
-                        <p class="dlcsubheader">Quantity</p>
-
-                        <p>200</p></td>
-                </tr>
-                <tr>
-                    <td>
-                        <p class="dlcsubheader">Price </p>
-
-                        <p>$14.00</p>
-                    </td>
-                    <td>
-                        <p class="dlcsubheader">Balance</p>
-
-                        <p>$2,800.00</p>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2" class="gencolorcode">
-                        <p class="dlcsubheader">Why</p>
-
-                        <p>+ 8% Gain / 70% of Peers Invested</p>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <div id="itemblistdetails4" class="itemblistdetailsclass">
-            <table id="details-list">
-                <tbody>
-                <tr>
-                    <td class="dlcname">
-                        <a href="#">JP Morgan Chase</a>
-                    </td>
-                    <td>
-                        <p class="dlcsubheader">Quantity</p>
-
-                        <p>80</p></td>
-                </tr>
-                <tr>
-                    <td>
-                        <p class="dlcsubheader">Price </p>
-
-                        <p>$62.00</p>
-                    </td>
-                    <td>
-                        <p class="dlcsubheader">Balance</p>
-
-                        <p>$0.00</p>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2" class="gencolorcode">
-                        <p class="dlcsubheader">Why</p>
-
-                        <p class="genlossfld">- 45% Loss / 25% of Peers
-                            Invested</p>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <div id="itemblistdetails5" class="itemblistdetailsclass">
-            <table id="details-list">
-                <tbody>
-                <tr>
-                    <td class="dlcname"><a href="#">United Airlines</a></td>
-                    <td>
-                        <p class="dlcsubheader">Quantity</p>
-
-                        <p>100</p></td>
-                </tr>
-                <tr>
-                    <td><p class="dlcsubheader">Price </p>
-
-                        <p>$50.00</p></td>
-                    <td><p class="dlcsubheader">Balance</p>
-
-                        <p>$5,000.00</p>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2" class="gencolorcode"><p
-                            class="dlcsubheader">Why</p>
-
-                        <p>+ 35% Gain / 80% of Peers Invested</p>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-
-
-        <div id="itemblistdetails6" class="itemblistdetailsclass">
-            <table id="details-list">
-                <tbody>
-                <tr>
-                    <td class="dlcname"><a href="#">Starbucks</a></td>
-                    <td>
-                        <p class="dlcsubheader">Quantity</p>
-
-                        <p>100</p></td>
-                </tr>
-                <tr>
-                    <td><p class="dlcsubheader">Price </p>
-
-                        <p>$48.00</p></td>
-                    <td><p class="dlcsubheader">Balance</p>
-
-                        <p>$0.00</p>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2" class="gencolorcode"><p
-                            class="dlcsubheader">Why</p>
-
-                        <p class="genlossfld">- 70% Loss / $45% of Peers
-                            Invested</p>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-
-
     </div>
-</div>
-<script src="static/js/datastax/ticker/custom-v1.js"></script>
+    <script src="static/js/datastax/ticker/custom-v1.js"></script>
 {% endblock %}
