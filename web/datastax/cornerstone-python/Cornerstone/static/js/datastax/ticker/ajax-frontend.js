@@ -16,7 +16,7 @@ function currentValues(exchange, symbol, quantity, investment) {
     $.ajax({
         url: '/quote?exchange='+ exchange + '&symbol=' + symbol
     }).success(function (data) {
-        $('#current-' + exchange + '-' + symbol).text('$ ' + data.current);
+        $('#current-' + exchange + '-' + symbol).text(data.current.formatMoney());
 
         balance = data.current * quantity;
         selection = $('#balance-' + exchange + '-' + symbol);
