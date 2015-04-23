@@ -151,7 +151,7 @@ ul {
 }
 #item-list td {
     font-family: HelveticaNeueLTStd-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif;
-    color: #555555;
+    /*color: #555555;*/
     border-bottom:2px solid #fafafa;
 }
 @media screen and (max-width: 410px) { 
@@ -159,10 +159,10 @@ ul {
       font-size: 15px;  /* thisfontsize */
   }
 }
-#item-list .pricerising {
+.pricerising {
     color: #48b749;
 }
-#item-list .pricefalling {
+.pricefalling {
     color: #ed1c24;
 }
 #item-list .tapcell1 {

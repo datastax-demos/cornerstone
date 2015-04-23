@@ -15,6 +15,7 @@ CREATE TABLE ticker.quotes (
     close double,
     low double,
     high double,
+    current double,
     PRIMARY KEY ((exchange, symbol), date)
 ) WITH CLUSTERING ORDER BY (date DESC);
 

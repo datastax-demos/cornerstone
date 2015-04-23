@@ -23,13 +23,18 @@
                     <td class="tapcell1">
                         <a href="#">{{ row.symbol }}</a>
                     </td>
-                    <td class="tapcell2">
-                        $xxx
+                    <td class="tapcell2"
+                        id="current-{{ row.exchange }}-{{ row.symbol }}">
+                        ---
                     </td>
-                    <td class="tapcell3 pricerising">
-                        + $xxx
+                    <td class="tapcell3"
+                        id="gain-{{ row.exchange }}-{{ row.symbol }}">
+                        ---
                     </td>
                 </tr>
+                <script type="text/javascript">
+                    currentValues('{{ row.exchange }}', '{{ row.symbol }}', '{{ row.quantity }}', '{{ row.investment }}');
+                </script>
             {% endfor %}
             </tbody>
         </table>
@@ -43,10 +48,12 @@
                             <td class="dlcname">
                                 <a href="#">{{ row.name }}</a>
                             </td>
-                            <td class="gencolorcode">
-                                <p class="dlcsubheader">Change (%) </p>
+                            <td>
+                                <p class="dlcsubheader">Change</p>
 
-                                <p>+ xxx%</p></td>
+                                <p id="investment-change-{{ row.exchange }}-{{ row.symbol }}">
+                                    ---
+                                </p></td>
                         </tr>
                         <tr>
                             <td>
@@ -71,7 +78,9 @@
                             <td>
                                 <p class="dlcsubheader">Balance </p>
 
-                                <p>${{ '%0.2f'|format(row.investment) }}</p>
+                                <p id="balance-{{ row.exchange }}-{{ row.symbol }}">
+                                    ---
+                                </p>
                             </td>
                         </tr>
                         </tbody>
