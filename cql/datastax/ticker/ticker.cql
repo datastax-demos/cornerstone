@@ -63,6 +63,7 @@ CREATE TABLE ticker.recommendations (
     recommendation_id uuid,
     exchange text,
     symbol text,
+    name text,
     buy boolean,
     quantity int,
     projected_growth double,
