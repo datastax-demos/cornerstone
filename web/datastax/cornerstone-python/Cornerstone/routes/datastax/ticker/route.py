@@ -86,10 +86,12 @@ def search():
 @ticker_api.route('/customize')
 def customize():
     preflight_check()
-    user_profile = cassandra_session.execute(prepared_statements['get_user'].bind((session['email_address'],)))
+    user_profile = cassandra_session.execute(
+        prepared_statements['get_user'].bind((session['email_address'],)))
     if user_profile:
         user_profile = dict(user_profile[0])
-    return render_template('datastax/ticker/customize.jinja2', user_profile=user_profile)
+    return render_template('datastax/ticker/customize.jinja2',
+                           user_profile=user_profile)
 
 
 @ticker_api.route('/portfolio', methods=['GET', 'POST'])
@@ -98,7 +100,8 @@ def portfolio():
     values = {
         'email_address': session['email_address']
     }
-    user_history = cassandra_session.execute(prepared_statements['get_portfolio'].bind(values))
+    user_history = cassandra_session.execute(
+        prepared_statements['get_portfolio'].bind(values))
 
     results = []
     current_record = None
@@ -136,7 +139,8 @@ def transactions():
     values = {
         'email_address': session['email_address']
     }
-    user_history = cassandra_session.execute(prepared_statements['get_history'].bind(values))
+    user_history = cassandra_session.execute(
+        prepared_statements['get_history'].bind(values))
 
     results = []
     for row in user_history:
@@ -162,20 +166,24 @@ def recommendations():
             if 'preferred_investment_types' in key:
                 values['preferred_investment_types'].append(key.split(':')[1])
 
-        cassandra_session.execute(prepared_statements['update_user'].bind(values))
+        cassandra_session.execute(
+            prepared_statements['update_user'].bind(values))
 
     return render_template('datastax/ticker/recommendations.jinja2',
                            crumb='recommendations')
 
+
 def buy_string_to_bool(string):
     return string.lower() in ('yes', 'true', 't', '1', 'buy')
+
 
 @ticker_api.route('/buy', methods=['POST'])
 def buy():
     preflight_check()
     values = {
         'email_address': session['email_address'],
-        'date': request.form.get('date') if request.form.get('date') else time.time() * 1000,
+        'date': request.form.get('date') if request.form.get('date') \
+            else time.time() * 1000,
         'buy': buy_string_to_bool(request.form.get('buy')),
         'exchange': request.form.get('exchange'),
         'symbol': request.form.get('symbol'),
@@ -183,6 +191,8 @@ def buy():
         'price': Decimal(request.form.get('price')),
         'quantity': Decimal(request.form.get('quantity')),
     }
-    cassandra_session.execute(prepared_statements['update_history'].bind(values))
-    cassandra_session.execute(prepared_statements['update_portfolio'].bind(values))
+    cassandra_session.execute(
+        prepared_statements['update_history'].bind(values))
+    cassandra_session.execute(
+        prepared_statements['update_portfolio'].bind(values))
     return jsonify({'status': 'ok'})
