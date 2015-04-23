@@ -51,6 +51,12 @@ def preflight_check():
             (?, ?, ?, ?, ?, ?, ?, ?)
     ''')
 
+    prepared_statements['get_quote'] = cassandra_session.prepare('''
+        SELECT * FROM ticker.quotes
+        WHERE exchange = ? AND symbol = ?
+        LIMIT 1
+    ''')
+
 
 @ticker_api.route('/')
 def index():
@@ -194,3 +200,21 @@ def buy():
     cassandra_session.execute(
         prepared_statements['update_portfolio'].bind(values))
     return jsonify({'status': 'ok'})
+
+
+@ticker_api.route('/quote')
+def quote():
+    if not request.args.get('exchange') or not request.args.get('symbol'):
+        return jsonify({'error': 'exchange and symbol required.'})
+    values = {
+        'exchange': request.args.get('exchange'),
+        'symbol': request.args.get('symbol'),
+    }
+    quote = cassandra_session.execute(
+        prepared_statements['get_quote'].bind(values))
+
+    results = {}
+    if quote:
+        results = dict(quote[0])
+
+    return jsonify(results)
