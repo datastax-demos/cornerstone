@@ -16,52 +16,55 @@ def preflight_check():
     if not cassandra_session:
         cassandra_session = get_session()
 
-    prepared_statements = {}
-    prepared_statements['get_user'] = cassandra_session.prepare('''
-        SELECT * FROM ticker.user
-        WHERE email_address = ?
-    ''')
-    prepared_statements['update_user'] = cassandra_session.prepare('''
-        INSERT INTO ticker.user
-            (email_address, risk_tolerance,
-            preferred_investment_types, retirement_age, withdrawal_year)
-        VALUES
-            (?, ?, ?, ?, ?)
-    ''')
+        prepared_statements = {}
+        prepared_statements['get_user'] = cassandra_session.prepare('''
+            SELECT * FROM ticker.user
+            WHERE email_address = ?
+        ''')
+        prepared_statements['update_user'] = cassandra_session.prepare('''
+            INSERT INTO ticker.user
+                (email_address, risk_tolerance,
+                preferred_investment_types, retirement_age, withdrawal_year)
+            VALUES
+                (?, ?, ?, ?, ?)
+        ''')
 
-    prepared_statements['get_history'] = cassandra_session.prepare('''
-        SELECT * FROM ticker.history
-        WHERE email_address = ?
-    ''')
-    prepared_statements['update_history'] = cassandra_session.prepare('''
-        INSERT INTO ticker.history
-            (email_address, date, buy, exchange, symbol, name, price, quantity)
-        VALUES
-            (?, ?, ?, ?, ?, ?, ?, ?)
-    ''')
+        prepared_statements['get_history'] = cassandra_session.prepare('''
+            SELECT * FROM ticker.history
+            WHERE email_address = ?
+        ''')
+        prepared_statements['update_history'] = cassandra_session.prepare('''
+            INSERT INTO ticker.history
+                (email_address, date, buy, exchange, symbol, name, price,
+                quantity)
+            VALUES
+                (?, ?, ?, ?, ?, ?, ?, ?)
+        ''')
 
-    prepared_statements['get_portfolio'] = cassandra_session.prepare('''
-        SELECT * FROM ticker.portfolio
-        WHERE email_address = ?
-    ''')
-    prepared_statements['update_portfolio'] = cassandra_session.prepare('''
-        INSERT INTO ticker.portfolio
-            (email_address, exchange, symbol, date, name, buy, price, quantity)
-        VALUES
-            (?, ?, ?, ?, ?, ?, ?, ?)
-    ''')
+        prepared_statements['get_portfolio'] = cassandra_session.prepare('''
+            SELECT * FROM ticker.portfolio
+            WHERE email_address = ?
+        ''')
+        prepared_statements['update_portfolio'] = cassandra_session.prepare('''
+            INSERT INTO ticker.portfolio
+                (email_address, exchange, symbol, date, name, buy, price,
+                quantity)
+            VALUES
+                (?, ?, ?, ?, ?, ?, ?, ?)
+        ''')
 
-    prepared_statements['get_recommendations'] = cassandra_session.prepare('''
-        SELECT * FROM ticker.recommendations
-        WHERE risk_tolerance = ? AND preferred_investment_types = ?
-            AND retirement_age = ? AND withdrawal_year = ?
-    ''')
+        prepared_statements['get_recommendations'] = \
+            cassandra_session.prepare('''
+            SELECT * FROM ticker.recommendations
+            WHERE risk_tolerance = ? AND preferred_investment_types = ?
+                AND retirement_age = ? AND withdrawal_year = ?
+        ''')
 
-    prepared_statements['get_quote'] = cassandra_session.prepare('''
-        SELECT * FROM ticker.quotes
-        WHERE exchange = ? AND symbol = ?
-        LIMIT 1
-    ''')
+        prepared_statements['get_quote'] = cassandra_session.prepare('''
+            SELECT * FROM ticker.quotes
+            WHERE exchange = ? AND symbol = ?
+            LIMIT 1
+        ''')
 
 
 @ticker_api.route('/')
@@ -106,11 +109,9 @@ def customize():
                            user_profile=user_profile)
 
 
-@ticker_api.route('/portfolio', methods=['GET', 'POST'])
-def portfolio():
-    preflight_check()
+def _get_portfolio(email_address):
     values = {
-        'email_address': session['email_address']
+        'email_address': email_address
     }
     user_history = cassandra_session.execute(
         prepared_statements['get_portfolio'].bind(values))
@@ -138,6 +139,14 @@ def portfolio():
             current_record['investment'] += row['quantity'] * row['price']
     results.append(current_record)
 
+    return results
+
+
+@ticker_api.route('/portfolio', methods=['GET', 'POST'])
+def portfolio():
+    preflight_check()
+    results = _get_portfolio(session['email_address'])
+
     return render_template('datastax/ticker/portfolio.jinja2',
                            crumb='portfolio',
                            results=results)
@@ -158,6 +167,19 @@ def transactions():
     return render_template('datastax/ticker/transactions.jinja2',
                            crumb='transactions',
                            results=results)
+
+
+def _portfolio_hash(email_address):
+    portfolio = _get_portfolio(email_address)
+
+    portfolio_hash = {}
+    for row in portfolio:
+        if not row['exchange'] in portfolio_hash:
+            portfolio_hash[row['exchange']] = {}
+        if not row['symbol'] in portfolio_hash[row['exchange']]:
+            portfolio_hash[row['exchange']][row['symbol']] = row
+
+    return portfolio_hash
 
 
 @ticker_api.route('/recommendations', methods=['GET', 'POST'])

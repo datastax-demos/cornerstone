@@ -53,20 +53,22 @@
                             <td>
                                 <p class="dlcsubheader">Quantity</p>
 
-                                <p>---</p></td>
+                                <p>{{ row.quantity }}</p>
                         </tr>
                         <tr>
                             <td>
-                                <p class="dlcsubheader">Price </p>
+                                <p class="dlcsubheader">Price</p>
 
                                 <p id="current-{{ row.exchange }}-{{ row.symbol }}">
                                     ---
                                 </p>
                             </td>
                             <td>
-                                <p class="dlcsubheader">Balance</p>
+                                <p class="dlcsubheader">Order</p>
 
-                                <p>---</p>
+                                <p id="balance-{{ row.exchange }}-{{ row.symbol }}">
+                                    ---
+                                </p>
                             </td>
                         </tr>
                         <tr>
