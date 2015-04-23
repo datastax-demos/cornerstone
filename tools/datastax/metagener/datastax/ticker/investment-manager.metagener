@@ -1,94 +1,37 @@
-sampler stocks.quote <- murmur3();
-entity stocks.quote pop=6569
+sampler stocks.quotes <- murmur3();
+entity stocks.quotes pop=999999999
 
-    # required
-    field Symbol:text    <- csvfilesample(/cornerstone/tools/datastax/metagener/datastax/investment-manager/stock_seed_data.csv, Symbol, uniform);
-    field LastTradePrice:decimal    <- csvfilesample(/cornerstone/tools/datastax/metagener/datastax/investment-manager/stock_seed_data.csv, Open, uniform);
-    field LastTradeDay:decimal
-    field LastTradeDate:timestamp
-    field LastTradeTime:text
-
-    # stored when available
-
-    # static fields
-    field Name:text
-    field MarketCapitalization:text
-    field PreviousClose:decimal
-    field Revenue:decimal
-    field TwoHundreddayMovingAverage:decimal
-    field YearHigh:decimal
-    field YearLow:decimal
-
-    # advanced memory
-    field DaysHigh:decimal
-    field DaysLow:decimal
-
-    # unsure of static or dynamic
-    field AverageDailyVolume:decimal
-
-    # dynamic fields
-    field Ask:decimal
-    field Bid:decimal
-    field BookValuePerShare:decimal
-    field Change:decimal
-    field ChangeInPercent:decimal
-    field DividendPayDate:timestamp
-    field TrailingAnnualDividendYield:decimal
-    field TrailingAnnualDividendYieldInPercent:decimal
-    field DilutedEPS:decimal
-    field EBITDA:decimal
-    field EPSEstimateCurrentYear:decimal
-    field EPSEstimateNextQuarter:decimal
-    field EPSEstimateNextYear:decimal
-    field ExDividendDate:decimal
-    field FiftydayMovingAverage:decimal
-    field LowLimit:decimal
-    field OneyrTargetPrice:decimal
-    field Open:decimal
-    field PEGRatio:decimal
-    field PERatio:decimal
-    field ChangeInPercentFromYearHigh:decimal
-    field PercentChangeFromYearLow:decimal
-    field PriceBook:decimal
-    field PriceEPSEstimateCurrentYear:decimal
-    field PriceEPSEstimateNextYear:decimal
-    field PricePaid:decimal
-    field PriceSales:decimal
-    field TradeDate:timestamp
-    field Volume:decimal
-
-    # spark ?
-    field ChangeFromFiftydayMovingAverage:decimal
-    field ChangeFromTwoHundreddayMovingAverage:decimal
-    field ChangeFromYearHigh:decimal
-    field ChangeFromYearLow:decimal
-    field PercentChangeFromFiftydayMovingAverage:decimal
-    field PercentChangeFromTwoHundreddayMovingAverage:decimal
+    field exchange:text <- csvfilesample(datastax/investment-manager/stock_seed_data.csv, exchange, uniform);
+    field symbol:text <- csvfilesample(datastax/investment-manager/stock_seed_data.csv, symbol, uniform);
+    field date:timestamp <- //start 5 days before and continue running (8am-4pm, if possible);
+    field name:text <- csvfilesample(datastax/investment-manager/stock_seed_data.csv, name, uniform);
+    field sector:text <- csvfilesample(datastax/investment-manager/stock_seed_data.csv, sector, uniform);
+    field marketcap:text <- csvfilesample(datastax/investment-manager/stock_seed_data.csv, marketcap, uniform);
+    field volume:int <- csvfilesample(datastax/investment-manager/stock_seed_data.csv, volume, uniform);
+    field open:double <- csvfilesample(datastax/investment-manager/stock_seed_data.csv, open, uniform);
+    field close:double <- //'---' if < 4pm else csvfilesample(datastax/investment-manager/stock_seed_data.csv, close, uniform);
+    field low:double <- csvfilesample(datastax/investment-manager/stock_seed_data.csv, low, uniform);
+    field high:double <- csvfilesample(datastax/investment-manager/stock_seed_data.csv, high, uniform);
+    field current:double <- //shookys function;
 
 sampler stocks.user <- linear();
 entity stocks.user pop=50000
 
-    field name:text    <- filesample(first_names.txt,uniform) + filesample(last_names.txt,uniform);
-    field email_address:text <- "first.last@gmail.com";
+    field name:text    <- //filesample(first_names.txt,uniform) + filesample(last_names.txt,uniform);
+    field email_address:text <- //"first.last@gmail.com";
     field risk_tolerance:text <- select('low,medium,high');
-    field preferred_investmentTypes:text <- select(money market,bonds,stocks,international securities);
-    field retirement_age:int <- rangedrandom(50,90);
-    field withdrawal_year:int <- rangedrandom(2015, 3000);
+    field preferred_investmentTypes:text <- select(money-market,bonds,stocks,international-securities);
+    field retirement_age:int <- select(35-45,45-65,65-75,75-85,85+);
+    field withdrawal_year:int <- select(<5,5-10,10-20,20-30,30+,retirement-age);
 
 sampler stocks.portfolio <- linear();
 entity stocks.portfolio pop=50000
-    field email_address:text
-    field portfolio_id:timeuuid
-    field description:text <- filesample(/cornerstone/tools/datastax/metagener/datastax/investment-manager/portfolio_descriptions.txt,uniform)) + rangedrandom(999999,9999999);
 
-sampler stocks.transaction <- linear();
-entity stocks.transaction pop=5000000
-    field transaction_type:text <- select('Deposit,Trade,Correction');
-
-    # if Deposit
-    field effective_date:date
-    field symbol:text
-    field quantity:decimal <- rangedrandom(0,5000)
-
-    # if Correction
-    field past_date:date
+    field email_address:text <- //"first.last@gmail.com";
+    field exchange:text <- csvfilesample(datastax/investment-manager/stock_seed_data.csv, exchange, uniform);
+    field symbol:text <- csvfilesample(datastax/investment-manager/stock_seed_data.csv, symbol, uniform);
+    field date:timestamp <- //start 5 days before and continue running (8am-4pm, if possible);
+    field name:text <- csvfilesample(datastax/investment-manager/stock_seed_data.csv, name, uniform);
+    field buy:boolean <- //select(true,false); can we guarantee the user has the stock to sell? if not, i'll handle with a read before write
+    field current:double <- //shookys function;
+    field quantity:int <- rangedrandom(1,10000);
