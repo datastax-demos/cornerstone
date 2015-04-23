@@ -57,8 +57,8 @@ CREATE TABLE ticker.portfolio (
 CREATE TABLE ticker.recommendations (
     risk_tolerance text,
     preferred_investment_types text,
-    retirement_age int,
-    withdrawal_year int,
+    retirement_age text,
+    withdrawal_year text,
     updated_date timestamp,
     recommendation_id uuid,
     exchange text,
