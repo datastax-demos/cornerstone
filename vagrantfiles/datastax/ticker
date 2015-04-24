@@ -217,6 +217,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             ENV['OPSCENTER_HOST'] = '127.0.0.1'
             ENV['SPARK'] = '1'
 
+            config.vm.provision :shell, path: 'vagrant/general/apt/configure/datastax-enterprise/enable_solr_v1.sh',
+                                        privileged: false
+
             dse_start.call config
             # opscenter_start.call config
             demo_start.call config

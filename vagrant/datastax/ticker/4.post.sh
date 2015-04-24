@@ -20,10 +20,10 @@ done
 
 SINGLE_SEED="${SEEDS%%,*}"
 
-dsetool -h $SINGLE_SEED create_core ticker.quotes generateResources=true reindex=true
-curl http://localhost:8983/solr/resource/ticker.quotes/schema.xml --data-binary @/cornerstone/vagrant/datastax/ticker/schema.xml -H 'Content-type:text/xml; charset=utf-8'
-nodetool -h $SINGLE_SEED rebuild_index ticker quotes ticker.quotes
-curl "http://$SINGLE_SEED:8983/solr/admin/cores?action=RELOAD&name=ticker.quotes&reindex=true&deleteAll=true"
+curl http://$SINGLE_SEED:8983/solr/resource/ticker.latest/solrconfig.xml --data-binary @/cornerstone/scripts/datastax/ticker/ticker.latest/solrconfig.xml -H 'Content-type:text/xml; charset=utf-8'
+curl http://$SINGLE_SEED:8983/solr/resource/ticker.latest/schema.xml --data-binary @/cornerstone/scripts/datastax/ticker/ticker.latest/schema.xml -H 'Content-type:text/xml; charset=utf-8'
+curl "http://$SINGLE_SEED:8983/solr/admin/cores?action=CREATE&name=ticker.latest&generateResources=true&reindex=true"
+curl "http://$SINGLE_SEED:8983/solr/admin/cores?action=RELOAD&name=ticker.latest&generateResources=true&reindex=true"
 
 #cqlsh $SINGLE_SEED -f /cornerstone/cql/datastax/black-friday/retail.cql
 

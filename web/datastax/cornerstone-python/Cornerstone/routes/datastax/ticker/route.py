@@ -64,7 +64,7 @@ def preflight_check():
         ''')
 
         prepared_statements['search_symbol'] = cassandra_session.prepare('''
-            SELECT * FROM ticker.quotes
+            SELECT * FROM ticker.latest
             WHERE solr_query = ?
         ''')
 

@@ -8,8 +8,8 @@ CREATE TABLE ticker.quotes (
     exchange text,
     symbol text,
     date timestamp,
-    name text STATIC,
-    sector text STATIC,
+    name text,
+    sector text,
     marketcap text,
     volume int,
     open double,
@@ -19,6 +19,22 @@ CREATE TABLE ticker.quotes (
     current double,
     PRIMARY KEY ((exchange, symbol), date)
 ) WITH CLUSTERING ORDER BY (date DESC);
+
+CREATE TABLE ticker.latest (
+    exchange text,
+    symbol text,
+    date timestamp,
+    name text,
+    sector text,
+    marketcap text,
+    volume int,
+    open double,
+    close double,
+    low double,
+    high double,
+    current double,
+    PRIMARY KEY ((exchange, symbol))
+);
 
 CREATE TABLE ticker.user (
     email_address text,

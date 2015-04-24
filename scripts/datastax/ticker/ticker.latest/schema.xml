@@ -48,5 +48,5 @@
             </analyzer>
         </field>
     </fields>
-    <uniqueKey>(exchange,symbol,date)</uniqueKey>
+    <uniqueKey>(exchange,symbol)</uniqueKey>
 </schema>
