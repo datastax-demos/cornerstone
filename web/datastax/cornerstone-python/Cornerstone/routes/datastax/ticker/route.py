@@ -1,6 +1,9 @@
 import time
 from decimal import Decimal
 
+try: import simplejson as json
+except ImportError: import json
+
 from flask import Blueprint, render_template, request, session, jsonify
 
 from Cornerstone.routes.datastax.cornerstone.rest import get_session
@@ -60,6 +63,11 @@ def preflight_check():
                 AND retirement_age = ? AND withdrawal_year = ?
         ''')
 
+        prepared_statements['search_symbol'] = cassandra_session.prepare('''
+            SELECT * FROM ticker.quotes
+            WHERE solr_query = ?
+        ''')
+
         prepared_statements['get_quote'] = cassandra_session.prepare('''
             SELECT * FROM ticker.quotes
             WHERE exchange = ? AND symbol = ?
@@ -95,14 +103,37 @@ def dash():
 
 @ticker_api.route('/search', methods=['GET', 'POST'])
 def search():
-    return render_template('datastax/ticker/search.jinja2')
+    preflight_check()
+    search_term = request.form.get('term', 'CUB')
+    solr_query = {
+        'q': 'symbol:*{0}*'.format(search_term),
+        #  AND name:"~{0}"
+        'sort': 'date desc'
+    }
+    values = {
+        'solr_query': json.dumps(solr_query)
+    }
+    search_results = cassandra_session.execute(
+        prepared_statements['search_symbol'].bind(values))
+
+    results = []
+    for row in search_results:
+        results.append(dict(row))
+
+    print results
+
+    return render_template('datastax/ticker/search.jinja2',
+                           results=results)
 
 
 @ticker_api.route('/customize')
 def customize():
     preflight_check()
+    values = {
+        'email_address': session['email_address']
+    }
     user_profile = cassandra_session.execute(
-        prepared_statements['get_user'].bind((session['email_address'],)))
+        prepared_statements['get_user'].bind((values)))
     if user_profile:
         user_profile = dict(user_profile[0])
     return render_template('datastax/ticker/customize.jinja2',

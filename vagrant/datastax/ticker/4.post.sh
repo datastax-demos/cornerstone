@@ -19,6 +19,12 @@ shift
 done
 
 SINGLE_SEED="${SEEDS%%,*}"
+
+dsetool -h $SINGLE_SEED create_core ticker.quotes generateResources=true reindex=true
+curl http://localhost:8983/solr/resource/ticker.quotes/schema.xml --data-binary @/cornerstone/vagrant/datastax/ticker/schema.xml -H 'Content-type:text/xml; charset=utf-8'
+nodetool -h $SINGLE_SEED rebuild_index ticker quotes ticker.quotes
+curl "http://$SINGLE_SEED:8983/solr/admin/cores?action=RELOAD&name=ticker.quotes&reindex=true&deleteAll=true"
+
 #cqlsh $SINGLE_SEED -f /cornerstone/cql/datastax/black-friday/retail.cql
 
 #/cornerstone/scripts/datastax/black-friday/1.seed_zipcode_data/1.zipcodes-to-cassandra.py
@@ -32,6 +38,6 @@ SINGLE_SEED="${SEEDS%%,*}"
 #sleep 20
 #/cornerstone/scripts/datastax/black-friday/3.scan_data/4.metagener-to-cassandra-stores-employees.py
 
-mkdir -p /mnt/log/spark_streaming/
-nohup nc -l 5005 &
+#mkdir -p /mnt/log/spark_streaming/
+#nohup nc -l 5005 &
 #nohup /cornerstone/scripts/datastax/black-friday/3.scan_data/5.metagener-to-cassandra-scan-items.py &

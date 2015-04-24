@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<schema name="autoSolrSchema" version="1.5">
+    <types>
+        <fieldType class="org.apache.solr.schema.TrieDoubleField"
+                   name="TrieDoubleField"/>
+        <fieldType class="org.apache.solr.schema.TrieIntField"
+                   name="TrieIntField"/>
+        <fieldType class="org.apache.solr.schema.TextField" name="TextField">
+            <analyzer>
+                <tokenizer class="solr.StandardTokenizerFactory"/>
+                <filter class="solr.LowerCaseFilterFactory"/>
+            </analyzer>
+        </fieldType>
+        <fieldType class="org.apache.solr.schema.TrieDateField"
+                   name="TrieDateField"/>
+    </types>
+    <fields>
+        <field indexed="true" multiValued="false" name="close" stored="true"
+               type="TrieDoubleField"/>
+        <field indexed="true" multiValued="false" name="open" stored="true"
+               type="TrieDoubleField"/>
+        <field indexed="true" multiValued="false" name="symbol" stored="true"
+               type="TextField">
+            <analyzer type="query">
+                <tokenizer class="solr.StandardTokenizerFactory"/>
+                <filter class="solr.LowerCaseTokenizerFactory"
+                        ignoreCase="true"/>
+            </analyzer>
+        </field>
+        <field indexed="true" multiValued="false" name="low" stored="true"
+               type="TrieDoubleField"/>
+        <field indexed="true" multiValued="false" name="volume" stored="true"
+               type="TrieIntField"/>
+        <field indexed="true" multiValued="false" name="marketcap" stored="true"
+               type="TextField"/>
+        <field indexed="true" multiValued="false" name="high" stored="true"
+               type="TrieDoubleField"/>
+        <field indexed="true" multiValued="false" name="current" stored="true"
+               type="TrieDoubleField"/>
+        <field indexed="true" multiValued="false" name="date" stored="true"
+               type="TrieDateField"/>
+        <field indexed="true" multiValued="false" name="exchange" stored="true"
+               type="TextField">
+            <analyzer type="query">
+                <tokenizer class="solr.StandardTokenizerFactory"/>
+                <filter class="solr.LowerCaseTokenizerFactory"
+                        ignoreCase="true"/>
+            </analyzer>
+        </field>
+    </fields>
+    <uniqueKey>(exchange,symbol,date)</uniqueKey>
+</schema>

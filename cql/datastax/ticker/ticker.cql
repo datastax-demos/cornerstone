@@ -1,6 +1,7 @@
 CREATE KEYSPACE ticker WITH replication = {
   'class': 'NetworkTopologyStrategy',
-  'Analytics': '3'
+  'Analytics': '3',
+  'Solr': '3'
 };
 
 CREATE TABLE ticker.quotes (
