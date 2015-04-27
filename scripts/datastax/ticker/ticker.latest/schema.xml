@@ -20,13 +20,7 @@
         <field indexed="true" multiValued="false" name="open" stored="true"
                type="TrieDoubleField"/>
         <field indexed="true" multiValued="false" name="symbol" stored="true"
-               type="TextField">
-            <analyzer type="query">
-                <tokenizer class="solr.StandardTokenizerFactory"/>
-                <filter class="solr.LowerCaseTokenizerFactory"
-                        ignoreCase="true"/>
-            </analyzer>
-        </field>
+               type="TextField"/>
         <field indexed="true" multiValued="false" name="low" stored="true"
                type="TrieDoubleField"/>
         <field indexed="true" multiValued="false" name="volume" stored="true"
@@ -40,13 +34,11 @@
         <field indexed="true" multiValued="false" name="date" stored="true"
                type="TrieDateField"/>
         <field indexed="true" multiValued="false" name="exchange" stored="true"
-               type="TextField">
-            <analyzer type="query">
-                <tokenizer class="solr.StandardTokenizerFactory"/>
-                <filter class="solr.LowerCaseTokenizerFactory"
-                        ignoreCase="true"/>
-            </analyzer>
-        </field>
+               type="TextField"/>
+        <field indexed="true" multiValued="false" name="name" stored="true"
+               type="TextField"/>
+        <field indexed="true" multiValued="false" name="sector" stored="true"
+               type="TextField"/>
     </fields>
     <uniqueKey>(exchange,symbol)</uniqueKey>
 </schema>
