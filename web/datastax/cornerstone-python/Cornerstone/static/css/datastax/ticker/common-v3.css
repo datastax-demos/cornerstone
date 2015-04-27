@@ -440,7 +440,7 @@ ul {
 }
 /* recommendations */
 #recommendations-page-div #item-list td {
-    color: #48B749;
+    /*color: #48B749;*/
 }
 #recommendations-page-div #item-list .tapcell1 {
     color: #555;

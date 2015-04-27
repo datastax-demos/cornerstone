@@ -24,12 +24,11 @@
                     <td class="tapcell1">
                         <a href="#">{{ row.symbol }}</a>
                     </td>
-                    <td class="tapcell2"
-                        id="{% if row.buy %}pricerising{% else %}pricefalling{% endif %}">
+                    <td class="tapcell2 {% if row.buy %}pricerising{% else %}pricefalling{% endif %}">
                         {% if row.buy %}BUY{% else %}SELL{% endif %}
                     </td>
                     <td class="tapcell3">
-                        {% if row.buy %}+{% endif %}
+                        {% if row.buy %}+{% else %}-{% endif %}
                         {{ '%d'|format(row.projected_growth * 100) }}% /
                         {{ '%d'|format(row.invested_peers * 100) }}%
                     </td>
@@ -66,7 +65,8 @@
                             <td>
                                 <p class="dlcsubheader">Order</p>
 
-                                <p id="balance-{{ row.exchange }}-{{ row.symbol }}">
+                                <p id="balance-{{ row.exchange }}-{{ row.symbol }}"
+                                   class="{% if row.buy %}pricerising{% else %}pricefalling{% endif %}">
                                     ---
                                 </p>
                             </td>
@@ -75,10 +75,12 @@
                             <td colspan="2" class="gencolorcode">
                                 <p class="dlcsubheader">Why</p>
 
-                                <p>
-                                    {% if row.buy %}+{% endif %}
-                                    {{ '%d'|format(row.projected_growth * 100) }}% Gain /
-                                    {{ '%d'|format(row.invested_peers * 100) }}% of Peers Invested
+                                <p class="{% if row.buy %}pricerising{% else %}pricefalling{% endif %}">
+                                    {% if row.buy %}{% else %}-{% endif %}
+                                    {{ '%d'|format(row.projected_growth * 100) }}%
+                                    {% if row.buy %}Gain{% else %}Loss{% endif %}/
+                                    {{ '%d'|format(row.invested_peers * 100) }}% of Peers
+                                    {% if row.buy %}Invested{% else %}Divested{% endif %}
                                 </p>
                             </td>
                         </tr>
@@ -86,43 +88,6 @@
                     </table>
                 </div>
             {% endfor %}
-
-
-            <div id="itemblistdetails2" class="itemblistdetailsclass">
-                <table id="details-list">
-                    <tbody>
-                    <tr>
-                        <td class="dlcname">
-                            <a href="#">Facebook</a>
-                        </td>
-                        <td>
-                            <p class="dlcsubheader">Quantity</p>
-
-                            <p>150</p></td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <p class="dlcsubheader">Price </p>
-
-                            <p>$90.00</p>
-                        </td>
-                        <td>
-                            <p class="dlcsubheader">Balance</p>
-
-                            <p>$0.00</p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2" class="gencolorcode">
-                            <p class="dlcsubheader">Why</p>
-
-                            <p class="genlossfld">- 20% Loss / 15% of Peers
-                                Invested</p>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
         </div>
     </div>
     <script src="static/js/datastax/ticker/custom-v1.js"></script>

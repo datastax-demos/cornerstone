@@ -1,19 +1,23 @@
 #!/usr/bin/env python
 
 import csv
+import time
+import random
+import uuid
+
 from cassandra.cluster import Cluster
 from cassandra.query import ordered_dict_factory
-
-import time
-import uuid
 
 ip_addresses = ['127.0.0.1']
 cluster = Cluster(ip_addresses)
 session = cluster.connect()
 session.row_factory = ordered_dict_factory
 
+QUOTE_DATA = []
+
 
 def insert_quotes():
+    print 'Seeding quotes and latest...'
     insert_quote = session.prepare('''
         INSERT INTO ticker.quotes
             (exchange, symbol, name, sector, marketcap, date, volume, open,
@@ -40,13 +44,36 @@ def insert_quotes():
         row['low'] = float(row['low'])
         row['high'] = float(row['high'])
         row['current'] = row['close']
-        print row
 
+        QUOTE_DATA.append(row)
         session.execute(insert_quote.bind(row))
         session.execute(insert_latest.bind(row))
 
 
+def _generate_recommendation(risk_tolerance, preferred_investment_types,
+                             retirement_age, withdrawal_year, updated_date):
+    row = QUOTE_DATA[random.randint(0, len(QUOTE_DATA) - 1)]
+    buy = random.choice([True, False])
+
+    return {
+        'risk_tolerance': risk_tolerance,
+        'preferred_investment_types': preferred_investment_types,
+        'retirement_age': retirement_age,
+        'withdrawal_year': withdrawal_year,
+        'updated_date': updated_date,
+        'recommendation_id': uuid.uuid4(),
+        'exchange': row['exchange'],
+        'symbol': row['symbol'],
+        'name': row['name'],
+        'buy': buy,
+        'quantity': random.randint(1, 10000),
+        'projected_growth': random.random(),
+        'invested_peers': random.random()
+    }
+
+
 def insert_recommendations():
+    print 'Seeding recommendations...'
     insert_recommendation = session.prepare('''
         INSERT INTO ticker.recommendations
             (risk_tolerance, preferred_investment_types, retirement_age,
@@ -91,11 +118,22 @@ def insert_recommendations():
         }
     ]
 
-    for value in values:
-        session.execute(insert_recommendation.bind(value))
+    updated_date = time.time() * 1000
+    for i in range(random.randint(1, 20)):
+        risk_tolerance = 'high'
+        preferred_investment_types = \
+            'bonds_international-securities_money-market'
+        retirement_age = '35-45'
+        withdrawal_year = '30+'
+        recommendation = _generate_recommendation(risk_tolerance,
+                                                  preferred_investment_types,
+                                                  retirement_age,
+                                                  withdrawal_year, updated_date)
+        session.execute(insert_recommendation.bind(recommendation))
 
 
 def insert_portfolios():
+    print 'Seeding portfolios and history...'
     insert_history = session.prepare('''
         INSERT INTO ticker.history
             (email_address, date, buy, exchange, name, price, quantity, symbol)
@@ -162,6 +200,7 @@ def insert_portfolios():
 
 
 def insert_users():
+    print 'Seeding users...'
     insert_user = session.prepare('''
         INSERT INTO ticker.user
             (email_address, preferred_investment_types, retirement_age,
@@ -186,6 +225,6 @@ def insert_users():
 
 
 insert_quotes()
-insert_portfolios()
 insert_recommendations()
+insert_portfolios()
 insert_users()
