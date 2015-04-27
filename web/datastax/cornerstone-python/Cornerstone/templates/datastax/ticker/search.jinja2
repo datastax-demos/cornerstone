@@ -27,6 +27,10 @@
             </table>
         </form>
 
+        {% if alert %}
+            <div class="alert alert-{{ alert.level }}" role="alert">{{ alert.message }}</div>
+        {% endif %}
+
         {% for row in results %}
             <table id="search-item-{{ loop.index }}" class="search-item">
                 <tbody>

@@ -113,22 +113,38 @@ def search():
     values = {
         'solr_query': json.dumps(solr_query)
     }
+    alert = None
     try:
         search_results = cassandra_session.execute(
             prepared_statements['search_symbol'].bind(values))
+
+        if len(search_results) == 0:
+            alert = {
+                'level': 'info',
+                'message': 'No results found.'
+            }
     except:
         logging.exception('Search failed:')
         search_results = []
+        if ' ' in search_term:
+            alert = {
+                'level': 'warning',
+                'message': 'Multi-word search coming soon to demo.',
+            }
+        else:
+            alert = {
+                'level': 'danger',
+                'message': 'Unexpected error.',
+            }
 
     results = []
     for row in search_results:
         results.append(dict(row))
 
-    print results
-
     return render_template('datastax/ticker/search.jinja2',
                            results=results,
-                           search_term=search_term)
+                           search_term=search_term,
+                           alert=alert)
 
 
 @ticker_api.route('/customize')
