@@ -8,14 +8,15 @@
 
     <div id="search-page-content">
 
-        <form id="search-form" action="" method="post">
+        <form id="search-form">
             <table class="sbtable">
                 <tbody>
                 <tr>
                     <td class="sbtd1">
                         <input class="search_button-fld" type="Text"
-                               name="search_string" id="search_string"
-                               placeholder="Enter Symbol or Name"></input>
+                               name="search_term" id="search_term"
+                               placeholder="Enter Symbol or Name"
+                               value="{{ search_term }}"/>
                     </td>
                     <td class="sbtd1">
                         <input class="search_button-btn" id="search_button"
@@ -26,334 +27,50 @@
             </table>
         </form>
 
-        <!-- Search Results START -->
+        {% for row in results %}
+            <table id="search-item-{{ loop.index }}" class="search-item">
+                <tbody>
+                <tr>
+                    <td class="dlcname">
+                        <p class="dlcsubheader">Symbol</p>
 
-        <table id="search-item-1" class="search-item">
-            <tbody>
-            <tr>
-                <td class="dlcname">
-                    <p class="dlcsubheader">Symbol</p>
+                        <p class="dlcsh-symbol">{{ row.symbol }}</p>
+                    </td>
+                    <td>
+                        <p class="dlcsubheader">Name</p>
 
-                    <p class="dlcsh-symbol">T</p>
-                </td>
-                <td>
-                    <p class="dlcsubheader">Name</p>
+                        <p>{{ row.name }}</p></td>
+                </tr>
+                <tr>
+                    <td>
+                        <p class="dlcsubheader">Exchange </p>
 
-                    <p>AT&T Inc.</p></td>
-            </tr>
-            <tr>
-                <td>
-                    <p class="dlcsubheader">Exchange </p>
+                        <p>{{ row.exchange }}</p>
+                    </td>
+                    <td>
+                        <p class="dlcsubheader">Sector</p>
 
-                    <p>NYSE</p>
-                </td>
-                <td>
-                    <p class="dlcsubheader">Sector</p>
+                        <p>{{ row.sector }}</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        {% set daily_gain=(row.current - row.open) / row.open * 100 %}
+                        <p class="dlcsubheader">Daily Gain </p>
 
-                    <p>Communications</p>
-                </td>
-            </tr>
-            <tr>
-                <td class="gencolorcode">
-                    <p class="dlcsubheader">Daily Gain </p>
+                        <p class="{% if daily_gain > 0 %}pricerising{% else %}pricefalling{% endif %}">
+                            {{ '%0.2f'|format(daily_gain) }}%
+                        </p>
+                    </td>
+                    <td>
+                        <p class="dlcsubheader">Last Trade</p>
 
-                    <p>+ 0.12%</p>
-                </td>
-                <td>
-                    <p class="dlcsubheader">Last Trade</p>
-
-                    <p>$32.00</p>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-
-
-        <table id="search-item-X" class="search-item">
-            <tbody>
-            <tr>
-                <td class="dlcname">
-                    <p class="dlcsubheader">Symbol</p>
-
-                    <p class="dlcsh-symbol">BRCM</p>
-                </td>
-                <td>
-                    <p class="dlcsubheader">Name</p>
-
-                    <p>Broadcom</p></td>
-            </tr>
-            <tr>
-                <td>
-                    <p class="dlcsubheader">Exchange </p>
-
-                    <p>NASDAQ</p>
-                </td>
-                <td>
-                    <p class="dlcsubheader">Sector</p>
-
-                    <p>Technology</p>
-                </td>
-            </tr>
-            <tr>
-                <td class="gencolorcode">
-                    <p class="dlcsubheader">Daily Gain </p>
-
-                    <p>+ 2.50%</p>
-                </td>
-                <td>
-                    <p class="dlcsubheader">Last Trade</p>
-
-                    <p>$45.00</p>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-
-
-        <table id="search-item-X" class="search-item">
-            <tbody>
-            <tr>
-                <td class="dlcname">
-                    <p class="dlcsubheader">Symbol</p>
-
-                    <p class="dlcsh-symbol">SAP</p>
-                </td>
-                <td>
-                    <p class="dlcsubheader">Name</p>
-
-                    <p>SAP</p></td>
-            </tr>
-            <tr>
-                <td>
-                    <p class="dlcsubheader">Exchange </p>
-
-                    <p>NYSE</p>
-                </td>
-                <td>
-                    <p class="dlcsubheader">Sector</p>
-
-                    <p>Technology</p>
-                </td>
-            </tr>
-            <tr>
-                <td class="gencolorcode">
-                    <p class="dlcsubheader">Daily Gain </p>
-
-                    <p>+ 0.07%</p>
-                </td>
-                <td>
-                    <p class="dlcsubheader">Last Trade</p>
-
-                    <p>$92.00</p>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-
-
-        <table id="search-item-X" class="search-item">
-            <tbody>
-            <tr>
-                <td class="dlcname">
-                    <p class="dlcsubheader">Symbol</p>
-
-                    <p class="dlcsh-symbol">TWTR</p>
-                </td>
-                <td>
-                    <p class="dlcsubheader">Name</p>
-
-                    <p>Twitter Inc. </p></td>
-            </tr>
-            <tr>
-                <td>
-                    <p class="dlcsubheader">Exchange </p>
-
-                    <p>NYSE</p>
-                </td>
-                <td>
-                    <p class="dlcsubheader">Sector</p>
-
-                    <p>Technology</p>
-                </td>
-            </tr>
-            <tr>
-                <td class="gencolorcode">
-                    <p class="dlcsubheader">Daily Gain </p>
-
-                    <p>+ 0.25%</p>
-                </td>
-                <td>
-                    <p class="dlcsubheader">Last Trade</p>
-
-                    <p>$52.00</p>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-
-
-        <table id="search-item-X" class="search-item">
-            <tbody>
-            <tr>
-                <td class="dlcname">
-                    <p class="dlcsubheader">Symbol</p>
-
-                    <p class="dlcsh-symbol">RAD</p>
-                </td>
-                <td>
-                    <p class="dlcsubheader">Name</p>
-
-                    <p>Rite Aid Inc.</p></td>
-            </tr>
-            <tr>
-                <td>
-                    <p class="dlcsubheader">Exchange </p>
-
-                    <p>NYSE</p>
-                </td>
-                <td>
-                    <p class="dlcsubheader">Sector</p>
-
-                    <p>Retail</p>
-                </td>
-            </tr>
-            <tr>
-                <td class="gencolorcode">
-                    <p class="dlcsubheader">Daily Gain </p>
-
-                    <p>+ 8.25%</p>
-                </td>
-                <td>
-                    <p class="dlcsubheader">Last Trade</p>
-
-                    <p>$8.00</p>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-
-
-        <table id="search-item-X" class="search-item">
-            <tbody>
-            <tr>
-                <td class="dlcname">
-                    <p class="dlcsubheader">Symbol</p>
-
-                    <p class="dlcsh-symbol">DIS</p>
-                </td>
-                <td>
-                    <p class="dlcsubheader">Name</p>
-
-                    <p>Walt Disney</p></td>
-            </tr>
-            <tr>
-                <td>
-                    <p class="dlcsubheader">Exchange </p>
-
-                    <p>NYSE</p>
-                </td>
-                <td>
-                    <p class="dlcsubheader">Sector</p>
-
-                    <p>Entertainment</p>
-                </td>
-            </tr>
-            <tr>
-                <td class="gencolorcode">
-                    <p class="dlcsubheader">Daily Gain </p>
-
-                    <p class="genlossfld">- 0.40%</p>
-                </td>
-                <td>
-                    <p class="dlcsubheader">Last Trade</p>
-
-                    <p>$107.00</p>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-
-
-        <table id="search-item-X" class="search-item">
-            <tbody>
-            <tr>
-                <td class="dlcname">
-                    <p class="dlcsubheader">Symbol</p>
-
-                    <p class="dlcsh-symbol">NKE</p>
-                </td>
-                <td>
-                    <p class="dlcsubheader">Name</p>
-
-                    <p>Nike Inc.</p></td>
-            </tr>
-            <tr>
-                <td>
-                    <p class="dlcsubheader">Exchange </p>
-
-                    <p>NYSE</p>
-                </td>
-                <td>
-                    <p class="dlcsubheader">Sector</p>
-
-                    <p>Retail</p>
-                </td>
-            </tr>
-            <tr>
-                <td class="gencolorcode">
-                    <p class="dlcsubheader">Daily Gain </p>
-
-                    <p class="genlossfld">- 0.16%</p>
-                </td>
-                <td>
-                    <p class="dlcsubheader">Last Trade</p>
-
-                    <p>$100.00</p>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-
-
-        <table id="search-item-X" class="search-item">
-            <tbody>
-            <tr>
-                <td class="dlcname">
-                    <p class="dlcsubheader">Symbol</p>
-
-                    <p class="dlcsh-symbol">NOW</p>
-                </td>
-                <td>
-                    <p class="dlcsubheader">Name</p>
-
-                    <p>ServiceNow</p></td>
-            </tr>
-            <tr>
-                <td>
-                    <p class="dlcsubheader">Exchange </p>
-
-                    <p>NYSE</p>
-                </td>
-                <td>
-                    <p class="dlcsubheader">Sector</p>
-
-                    <p>Technology</p>
-                </td>
-            </tr>
-            <tr>
-                <td class="gencolorcode">
-                    <p class="dlcsubheader">Daily Gain </p>
-
-                    <p class="genlossfld">- 1.15%</p>
-                </td>
-                <td>
-                    <p class="dlcsubheader">Last Trade</p>
-
-                    <p>$80.00</p>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+                        <p>$ {{ row.current }}</p>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        {% endfor %}
     </div>
 </div>
 {% endblock %}

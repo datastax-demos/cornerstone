@@ -1,3 +1,4 @@
+import logging
 import time
 from decimal import Decimal
 
@@ -101,20 +102,23 @@ def dash():
     return render_template('datastax/ticker/dash.jinja2')
 
 
-@ticker_api.route('/search', methods=['GET', 'POST'])
+@ticker_api.route('/search')
 def search():
     preflight_check()
-    search_term = request.form.get('term', 'CUB')
+    search_term = request.args.get('search_term', 'MSFT')
     solr_query = {
-        'q': 'symbol:*{0}*'.format(search_term),
-        #  AND name:"~{0}"
-        'sort': 'date desc'
+        'q': 'symbol:*{0}* name:*{0}*'.format(search_term),
+        'sort': 'volume desc'
     }
     values = {
         'solr_query': json.dumps(solr_query)
     }
-    search_results = cassandra_session.execute(
-        prepared_statements['search_symbol'].bind(values))
+    try:
+        search_results = cassandra_session.execute(
+            prepared_statements['search_symbol'].bind(values))
+    except:
+        logging.exception('Search failed:')
+        search_results = []
 
     results = []
     for row in search_results:
@@ -123,7 +127,8 @@ def search():
     print results
 
     return render_template('datastax/ticker/search.jinja2',
-                           results=results)
+                           results=results,
+                           search_term=search_term)
 
 
 @ticker_api.route('/customize')
