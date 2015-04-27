@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<schema name="autoSolrSchema" version="1.5">
+<schema name="tickerSchema" version="1.5">
     <types>
         <fieldType class="org.apache.solr.schema.TrieDoubleField"
                    name="TrieDoubleField"/>

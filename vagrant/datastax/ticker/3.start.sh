@@ -18,9 +18,12 @@ esac
 shift
 done
 
+SINGLE_SEED="${SEEDS%%,*}"
+
 CFG=/cornerstone/web/datastax/cornerstone-python/Cornerstone/application.cfg
 sed -i -e "s/^DSE_CLUSTER.*/DSE_CLUSTER = '${SEEDS}'/" ${CFG}
 
+cqlsh $SINGLE_SEED -f /cornerstone/cql/datastax/ticker/ticker.cql
 
 ln -s /cornerstone/web/datastax/cornerstone-python/Cornerstone/templates /cornerstone/web/datastax/ticker/
 ln -s /cornerstone/web/datastax/cornerstone-python/Cornerstone/static /cornerstone/web/datastax/ticker/
@@ -29,7 +32,7 @@ export PYTHONPATH=/cornerstone/web/datastax/cornerstone-python:${PYTHONPATH}
 echo "export PYTHONPATH=/cornerstone/web/datastax/cornerstone-python:${PYTHONPATH}" >> ${HOME}/.profile
 
 (
-    nohup /cornerstone/web/datastax/ticker/run
+    nohup /cornerstone/web/datastax/ticker/run > ${HOME}/flask.log 2>&1
 ) &
 
 sleep 2

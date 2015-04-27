@@ -189,7 +189,8 @@ def _get_portfolio(email_address):
         else:
             current_record['quantity'] -= row['quantity']
             current_record['investment'] += row['quantity'] * row['price']
-    results.append(current_record)
+    if current_record:
+        results.append(current_record)
 
     return results
 
