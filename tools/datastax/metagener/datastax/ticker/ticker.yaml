@@ -1,5 +1,5 @@
 preload:
-  investment-manager: datastax/investment-manager/investment-manager.metagener
+  investment-manager: datastax/ticker/ticker.metagener
 logging:
   level: INFO
   loggers:
