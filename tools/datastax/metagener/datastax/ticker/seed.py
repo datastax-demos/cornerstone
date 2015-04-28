@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import csv
+import itertools
 import time
 import random
 import uuid
@@ -13,7 +14,19 @@ cluster = Cluster(ip_addresses)
 session = cluster.connect()
 session.row_factory = ordered_dict_factory
 
+seed_file = open('stock_seed_data.csv', 'r')
 QUOTE_DATA = []
+reader = csv.DictReader(seed_file)
+for row in reader:
+    row['date'] = time.mktime(time.strptime(row['date'], '%d-%b-%Y')) * 1000
+    row['volume'] = int(row['volume'])
+    row['open'] = float(row['open'])
+    row['close'] = float(row['close'])
+    row['low'] = float(row['low'])
+    row['high'] = float(row['high'])
+    row['current'] = row['close']
+
+    QUOTE_DATA.append(row)
 
 
 def insert_quotes():
@@ -33,19 +46,7 @@ def insert_quotes():
             (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     ''')
 
-    seed_file = open('stock_seed_data.csv', 'r')
-
-    reader = csv.DictReader(seed_file)
-    for row in reader:
-        row['date'] = time.mktime(time.strptime(row['date'], '%d-%b-%Y')) * 1000
-        row['volume'] = int(row['volume'])
-        row['open'] = float(row['open'])
-        row['close'] = float(row['close'])
-        row['low'] = float(row['low'])
-        row['high'] = float(row['high'])
-        row['current'] = row['close']
-
-        QUOTE_DATA.append(row)
+    for row in QUOTE_DATA:
         session.execute(insert_quote.bind(row))
         session.execute(insert_latest.bind(row))
 
@@ -119,17 +120,31 @@ def insert_recommendations():
     ]
 
     updated_date = time.time() * 1000
-    for i in range(random.randint(1, 20)):
-        risk_tolerance = 'high'
-        preferred_investment_types = \
-            'bonds_international-securities_money-market'
-        retirement_age = '35-45'
-        withdrawal_year = '30+'
-        recommendation = _generate_recommendation(risk_tolerance,
-                                                  preferred_investment_types,
-                                                  retirement_age,
-                                                  withdrawal_year, updated_date)
-        session.execute(insert_recommendation.bind(recommendation))
+    investment_types = [
+        'bonds',
+        'international-securities',
+        'money-market',
+        'stock',
+    ]
+    investment_types.sort()
+    risk_tolerance = ['low', 'medium', 'high']
+    retirement_age = ['35-45', '45-65', '65-75', '75-85', '85+']
+    withdrawal_year = ['<5', '5-10', '10-20', '20-30', '30+', 'retirement-age']
+    for combination_length in range(len(investment_types) + 1):
+        for combination in itertools.combinations(investment_types,
+                                                  combination_length):
+            preferred_investment_types = '_'.join(combination)
+            for risk in risk_tolerance:
+                for retirement in retirement_age:
+                    for withdrawal in withdrawal_year:
+                        for _ in range(random.randint(1, 20)):
+                            recommendation = _generate_recommendation(risk,
+                                                                      preferred_investment_types,
+                                                                      retirement,
+                                                                      withdrawal,
+                                                                      updated_date)
+                            session.execute(
+                                insert_recommendation.bind(recommendation))
 
 
 def insert_portfolios():
@@ -147,56 +162,56 @@ def insert_portfolios():
             (?, ?, ?, ?, ?, ?, ?, ?)
     ''')
 
-    email_address = 'joaquin@datastax.com'
-    exchange = 'NYSE'
-    name = 'Nike'
-    symbol = 'NKE'
-    values = [
-        {
-            'email_address': email_address,
-            'exchange': exchange,
-            'name': name,
-            'symbol': symbol,
-            'date': time.time() * 1000,
-            'buy': True,
-            'price': 1,
-            'quantity': 1000
-        },
-        {
-            'email_address': email_address,
-            'exchange': exchange,
-            'name': name,
-            'symbol': symbol,
-            'date': time.time() * 1000 + 1,
-            'buy': True,
-            'price': 2.54,
-            'quantity': 200
-        },
-        {
-            'email_address': email_address,
-            'exchange': exchange,
-            'name': name,
-            'symbol': symbol,
-            'date': time.time() * 1000 + 2,
-            'buy': False,
-            'price': 50,
-            'quantity': 100
-        },
-        {
-            'email_address': email_address,
-            'exchange': exchange,
-            'name': name,
-            'symbol': symbol,
-            'date': time.time() * 1000 + 3,
-            'buy': False,
-            'price': 200,
-            'quantity': 4
-        },
+    email_addresses = [
+        'joaquin@datastax.com'
     ]
+    for email_address in email_addresses:
+        i = 0
+        for _ in range(random.randint(1, 5)):
+            i += 1
 
-    for value in values:
-        session.execute(insert_history.bind(value))
-        session.execute(insert_portfolio.bind(value))
+            stock = random.choice(QUOTE_DATA)
+            purchased = 0
+
+            buy = True
+            for _ in range(random.randint(1, 5)):
+                i += 1
+
+                quantity = random.randint(1, 1000)
+                purchased += quantity
+
+                value = {
+                    'email_address': email_address,
+                    'exchange': stock['exchange'],
+                    'name': stock['name'],
+                    'symbol': stock['symbol'],
+                    'date': time.time() * 1000 + i,
+                    'buy': buy,
+                    'price': random.randint(1, int(stock['high'] * 1.25)),
+                    'quantity': quantity
+                }
+                session.execute(insert_history.bind(value))
+                session.execute(insert_portfolio.bind(value))
+
+            buy = False
+            for _ in range(random.randint(1, 5)):
+                i += 1
+
+                quantity = random.randint(1, purchased)
+                purchased -= quantity
+
+                value = {
+                    'email_address': email_address,
+                    'exchange': stock['exchange'],
+                    'name': stock['name'],
+                    'symbol': stock['symbol'],
+                    'date': time.time() * 1000 + i,
+                    'buy': buy,
+                    'price': random.randint(1, int(stock['high'] * 1.25)),
+                    'quantity': quantity
+                }
+                session.execute(insert_history.bind(value))
+                session.execute(insert_portfolio.bind(value))
 
 
 def insert_users():
