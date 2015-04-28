@@ -9,11 +9,11 @@
         <table id="item-list">
             <thead>
             <tr>
-                <th class="tapcell1">Symbol
+                <th class="tapcell1 padded">Symbol
                 </th>
-                <th class="tapcell2">Current
+                <th class="tapcell2 padded right">Current
                 </th>
-                <th class="tapcell3">Gain / Loss
+                <th class="tapcell3 padded right">Gain / Loss
                 </th>
             </tr>
             </thead>
@@ -21,14 +21,14 @@
             {% for row in results %}
                 <tr {% if loop.first %}class="selecteditem"{% endif %}
                     id="itemblistutton{{ loop.index }}">
-                    <td class="tapcell1">
+                    <td class="tapcell1 padded">
                         <a href="#">{{ row.symbol }}</a>
                     </td>
-                    <td class="tapcell2"
+                    <td class="tapcell2 padded right"
                         id="current-{{ row.exchange }}-{{ row.symbol }}">
                         ---
                     </td>
-                    <td class="tapcell3"
+                    <td class="tapcell3 padded right"
                         id="gain-{{ row.exchange }}-{{ row.symbol }}">
                         ---
                     </td>
@@ -42,7 +42,7 @@
 
         <div id="details-list-block">
             {% for row in results %}
-                <div id="itemblistdetails1" class="itemblistdetailsclass">
+                <div id="itemblistdetails{{ loop.index }}" class="itemblistdetailsclass">
                     <table id="details-list">
                         <tbody>
                         <tr>
@@ -74,7 +74,7 @@
                             <td>
                                 <p class="dlcsubheader">Last Trade</p>
 
-                                <p>${{ '%0.2f'|format(row.last_trade) }}</p>
+                                <p>{{ row.last_trade|currency }}</p>
                             </td>
                             <td>
                                 <p class="dlcsubheader">Balance</p>

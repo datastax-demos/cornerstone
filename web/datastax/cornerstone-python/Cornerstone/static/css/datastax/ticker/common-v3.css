@@ -22,6 +22,15 @@ body {
 .center {
     text-align: center;
 }
+.left {
+    text-align: left;
+}
+.right {
+    text-align: right;
+}
+.padded {
+    padding: 15px;
+}
 body {
     font-family: 'HelveticaNeueLTStd-Lt', helvetica, arial, clean, sans-serif;
     color:#555555;
@@ -166,7 +175,7 @@ ul {
     color: #ed1c24;
 }
 #item-list .tapcell1 {
-    text-align:left;
+    /*text-align:left;*/
     padding-left:10px;
     text-decoration: underline;
 }
@@ -174,11 +183,11 @@ ul {
     text-decoration: none;
 }
 #item-list .tapcell2 {
-    text-align:right;
+    /*text-align:right;*/
     padding-right: 15px;
 }
 #item-list .tapcell3 {
-    text-align:left;
+    /*text-align:left;*/
     padding-left:15px;
 }
 #item-list td.tapcell3 {
