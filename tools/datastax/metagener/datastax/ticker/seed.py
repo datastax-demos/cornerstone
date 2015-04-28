@@ -171,7 +171,11 @@ def insert_portfolios():
         'mkennedy@datastax.com',
         'mrollender@datastax.com',
         'morris.stangelo@datastax.com',
-        'paul.gilman@datastax.com'
+        'paul.gilman@datastax.com',
+        'brian.hess@datastax.com',
+        'tprice@datastax.com',
+        'jshook@datastax.com',
+        'shaji@datastax.com'
     ]
     for email_address in email_addresses:
         i = 0
