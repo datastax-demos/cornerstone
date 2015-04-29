@@ -11,6 +11,10 @@ case $key in
     SEEDS="$2"
     shift
     ;;
+    -l|--solr-node)
+    SOLR_NODE="$2"
+    shift
+    ;;
     *)
     # unknown option
     ;;
@@ -18,12 +22,10 @@ esac
 shift
 done
 
-SINGLE_SEED="${SEEDS%%,*}"
-
-curl http://$SINGLE_SEED:8983/solr/resource/ticker.latest/solrconfig.xml --data-binary @/cornerstone/scripts/datastax/ticker/ticker.latest/solrconfig.xml -H 'Content-type:text/xml; charset=utf-8'
-curl http://$SINGLE_SEED:8983/solr/resource/ticker.latest/schema.xml --data-binary @/cornerstone/scripts/datastax/ticker/ticker.latest/schema.xml -H 'Content-type:text/xml; charset=utf-8'
-curl "http://$SINGLE_SEED:8983/solr/admin/cores?action=CREATE&name=ticker.latest&generateResources=false&reindex=true"
-#curl "http://$SINGLE_SEED:8983/solr/admin/cores?action=RELOAD&name=ticker.latest&generateResources=false&reindex=true"
+curl http://$SOLR_NODE:8983/solr/resource/ticker.latest/solrconfig.xml --data-binary @/cornerstone/scripts/datastax/ticker/ticker.latest/solrconfig.xml -H 'Content-type:text/xml; charset=utf-8'
+curl http://$SOLR_NODE:8983/solr/resource/ticker.latest/schema.xml --data-binary @/cornerstone/scripts/datastax/ticker/ticker.latest/schema.xml -H 'Content-type:text/xml; charset=utf-8'
+curl "http://$SOLR_NODE:8983/solr/admin/cores?action=CREATE&name=ticker.latest&generateResources=false&reindex=true"
+#curl "http://$SOLR_NODE:8983/solr/admin/cores?action=RELOAD&name=ticker.latest&generateResources=false&reindex=true"
 
 (
     cd /cornerstone/tools/datastax/metagener/datastax/ticker

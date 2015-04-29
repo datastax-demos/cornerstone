@@ -158,7 +158,8 @@ demo_start = Proc.new do |config|
                                 args: ['--seeds', ENV['SEEDS']],
                                 privileged: false
     config.vm.provision :shell, path: 'vagrant/datastax/ticker/4.post.sh',
-                                args: ['--seeds', ENV['SEEDS']],
+                                args: ['--seeds', ENV['SEEDS'],
+                                       '--solr-node', ENV['SOLR_NODE']],
                                 privileged: false
 end
 
@@ -216,6 +217,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             ENV['SEEDS'] = '127.0.0.1'
             ENV['OPSCENTER_HOST'] = '127.0.0.1'
             ENV['SPARK'] = '1'
+            ENV['SOLR_NODE'] = ENV['SEEDS']
 
             config.vm.provision :shell, path: 'vagrant/general/apt/configure/datastax-enterprise/enable_solr_v1.sh',
                                         privileged: false
@@ -252,6 +254,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                 ENV['SEEDS'] = '127.0.0.1'
                 ENV['OPSCENTER_HOST'] = '127.0.0.1'
                 ENV['SPARK'] = '1'
+                ENV['SOLR_NODE'] = ENV['SEEDS']
 
                 dse_start.call config
                 # opscenter_start.call config
