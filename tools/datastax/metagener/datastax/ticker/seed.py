@@ -179,14 +179,14 @@ def insert_portfolios():
     ]
     for email_address in email_addresses:
         i = 0
-        for _ in range(random.randint(1, 5)):
+        for _ in range(random.randint(5, 10)):
             i += 1
 
             stock = random.choice(QUOTE_DATA)
             purchased = 0
 
             buy = True
-            for _ in range(random.randint(1, 5)):
+            for _ in range(random.randint(2, 5)):
                 i += 1
 
                 quantity = random.randint(1, 1000)
@@ -206,7 +206,7 @@ def insert_portfolios():
                 session.execute(insert_portfolio.bind(value))
 
             buy = False
-            for _ in range(random.randint(1, 5)):
+            for _ in range(random.randint(2, 5)):
                 i += 1
 
                 quantity = random.randint(1, purchased)
