@@ -199,7 +199,7 @@ def insert_portfolios():
                     'symbol': stock['symbol'],
                     'date': time.time() * 1000 + i,
                     'buy': buy,
-                    'price': random.randint(1, int(stock['high'] * 1.25)),
+                    'price': random.uniform(0.01, stock['high'] * 1.25),
                     'quantity': quantity
                 }
                 session.execute(insert_history.bind(value))
@@ -208,6 +208,9 @@ def insert_portfolios():
             buy = False
             for _ in range(random.randint(2, 5)):
                 i += 1
+
+                if purchased < 2:
+                    break
 
                 quantity = random.randint(1, purchased)
                 purchased -= quantity
@@ -219,7 +222,7 @@ def insert_portfolios():
                     'symbol': stock['symbol'],
                     'date': time.time() * 1000 + i,
                     'buy': buy,
-                    'price': random.randint(1, int(stock['high'] * 1.25)),
+                    'price': random.uniform(0.01, stock['high'] * 1.25),
                     'quantity': quantity
                 }
                 session.execute(insert_history.bind(value))

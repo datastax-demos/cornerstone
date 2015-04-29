@@ -34,7 +34,9 @@
                     </td>
                 </tr>
                 <script type="text/javascript">
-                    currentValues('{{ row.exchange }}', '{{ row.symbol }}', '{{ row.quantity }}', '{{ row.investment }}');
+                    setInterval(function(){
+                        currentValues('{{ row.exchange }}', '{{ row.symbol }}', '{{ row.quantity }}', '{{ row.investment }}');
+                    }, 1000);
                 </script>
             {% endfor %}
             </tbody>
