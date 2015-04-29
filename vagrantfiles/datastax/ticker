@@ -110,7 +110,7 @@ class_bootstrap = Proc.new do |config|
     end
 end
 
-dse_install = Proc.new do |config, node_index|
+dse_install = Proc.new do |config|
     config.vm.provision :shell, path: 'vagrant/general/apt/install/datastax-enterprise_v3.sh',
                                 args: ['--datastax-user', "#{ENV['DATASTAX_USER']}",
                                        '--datastax-pass', "#{ENV['DATASTAX_PASS']}"],
@@ -203,7 +203,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         else
             bootstrap.call config
 
-            dse_install.call config, 0
+            dse_install.call config
             opscenter_install.call config
             demo_install.call config
 
@@ -247,7 +247,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                 class_bootstrap.call config
                 bootstrap.call config
 
-                dse_install.call config, 0
+                dse_install.call config
                 opscenter_install.call config
                 demo_install.call config
 
@@ -290,7 +290,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                 dse_start.call config
             else
                 bootstrap.call config
-                dse_install.call config, i
+                dse_install.call config
             end
         end
     end
@@ -356,6 +356,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             demo_start.call config
         else
             bootstrap.call config
+            dse_install.call config
             demo_install.call config
         end
     end
