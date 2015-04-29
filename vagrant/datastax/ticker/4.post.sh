@@ -28,4 +28,9 @@ curl "http://$SINGLE_SEED:8983/solr/admin/cores?action=CREATE&name=ticker.latest
 (
     cd /cornerstone/tools/datastax/metagener/datastax/ticker
     ./seed.py
+    (
+        nohup ./stream.py > ${HOME}/stream.log 2>&1
+    ) &
 )
+
+sleep 2
