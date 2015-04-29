@@ -7,6 +7,10 @@ except ImportError: import json
 
 from flask import Blueprint, render_template, request, session, jsonify
 
+from cassandra.cluster import Cluster
+from cassandra.policies import DCAwareRoundRobinPolicy
+from cassandra.query import ordered_dict_factory
+
 from Cornerstone.routes.datastax.cornerstone.rest import get_session
 
 ticker_api = Blueprint('ticker_api', __name__)
@@ -16,9 +20,14 @@ prepared_statements = None
 
 
 def preflight_check():
-    global cassandra_session, prepared_statements
+    global cassandra_session, solr_session, prepared_statements
     if not cassandra_session:
         cassandra_session = get_session()
+
+        solr_cluster = Cluster(cassandra_session.cluster.contact_points,
+                               load_balancing_policy=DCAwareRoundRobinPolicy(local_dc='Solr'))
+        solr_session = solr_cluster.connect()
+        solr_session.row_factory = ordered_dict_factory
 
         prepared_statements = {}
         prepared_statements['get_user'] = cassandra_session.prepare('''
@@ -64,7 +73,7 @@ def preflight_check():
                 AND retirement_age = ? AND withdrawal_year = ?
         ''')
 
-        prepared_statements['search_symbol'] = cassandra_session.prepare('''
+        prepared_statements['search_symbol'] = solr_session.prepare('''
             SELECT * FROM ticker.latest
             WHERE solr_query = ?
         ''')
@@ -115,7 +124,7 @@ def search():
     }
     alert = None
     try:
-        search_results = cassandra_session.execute(
+        search_results = solr_session.execute(
             prepared_statements['search_symbol'].bind(values))
 
         if len(search_results) == 0:
