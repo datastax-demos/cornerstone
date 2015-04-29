@@ -22,22 +22,18 @@ source set_credentials.sh || exit 1
 unset SEEDS GATHER_IPS OPSCENTER_HOST DEMO_HOST WEB_PORT SPARK SOLR
 
 # start machines, install, do not provision
-vagrant up --provider azure dse0 &
-vagrant up --provider azure dse1 &
-vagrant up --provider azure dse2 &
-vagrant up --provider azure dse3 &
-vagrant up --provider azure dse4 &
-vagrant up --provider azure dse5 &
-vagrant up --provider azure dse6 &
-vagrant up --provider azure dse7 &
-vagrant up --provider azure dse8 &
-vagrant up --provider azure dse9 &
-vagrant up --provider azure opscenter &
-vagrant up --provider azure demo &
-
-# print job status and wait until `vagrant up` commands have completed
-jobs
-wait
+vagrant up --provider azure dse0
+vagrant up --provider azure dse1
+vagrant up --provider azure dse2
+vagrant up --provider azure dse3
+vagrant up --provider azure dse4
+vagrant up --provider azure dse5
+vagrant up --provider azure dse6
+vagrant up --provider azure dse7
+vagrant up --provider azure dse8
+vagrant up --provider azure dse9
+vagrant up --provider azure opscenter
+vagrant up --provider azure demo
 
 # collect IPs
 export GATHER_IPS=1
