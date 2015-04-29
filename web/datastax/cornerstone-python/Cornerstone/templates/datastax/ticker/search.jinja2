@@ -69,11 +69,18 @@
                     <td>
                         <p class="dlcsubheader">Last Trade</p>
 
-                        <p>{{ row.current|currency }}</p>
+                        <p id="current-{{ row.exchange }}-{{ row.symbol }}">
+                            {{ row.current|currency }}
+                        </p>
                     </td>
                 </tr>
                 </tbody>
             </table>
+            <script type="text/javascript">
+                setInterval(function(){
+                    currentValues('{{ row.exchange }}', '{{ row.symbol }}', '1', '{{ row.investment }}');
+                }, 1000);
+            </script>
         {% endfor %}
     </div>
 </div>

@@ -16,6 +16,7 @@ from Cornerstone.routes.datastax.cornerstone.rest import get_session
 ticker_api = Blueprint('ticker_api', __name__)
 
 cassandra_session = None
+solr_session = None
 prepared_statements = None
 
 
