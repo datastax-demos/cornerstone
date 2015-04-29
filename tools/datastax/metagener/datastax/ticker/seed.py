@@ -9,7 +9,8 @@ import uuid
 from cassandra.cluster import Cluster
 from cassandra.query import ordered_dict_factory
 
-ip_addresses = ['127.0.0.1']
+ip_addresses = '127.0.0.1'
+ip_addresses = ip_addresses.split(',')
 cluster = Cluster(ip_addresses)
 session = cluster.connect()
 session.row_factory = ordered_dict_factory
