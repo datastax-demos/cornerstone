@@ -1,0 +1,75 @@
+#!/usr/bin/env bash
+
+DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+cd $DIR/../../../
+echo "Running script from: $(pwd)"
+
+# backup existing Vagrantfile
+if [ -f Vagrantfile ]; then
+    VERSION=$(date +"%Y%m%d_%H%M%S")
+    mv Vagrantfile{,.bak.$VERSION}
+    echo "Backing up current Vagrantfile to: Vagrantfile.$VERSION"
+fi
+
+# copy correct Vagrantfile in place
+ln -s vagrantfiles/datastax/ticker Vagrantfile
+ls -alh Vagrantfile
+
+echo "Setting credentials using: ./set_credentials.sh"
+source set_credentials.sh || exit 1
+
+# clear envars
+unset SEEDS GATHER_IPS OPSCENTER_HOST DEMO_HOST WEB_PORT SPARK SOLR
+
+# start machines, install, do not provision
+vagrant up --provider azure dse0 dse1 dse2 dse3 dse4 dse5 dse6 dse7 dse8 dse9 opscenter demo
+
+# collect IPs
+export GATHER_IPS=1
+DSE0=$(vagrant provision dse0 | grep GATHER_IPS | awk '{print $4}')
+DSE1=$(vagrant provision dse1 | grep GATHER_IPS | awk '{print $4}')
+DSE2=$(vagrant provision dse2 | grep GATHER_IPS | awk '{print $4}')
+DSE3=$(vagrant provision dse3 | grep GATHER_IPS | awk '{print $4}')
+DSE4=$(vagrant provision dse4 | grep GATHER_IPS | awk '{print $4}')
+
+DSE5=$(vagrant provision dse5 | grep GATHER_IPS | awk '{print $4}')
+DSE6=$(vagrant provision dse6 | grep GATHER_IPS | awk '{print $4}')
+DSE7=$(vagrant provision dse7 | grep GATHER_IPS | awk '{print $4}')
+DSE8=$(vagrant provision dse8 | grep GATHER_IPS | awk '{print $4}')
+DSE9=$(vagrant provision dse9 | grep GATHER_IPS | awk '{print $4}')
+export OPSCENTER_HOST=$(vagrant provision opscenter | grep GATHER_IPS | awk '{print $4}')
+export DEMO_HOST=$(vagrant provision demo | grep GATHER_IPS | awk '{print $4}')
+unset GATHER_IPS
+
+export SEEDS=$DSE0,$DSE1,$DSE2,$DSE3,$DSE4,$DSE5,$DSE6,$DSE7,$DSE8,$DSE9
+export SOLR_NODE=$DSE5
+
+# finish configuration, start
+export SPARK=1
+    vagrant provision dse0
+    vagrant provision dse1
+    vagrant provision dse2
+    vagrant provision dse3
+    vagrant provision dse4
+unset SPARK
+export SOLR=1
+    vagrant provision dse5
+    vagrant provision dse6
+    vagrant provision dse7
+    vagrant provision dse8
+    vagrant provision dse9
+unset SOLR
+vagrant provision opscenter
+vagrant provision demo
+
+# gather web ports
+export WEB_PORT=1
+OPSCENTER_PORT=$(vagrant provision opscenter | grep WEB_PORT | awk '{print $4}')
+DEMO_PORT=$(vagrant provision demo | grep WEB_PORT | awk '{print $4}')
+unset WEB_PORT
+
+# display urls
+OPSCENTER_PUBLIC_HOST=$(vagrant ssh-config opscenter | grep HostName | awk '{print $2}')
+DEMO_PUBLIC_HOST=$(vagrant ssh-config demo | grep HostName | awk '{print $2}')
+echo -e "OpsCenter address: \n    http://${OPSCENTER_PUBLIC_HOST}:${OPSCENTER_PORT}"
+echo -e "Demo address: \n    http://${DEMO_PUBLIC_HOST}:${DEMO_PORT}"
