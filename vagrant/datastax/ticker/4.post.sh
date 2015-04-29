@@ -29,6 +29,10 @@ curl "http://$SOLR_NODE:8983/solr/admin/cores?action=CREATE&name=ticker.latest&g
 
 (
     cd /cornerstone/tools/datastax/metagener/datastax/ticker
+
+    sed -i -e "s/127.0.0.1/${SEEDS}/" ./seed.py
+    sed -i -e "s/127.0.0.1/${SEEDS}/" ./stream.py
+
     ./seed.py
     (
         nohup ./stream.py > ${HOME}/stream.log 2>&1
