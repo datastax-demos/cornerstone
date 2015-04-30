@@ -7,11 +7,8 @@ except ImportError: import json
 
 from flask import Blueprint, render_template, request, session, jsonify
 
-from cassandra.cluster import Cluster
-from cassandra.policies import DCAwareRoundRobinPolicy
-from cassandra.query import ordered_dict_factory
-
-from Cornerstone.routes.datastax.cornerstone.rest import get_session
+from Cornerstone.routes.datastax.cornerstone.rest import get_session, \
+    get_solr_session
 
 ticker_api = Blueprint('ticker_api', __name__)
 
@@ -24,11 +21,7 @@ def preflight_check():
     global cassandra_session, solr_session, prepared_statements
     if not cassandra_session:
         cassandra_session = get_session()
-
-        solr_cluster = Cluster(cassandra_session.cluster.contact_points,
-                               load_balancing_policy=DCAwareRoundRobinPolicy(local_dc='Solr'))
-        solr_session = solr_cluster.connect()
-        solr_session.row_factory = ordered_dict_factory
+        solr_session = get_solr_session()
 
         prepared_statements = {}
         prepared_statements['get_user'] = cassandra_session.prepare('''

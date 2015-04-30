@@ -10,4 +10,3 @@ fi
 
 bash /cornerstone/vagrant/general/file/setup/cache_v2.sh
 bash /cornerstone/vagrant/general/file/setup/sbin_v2.sh
-bash /cornerstone/vagrant/general/file/setup/mnt-directories_v2.sh

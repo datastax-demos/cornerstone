@@ -20,7 +20,8 @@ def format_currency(value):
 
 
 def start():
-    rest.init_cassandra(app.config['DSE_CLUSTER'].split(','))
+    rest.init_cassandra(app.config['DSE_CLUSTER'].split(','),
+                        app.config['DSE_SOLR_DC'])
 
     app.run(host='0.0.0.0',
             port=5000,

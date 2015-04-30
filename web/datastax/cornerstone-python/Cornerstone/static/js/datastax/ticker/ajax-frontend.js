@@ -14,7 +14,8 @@ Number.prototype.formatMoney = function () {
 
 function currentValues(exchange, symbol, quantity, investment) {
     $.ajax({
-        url: '/quote?exchange='+ exchange + '&symbol=' + symbol
+        url: '/quote?exchange='+ exchange + '&symbol=' + symbol,
+        timeout: 1000
     }).success(function (data) {
         $('#current-' + exchange + '-' + symbol).text(data.current.formatMoney());
 
