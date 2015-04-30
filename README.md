@@ -50,7 +50,7 @@ To start the base Cornerstone project, run:
 
     ./run/datastax/cornerstone/run
 
-**Note**: In some setups VirtualBox's main application must be closed in order to
+**Note**: In some setups, VirtualBox's main application must be closed in order to
 complete a successful launch.
 
 ## Interacting with a Demo
