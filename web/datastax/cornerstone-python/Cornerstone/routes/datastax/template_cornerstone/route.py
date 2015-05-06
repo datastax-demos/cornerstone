@@ -14,5 +14,5 @@ template_cornerstone_endpoint = Blueprint('template_cornerstone_endpoint', __nam
 
 @template_cornerstone_endpoint.route('/')
 def index():
-    return render_template('datastax/template_cornerstone/index.jinja2')
+    return render_template('datastax/template-cornerstone/index.jinja2')
 
