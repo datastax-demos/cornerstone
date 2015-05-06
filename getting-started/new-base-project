@@ -70,6 +70,14 @@ You'll want to edit the following files:
     vagrant/$GROUP/$NEW_PROJECT/3.start.sh
     vagrant/$GROUP/$NEW_PROJECT/4.post.sh
 
+If installing a package or downloading a tarball, base your installation scripts
+off of the following files. Adhering to these standards caches your files and
+ensures you have quicker setup times as well as ensuring your demo will work in
+offline situations:
+
+    vagrant/general/apt/install/git_v1.sh
+    vagrant/general/file/install/tomcat_v2.sh
+
 To undo project creation, run these commands:
 
     rm -rf cql/$GROUP/$NEW_PROJECT/

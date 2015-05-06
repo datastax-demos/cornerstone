@@ -88,6 +88,14 @@ You'll want to edit the following files:
     # base index.html file
     web/datastax/cornerstone-python/Cornerstone/templates/datastax/template-cornerstone/index.jinja2
 
+If installing a package or downloading a tarball, base your installation scripts
+off of the following files. Adhering to these standards caches your files and
+ensures you have quicker setup times as well as ensuring your demo will work in
+offline situations:
+
+    vagrant/general/apt/install/git_v1.sh
+    vagrant/general/file/install/tomcat_v2.sh
+
 To undo project creation, run these commands:
 
     rm -rf cql/$GROUP/$NEW_PROJECT/
