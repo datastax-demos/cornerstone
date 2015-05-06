@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request
 
-gcharts_api = Blueprint('gcharts_api', __name__)
+gcharts_endpoint = Blueprint('gcharts_endpoint', __name__)
 
 
 def compose_ajax_source():
@@ -20,7 +20,7 @@ def compose_ajax_source():
     return ajax_source
 
 
-@gcharts_api.route('/annotationchart/')
+@gcharts_endpoint.route('/annotationchart/')
 def annotationchart():
     ajax_source = compose_ajax_source()
 
@@ -33,7 +33,7 @@ def annotationchart():
                            options='options')
 
 
-@gcharts_api.route('/areachart/')
+@gcharts_endpoint.route('/areachart/')
 def areachart():
     ajax_source = compose_ajax_source()
 
@@ -47,7 +47,7 @@ def areachart():
                            options='options')
 
 
-@gcharts_api.route('/barchart/')
+@gcharts_endpoint.route('/barchart/')
 def barchart():
     ajax_source = compose_ajax_source()
 
@@ -60,7 +60,7 @@ def barchart():
                            options='google.charts.Bar.convertOptions(options)')
 
 
-@gcharts_api.route('/linechart/')
+@gcharts_endpoint.route('/linechart/')
 def linechart():
     ajax_source = compose_ajax_source()
 
@@ -73,7 +73,7 @@ def linechart():
                            options='google.charts.Line.convertOptions(options)')
 
 
-@gcharts_api.route('/piechart/')
+@gcharts_endpoint.route('/piechart/')
 def piechart():
     ajax_source = compose_ajax_source()
 
@@ -87,7 +87,7 @@ def piechart():
                            options='options')
 
 
-@gcharts_api.route('/table/')
+@gcharts_endpoint.route('/table/')
 def table():
     ajax_source = compose_ajax_source()
 

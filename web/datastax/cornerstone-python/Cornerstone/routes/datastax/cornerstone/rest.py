@@ -12,7 +12,7 @@ from cassandra.policies import DCAwareRoundRobinPolicy
 from cassandra.query import ordered_dict_factory
 from cassandra.util import OrderedMap
 
-rest_api = Blueprint('rest_api', __name__)
+rest_endpoint = Blueprint('rest_endpoint', __name__)
 
 session = None
 solr_session = None
@@ -91,13 +91,13 @@ def get_solr_session():
     return solr_session
 
 
-@rest_api.route('/')
+@rest_endpoint.route('/')
 def base():
     f = {'status': 'OK'}
     return jsonify(**f)
 
 
-@rest_api.route('/paging/<keyspace>/<table>/')
+@rest_endpoint.route('/paging/<keyspace>/<table>/')
 def paging(keyspace=None, table=None):
     """
     Convert REST calls to Cassandra queries

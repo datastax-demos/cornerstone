@@ -10,7 +10,7 @@ from flask import Blueprint, render_template, request, session, jsonify
 from Cornerstone.routes.datastax.cornerstone.rest import get_session, \
     get_solr_session
 
-ticker_api = Blueprint('ticker_api', __name__)
+ticker_endpoint = Blueprint('ticker_endpoint', __name__)
 
 cassandra_session = None
 solr_session = None
@@ -79,12 +79,12 @@ def preflight_check():
         ''')
 
 
-@ticker_api.route('/')
+@ticker_endpoint.route('/')
 def index():
     return render_template('datastax/ticker/index.jinja2')
 
 
-@ticker_api.route('/login', methods=['POST'])
+@ticker_endpoint.route('/login', methods=['POST'])
 def login():
     session['email_address'] = request.form.get('email_address')
 
@@ -95,17 +95,17 @@ def login():
     return render_template('datastax/ticker/orbeus.jinja2')
 
 
-@ticker_api.route('/disclaimer')
+@ticker_endpoint.route('/disclaimer')
 def disclaimer():
     return render_template('datastax/ticker/disclaimer.jinja2')
 
 
-@ticker_api.route('/dash')
+@ticker_endpoint.route('/dash')
 def dash():
     return render_template('datastax/ticker/dash.jinja2')
 
 
-@ticker_api.route('/search')
+@ticker_endpoint.route('/search')
 def search():
     preflight_check()
     search_term = request.args.get('search_term', 'MSFT')
@@ -150,7 +150,7 @@ def search():
                            alert=alert)
 
 
-@ticker_api.route('/customize')
+@ticker_endpoint.route('/customize')
 def customize():
     preflight_check()
     values = {
@@ -198,7 +198,7 @@ def _get_portfolio(email_address):
     return results
 
 
-@ticker_api.route('/portfolio', methods=['GET', 'POST'])
+@ticker_endpoint.route('/portfolio', methods=['GET', 'POST'])
 def portfolio():
     preflight_check()
     results = _get_portfolio(session['email_address'])
@@ -208,7 +208,7 @@ def portfolio():
                            results=results)
 
 
-@ticker_api.route('/transactions')
+@ticker_endpoint.route('/transactions')
 def transactions():
     preflight_check()
     values = {
@@ -238,7 +238,7 @@ def _portfolio_hash(email_address):
     return portfolio_hash
 
 
-@ticker_api.route('/recommendations', methods=['GET', 'POST'])
+@ticker_endpoint.route('/recommendations', methods=['GET', 'POST'])
 def recommendations():
     preflight_check()
     if request.method == 'POST':
@@ -305,7 +305,7 @@ def buy_string_to_bool(string):
     return string.lower() in ('yes', 'true', 't', '1', 'buy')
 
 
-@ticker_api.route('/buy', methods=['POST'])
+@ticker_endpoint.route('/buy', methods=['POST'])
 def buy():
     preflight_check()
     values = {
@@ -326,7 +326,7 @@ def buy():
     return jsonify({'status': 'ok'})
 
 
-@ticker_api.route('/quote')
+@ticker_endpoint.route('/quote')
 def quote():
     if not request.args.get('exchange') or not request.args.get('symbol'):
         return jsonify({'error': 'exchange and symbol required.'})

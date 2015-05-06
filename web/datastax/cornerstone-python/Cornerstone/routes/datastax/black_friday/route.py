@@ -1,9 +1,9 @@
 from flask import Blueprint, render_template
 
-black_friday_api = Blueprint('black_friday_api', __name__)
+black_friday_endpoint = Blueprint('black_friday_endpoint', __name__)
 
 
-@black_friday_api.route('/')
+@black_friday_endpoint.route('/')
 def index():
     content = '''
     List of example links to be used to showcase and ingest data on the frontend:
