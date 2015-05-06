@@ -40,4 +40,6 @@ ln -s /cornerstone/web/datastax/cornerstone-python/Cornerstone/static /cornersto
 # start webserver, with logging
 (
     nohup /cornerstone/web/datastax/template-cornerstone/run > ${HOME}/flask.log 2>&1
-) &; sleep 2
+) &
+
+wait
