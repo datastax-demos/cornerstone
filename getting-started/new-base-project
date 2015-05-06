@@ -1,0 +1,77 @@
+#!/usr/bin/env bash
+
+if [ $# -eq 0 ]
+then
+    THIS_FILE=`basename "$0"`
+    echo -e "\nUsage:\n\t$THIS_FILE <contributions|showcase|datastax> <project-name-with-hyphens>\n"
+    exit
+fi
+
+DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+cd $DIR/../
+echo "Running script from: $(pwd)"
+
+TEMPLATE_NAME=template-base
+TEMPLATE_PACKAGE=$(echo $TEMPLATE_NAME | sed 's/-/_/g')
+
+GROUP=$1
+NEW_PROJECT=$2
+NEW_PACKAGE=$(echo $NEW_PROJECT | sed 's/-/_/g')
+
+
+mkdir -p run/$GROUP/$NEW_PROJECT/
+cp run/datastax/$TEMPLATE_NAME/run run/$GROUP/$NEW_PROJECT/run
+sed -i -e "s|datastax/$TEMPLATE_NAME|$GROUP/$NEW_PROJECT|g" run/$GROUP/$NEW_PROJECT/run
+rm run/$GROUP/$NEW_PROJECT/run-e
+
+cp vagrantfiles/datastax/$TEMPLATE_NAME vagrantfiles/$GROUP/$NEW_PROJECT
+sed -i -e "s|datastax/$TEMPLATE_NAME|$GROUP/$NEW_PROJECT|g" vagrantfiles/$GROUP/$NEW_PROJECT
+sed -i -e "s|$TEMPLATE_NAME|$NEW_PROJECT|g" vagrantfiles/$GROUP/$NEW_PROJECT
+rm vagrantfiles/$GROUP/$NEW_PROJECT-e
+
+cp -r vagrant/datastax/$TEMPLATE_NAME vagrant/$GROUP/$NEW_PROJECT
+sed -i -e "s|datastax/$TEMPLATE_NAME|$GROUP/$NEW_PROJECT|g" vagrant/$GROUP/$NEW_PROJECT/3.start.sh
+rm vagrant/$GROUP/$NEW_PROJECT/3.start.sh-e
+
+mkdir -p cql/$GROUP/$NEW_PROJECT
+touch cql/$GROUP/$NEW_PROJECT/schema.cql
+
+cp -r web/datastax/$TEMPLATE_NAME web/$GROUP/$NEW_PROJECT
+
+echo "
+
+Run the following commands to start your new branch:
+
+    git pull
+    git checkout -b $NEW_PROJECT
+
+    git add cql/$GROUP/$NEW_PROJECT/
+    git add run/$GROUP/$NEW_PROJECT/
+    git add vagrant/$GROUP/$NEW_PROJECT/
+    git add vagrantfiles/$GROUP/$NEW_PROJECT
+    git add web/$GROUP/$NEW_PROJECT/
+
+    git commit -am \"First commit for $NEW_PROJECT\"
+    git push origin $NEW_PROJECT
+
+To get started, run this file:
+
+    run/$GROUP/$NEW_PROJECT/run
+
+You'll want to edit the following files:
+
+    # holds the project's schema
+    cql/$GROUP/$NEW_PROJECT/schema.cql
+
+    # starts your required processes, scripts, and tools
+    vagrant/$GROUP/$NEW_PROJECT/3.start.sh
+    vagrant/$GROUP/$NEW_PROJECT/4.post.sh
+
+To undo project creation, run these commands:
+
+    rm -rf cql/$GROUP/$NEW_PROJECT/
+    rm -rf run/$GROUP/$NEW_PROJECT/
+    rm -rf vagrant/$GROUP/$NEW_PROJECT/
+    rm vagrantfiles/$GROUP/$NEW_PROJECT
+    rm -rf web/$GROUP/$NEW_PROJECT/
+"
