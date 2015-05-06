@@ -42,4 +42,5 @@ ln -s /cornerstone/web/datastax/cornerstone-python/Cornerstone/static /cornersto
     nohup /cornerstone/web/datastax/template-cornerstone/run > ${HOME}/flask.log 2>&1
 ) &
 
-wait
+# needed to allow background nohup command to execute
+sleep 2
