@@ -70,6 +70,10 @@ You'll want to edit the following files:
     vagrant/$GROUP/$NEW_PROJECT/3.start.sh
     vagrant/$GROUP/$NEW_PROJECT/4.post.sh
 
+To see how the main cornerstone-python script installs the Flask webserver, see:
+
+    vagrant/datastax/cornerstone-python/2.install.sh
+
 If installing a package or downloading a tarball, base your installation scripts
 off of the following files. Adhering to these standards caches your files and
 ensures you have quicker setup times as well as ensuring your demo will work in

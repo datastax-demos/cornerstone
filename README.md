@@ -72,11 +72,13 @@ Running the following command will allow access to the development machine:
 
 ## Creating a New Demo
 
-If you want to create a new cornerstone-python based demo, run the command:
+If you want to create a new cornerstone-python based demo which starts up a
+Python Flask-based webserver, run the command:
 
     ./getting-started/new-cornerstone-project <contributions|showcase|datastax> <project-name-with-hyphens>
 
-If you want to create a new demo from scratch, run the command:
+If you want to create a new demo from scratch using your own webserver, run the
+command:
 
     ./getting-started/new-base-project <contributions|showcase|datastax> <project-name-with-hyphens>
 
