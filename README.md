@@ -70,6 +70,19 @@ Running the following command will allow access to the development machine:
 
     vagrant ssh singlenode
 
+## Creating a New Demo
+
+If you want to create a new cornerstone-python based demo, run the command:
+
+    ./getting-started/new-cornerstone-project <contributions|showcase|datastax> <project-name-with-hyphens>
+
+If you want to create a new demo from scratch, run the command:
+
+    ./getting-started/new-base-project <contributions|showcase|datastax> <project-name-with-hyphens>
+
+Be sure to read the [contributing guide](CONTRIBUTING.md) for a full explanation
+of directories.
+
 ### Important Paths
 
 The base directory of the Cornerstone project, `.`, on the host machine will
