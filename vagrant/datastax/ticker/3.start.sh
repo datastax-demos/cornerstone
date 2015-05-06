@@ -34,9 +34,6 @@ cqlsh $SINGLE_SEED -f /cornerstone/cql/datastax/ticker/ticker.cql
 ln -s /cornerstone/web/datastax/cornerstone-python/Cornerstone/templates /cornerstone/web/datastax/ticker/
 ln -s /cornerstone/web/datastax/cornerstone-python/Cornerstone/static /cornerstone/web/datastax/ticker/
 
-export PYTHONPATH=/cornerstone/web/datastax/cornerstone-python:${PYTHONPATH}
-echo "export PYTHONPATH=/cornerstone/web/datastax/cornerstone-python:${PYTHONPATH}" >> ${HOME}/.profile
-
 (
     nohup /cornerstone/web/datastax/ticker/run > ${HOME}/flask.log 2>&1
 ) &
