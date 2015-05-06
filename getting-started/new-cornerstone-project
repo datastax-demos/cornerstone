@@ -1,0 +1,69 @@
+#!/usr/bin/env bash
+
+OLD_NAME=template-cornerstone
+OLD_PACKAGE=$(echo $OLD_NAME | sed 's/-/_/g')
+
+GROUP=$1
+NEW_NAME=$2
+NEW_PACKAGE=$(echo $NEW_NAME | sed 's/-/_/g')
+
+
+mkdir -p run/$GROUP/$NEW_NAME/
+cp run/datastax/$OLD_NAME/run run/$GROUP/$NEW_NAME/run
+sed -i -e "s|datastax/$OLD_NAME|$GROUP/$NEW_NAME|g" run/$GROUP/$NEW_NAME/run
+rm run/$GROUP/$NEW_NAME/run-e
+
+cp vagrantfiles/datastax/$OLD_NAME vagrantfiles/$GROUP/$NEW_NAME
+sed -i -e "s|datastax/$OLD_NAME|$GROUP/$NEW_NAME|g" vagrantfiles/$GROUP/$NEW_NAME
+sed -i -e "s|$OLD_NAME|$NEW_NAME|g" vagrantfiles/$GROUP/$NEW_NAME
+rm vagrantfiles/$GROUP/$NEW_NAME-e
+
+cp -r vagrant/datastax/$OLD_NAME vagrant/$GROUP/$NEW_NAME
+sed -i -e "s|datastax/$OLD_NAME|$GROUP/$NEW_NAME|g" vagrant/$GROUP/$NEW_NAME/3.start.sh
+sed -i -e "/$OLD_NAME/s/^/#/" vagrant/$GROUP/$NEW_NAME/4.post.sh
+rm vagrant/$GROUP/$NEW_NAME/3.start.sh-e
+rm vagrant/$GROUP/$NEW_NAME/4.post.sh-e
+
+mkdir -p cql/$GROUP/$NEW_NAME
+touch cql/$GROUP/$NEW_NAME/schema.cql
+
+cp -r web/datastax/$OLD_NAME web/$GROUP/$NEW_NAME
+sed -i -e "s|datastax.$OLD_PACKAGE|$GROUP.$NEW_PACKAGE|g" web/$GROUP/$NEW_NAME/application.py
+sed -i -e "s|$OLD_PACKAGE|$NEW_PACKAGE|g" web/$GROUP/$NEW_NAME/application.py
+rm web/$GROUP/$NEW_NAME/application.py-e
+
+cp -r web/datastax/cornerstone-python/Cornerstone/routes/datastax/$OLD_PACKAGE web/datastax/cornerstone-python/Cornerstone/routes/$GROUP/$NEW_PACKAGE
+sed -i -e "s|$OLD_PACKAGE|$NEW_PACKAGE|g" web/datastax/cornerstone-python/Cornerstone/routes/$GROUP/$NEW_PACKAGE/route.py
+sed -i -e "s|datastax/$OLD_NAME|$GROUP/$NEW_NAME|g" web/datastax/cornerstone-python/Cornerstone/routes/$GROUP/$NEW_PACKAGE/route.py
+rm web/datastax/cornerstone-python/Cornerstone/routes/$GROUP/$NEW_PACKAGE/route.py-e
+
+mkdir -p web/datastax/cornerstone-python/Cornerstone/templates/$GROUP/$NEW_NAME
+cp web/datastax/cornerstone-python/Cornerstone/templates/datastax/cornerstone/index.jinja2 web/datastax/cornerstone-python/Cornerstone/templates/$GROUP/$NEW_NAME/
+
+echo "
+
+Run the following commands to start your new branch:
+
+    git pull
+    git checkout -b $NEW_NAME
+
+    git add cql/$GROUP/$NEW_NAME/
+    git add run/$GROUP/$NEW_NAME/
+    git add vagrant/$GROUP/$NEW_NAME/
+    git add vagrantfiles/$GROUP/$NEW_NAME
+    git add web/datastax/cornerstone-python/Cornerstone/routes/$GROUP/$NEW_PACKAGE/
+    git add web/datastax/cornerstone-python/Cornerstone/templates/$GROUP/$NEW_NAME/
+    git add web/$GROUP/$NEW_NAME/
+
+    git commit -am \"First commit for $NEW_NAME\"
+
+To undo project creation, run these commands:
+
+    rm -rf cql/$GROUP/$NEW_NAME/
+    rm -rf run/$GROUP/$NEW_NAME/
+    rm -rf vagrant/$GROUP/$NEW_NAME/
+    rm vagrantfiles/$GROUP/$NEW_NAME
+    rm -rf web/datastax/cornerstone-python/Cornerstone/routes/$GROUP/$NEW_PACKAGE/
+    rm -rf web/datastax/cornerstone-python/Cornerstone/templates/$GROUP/$NEW_NAME/
+    rm -rf web/$GROUP/$NEW_NAME/
+"
