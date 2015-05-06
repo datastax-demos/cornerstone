@@ -69,6 +69,25 @@ Run the following commands to start your new branch:
     git commit -am \"First commit for $NEW_PROJECT\"
     git push origin $NEW_PROJECT
 
+To get started, run this file:
+
+    run/$GROUP/$NEW_PROJECT/run
+
+You'll want to edit the following files:
+
+    # holds the project's schema
+    cql/$GROUP/$NEW_PROJECT/schema.cql
+
+    # starts your required processes, scripts, and tools
+    vagrant/$GROUP/$NEW_PROJECT/3.start.sh
+    vagrant/$GROUP/$NEW_PROJECT/4.post.sh
+
+    # add new URL routing endpoints using Flask
+    web/datastax/cornerstone-python/Cornerstone/routes/$GROUP/$NEW_PACKAGE/route.py
+
+    # base index.html file
+    web/datastax/cornerstone-python/Cornerstone/templates/datastax/template-cornerstone/index.jinja2
+
 To undo project creation, run these commands:
 
     rm -rf cql/$GROUP/$NEW_PROJECT/
