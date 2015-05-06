@@ -4,6 +4,7 @@ bower/
 cache/
 cache_old/
 keys/
+logs/
 tmp/
 
 *.pyc
