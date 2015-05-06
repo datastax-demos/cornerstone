@@ -60,7 +60,7 @@ To get started, run this file:
 
 You'll want to edit the following files:
 
-    # all instances of \"WEB_PORT = '5000'\" must be updated according to your project
+    # all instances of \"WEB_PORT = '5000'\" must be updated according to the new project
     vagrantfiles/$GROUP/$NEW_PROJECT
 
     # holds the project's schema
