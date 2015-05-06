@@ -26,5 +26,5 @@ done
 SINGLE_SEED="${SEEDS%%,*}"
 
 # load schema into DSE
-cqlsh $SINGLE_SEED -f /cornerstone/cql/datastax/template-base/ticker.cql
+cqlsh $SINGLE_SEED -f /cornerstone/cql/datastax/template-base/schema.cql
 
