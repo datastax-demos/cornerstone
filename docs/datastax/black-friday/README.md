@@ -8,6 +8,11 @@ The job description for the Data Visualization/Engineering Intern can be found
 
 ## Setup
 
+**Note:** This entire setup expects an OS X or \*nix environment. Windows support
+is close, but still needs modification. Ping me on
+[HipChat](https://www.hipchat.com/gUPdWxUUx) if you do not have access to a
+supported environment.
+
 This project should follow the same
 [documentation](../../../docs/datastax/cornerstone) as the `cornerstone` project and
 should have all documentation updates there until `black-friday` project
@@ -27,6 +32,17 @@ all static files should be added to their `datastax/black-friday` directory
 [here](../../../web/datastax/cornerstone-python/Cornerstone/static),
 and all template files should be added to a `black-friday` directory
 [here](../../../web/datastax/cornerstone-python/Cornerstone/templates/datastax).
+
+## Start
+
+Once Virtualbox and Vagrant have been installed following the
+[README](../../../README.md), run:
+
+    run/datastax/black-friday/run
+
+You'll be able to ssh into the box using:
+
+    vagrant ssh singlenode
 
 ## Technical Screening
 
