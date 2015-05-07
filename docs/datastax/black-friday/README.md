@@ -3,7 +3,7 @@
 This project is currently being used for the DataStax certification program as
 well as our Demos Team technical screenings.
 
-The job description for the Data Visualization Engineering Intern can be found
+The job description for the Data Visualization/Engineering Intern can be found
 [here](https://gist.github.com/joaquincasares/af1a45b67088be5b9869).
 
 ## Setup
