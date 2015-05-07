@@ -79,14 +79,6 @@ to the repository under their Github account.
 
 ### Questions?
 
-**Note:** Please use
-[HipChat](https://www.hipchat.com/gUPdWxUUx)
-to ask questions instead
-of IRC. HipChat will allow for persistent questions for around-the-clock
-communication without the fear of me missing anything. I realized that my new
-IRCCloud account wasn't sending notifications and I apologize for the missed pings
-from ataxia. This new process should prevent that from happening again.
-
 If something is unclear, feel free to find me on
 [HipChat](https://www.hipchat.com/gUPdWxUUx) between the hours of 9am-5pm CST.
 If I don't respond within 10 minutes during the above availability hours,
@@ -97,6 +89,6 @@ of the interview process. I will be available to help field all questions
 that cannot be found online and help clarify the current use cases.
 
 Do be aware that other candidates may also be sitting in the channel, feel free
-to help each other at a high level, but please refrain from sharing implementation
-details. Also, I'm never actively watching my IRC channel. If it's apparent I'm
-not active on the channel, feel free to mention my name so I get a notification.
+to collaborate with each other at a high level since this interaction will also
+be evaluated, but please refrain from sharing implementation
+details.
