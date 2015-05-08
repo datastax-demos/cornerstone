@@ -53,6 +53,9 @@ To start the base Cornerstone project, run:
 **Note**: In some setups, VirtualBox's main application must be closed in order to
 complete a successful launch.
 
+**Note**: If you attempted a run script without properly setting up your credentials
+you may need to run `vagrant destroy -f` and try your run script again.
+
 ## Interacting with a Demo
 
 The last message of a successful run of the Cornerstone project will look similar
