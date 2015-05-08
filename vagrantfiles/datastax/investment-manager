@@ -27,7 +27,7 @@ PRIVATE_OPSCENTER_PORTS='61620'
 required_envars = ['DATASTAX_USER', 'DATASTAX_PASS']
 for envar in required_envars
     if !ENV[envar]
-        print "\n$#{envar} must be set in the current shell! \n\tNo actions performed!\n\n"
+        print "\n$#{envar} must be set in the current shell. \n\tNo actions performed.\n\n"
         exit
     end
 end
