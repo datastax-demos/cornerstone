@@ -48,6 +48,20 @@ You'll be able to ssh into the box using:
 
 ## Technical Screening
 
+### Deadline
+
+I'll be out of the office starting end of day May 15th and will return June 1st.
+I still do not have a proper plan in place for interviews conducted during the
+two weeks I'll be out of the office, but will update this section here.
+
+If possible, I'd like to have technical screens in by May 15th, but I also
+understand many of you are currently working on finals. If we can get them in by
+May 15th, that's great, if not, work on them when you're free again. I, however,
+will not be able to provide technical guidance during my OOO time, but the
+Hipchat room will remain open for collaboration.
+
+Good luck with your finals!
+
 ### Time Requirement
 
 Since this is an open ended screening I would like to set the implementation time
