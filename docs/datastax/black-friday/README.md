@@ -6,6 +6,8 @@ well as our Demos Team technical screenings.
 The job description for the Data Visualization/Engineering Intern can be found
 [here](https://gist.github.com/joaquincasares/af1a45b67088be5b9869).
 
+The story of the demo can be found [here](SCRIPT.md).
+
 ## Setup
 
 **Note:** This entire setup expects an OS X or \*nix environment. Windows support
@@ -108,3 +110,14 @@ Do be aware that other candidates may also be sitting in the channel, feel free
 to collaborate with each other at a high level since this interaction will also
 be evaluated, but please refrain from sharing implementation
 details.
+
+## Errors / Issues
+
+If using Windows or encountering an error while using Vagrant, please paste the
+error into the [HipChat](https://www.hipchat.com/gUPdWxUUx) room and submit it
+with your final answer. Please also include all relevant information about the
+system that you are on to help us debug that environment further.
+
+The backup project would be to create an interesting demo, preferably using
+Flask, that coincides with this [story](SCRIPT.md). Showcase your skills, your
+imagination, and your capabilities at full-stack development.
