@@ -52,6 +52,14 @@ To start a project, run:
 
 For the base Cornerstone project, use `cornerstone-python` as the project name.
 
+**Note**: If you get the error:
+
+    A host only network interface you're attempting to configure via DHCP
+    already has a conflicting host only adapter with DHCP enabled.
+
+Running `VBoxManage dhcpserver remove --netname HostInterfaceNetworking-vboxnet0`
+should fix the issue.
+
 **Note**: In some setups, VirtualBox's main application must be closed in order to
 complete a successful launch.
 
