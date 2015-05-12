@@ -32,6 +32,7 @@ cqlsh $SINGLE_SEED -f /cornerstone/cql/datastax/black-friday/retail.cql
 sleep 20
 /cornerstone/scripts/datastax/black-friday/3.scan_data/4.metagener-to-cassandra-stores-employees.py
 
-mkdir -p /mnt/log/spark_streaming/
+sudo mkdir -p /mnt/log/spark_streaming/
+sudo chown -R $(whoami):$(whoami) /mnt/log/spark_streaming/
 nohup nc -l 5005 &
 nohup /cornerstone/scripts/datastax/black-friday/3.scan_data/5.metagener-to-cassandra-scan-items.py &
