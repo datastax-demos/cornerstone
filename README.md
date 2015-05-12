@@ -46,9 +46,11 @@ This will enable free orchestration across all platforms for all users.
 Any demo can be started locally by running the appropriate file located in the
 `run/` directory.
 
-To start the base Cornerstone project, run:
+To start a project, run:
 
-    ./run/datastax/cornerstone/run
+    ./run/datastax/<project>/run
+
+For the base Cornerstone project, use `cornerstone-python` as the project name.
 
 **Note**: In some setups, VirtualBox's main application must be closed in order to
 complete a successful launch.
