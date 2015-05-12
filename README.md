@@ -115,7 +115,12 @@ will force a full download on the next `vagrant up` command.
 
 To destroy all machines launched from the current directory, run:
 
+    source set_credentials.sh
     vagrant destroy -f [machine-name]
+
+To clear the cache:
+
+    rm -rf cache/
 
 ## Contributing
 
