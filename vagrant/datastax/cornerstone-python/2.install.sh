@@ -7,7 +7,6 @@ bash /cornerstone/vagrant/general/apt/configure/java/default-jdk7_v2.sh
 bash /cornerstone/vagrant/general/apt/install/dev_v3.sh
 bash /cornerstone/vagrant/general/apt/install/python_v2.sh
 bash /cornerstone/vagrant/general/apt/install/ruby_v2.sh
-bash /cornerstone/vagrant/general/file/install/bower_v2.sh
 
 sudo pip install -r /cornerstone/web/datastax/cornerstone-python/Cornerstone/requirements.txt
 
@@ -19,18 +18,38 @@ if [ ! -d ${CACHE} ]; then
     wget -c https://google-visualization-python.googlecode.com/files/${DOWNLOADNAME} -P ${CACHE}
 
     mkdir -p /cache/extracted
-    tar -zxvf ${CACHE}/${DOWNLOADNAME} --directory /cache/extracted
+    tar zxf ${CACHE}/${DOWNLOADNAME} --directory /cache/extracted
 fi
 (
     cd /cache/extracted/${EXTRACTEDNAME}
     sudo python setup.py install
 )
 
-(
-    cd /cornerstone/web/datastax/cornerstone-python/Cornerstone
-    source ${HOME}/.profile
-    bower --config.analytics=false install
-)
+
+CACHE=/cache/tar/jquery
+DOWNLOADNAME=2.1.4.tar.gz
+PACKAGESDIR=/cornerstone/web/datastax/cornerstone-python/Cornerstone/static/packages
+if [ ! -d ${CACHE}/${DOWNLOADNAME} ]; then
+    mkdir -p ${CACHE}
+    wget https://github.com/jquery/jquery/archive/${DOWNLOADNAME} -P ${CACHE}
+fi
+
+mkdir -p ${PACKAGESDIR}
+tar zxf ${CACHE}/${DOWNLOADNAME} --directory ${PACKAGESDIR}
+mv packages/jquery-* packages/jquery
+
+CACHE=/cache/tar/bootstrap
+DOWNLOADNAME=v3.3.4.tar.gz
+PACKAGESDIR=/cornerstone/web/datastax/cornerstone-python/Cornerstone/static/packages
+if [ ! -d ${CACHE}/${DOWNLOADNAME} ]; then
+    mkdir -p ${CACHE}
+    wget https://github.com/twbs/bootstrap/archive/${DOWNLOADNAME} -P ${CACHE}
+fi
+
+mkdir -p ${PACKAGESDIR}
+tar zxf ${CACHE}/${DOWNLOADNAME} --directory ${PACKAGESDIR}
+mv packages/bootstrap-* packages/bootstrap
+
 
 CFG=/cornerstone/web/datastax/cornerstone-python/Cornerstone/application.cfg
 if [ ! -f ${CFG} ]; then
