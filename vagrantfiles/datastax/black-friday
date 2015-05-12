@@ -82,7 +82,7 @@ aws_setup = Proc.new do |aws, override|
     aws.instance_type = 'm3.medium'
 
     aws.keypair_name = ENV['DEMO_AWS_KEYPAIR_NAME']
-    if ENV['DEMO_AWS_KEYPAIR_LOCATION'].nil?
+    if !ENV['DEMO_AWS_KEYPAIR_LOCATION'].empty?
         override.ssh.private_key_path = ENV['DEMO_AWS_KEYPAIR_LOCATION']
     end
 
