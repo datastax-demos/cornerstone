@@ -36,7 +36,7 @@ fi
 
 mkdir -p ${PACKAGESDIR}
 tar zxf ${CACHE}/${DOWNLOADNAME} --directory ${PACKAGESDIR}
-mv packages/jquery-* packages/jquery
+mv $PACKAGESDIR/jquery-* $PACKAGESDIR/jquery
 
 CACHE=/cache/tar/bootstrap
 DOWNLOADNAME=v3.3.4.tar.gz
@@ -48,7 +48,7 @@ fi
 
 mkdir -p ${PACKAGESDIR}
 tar zxf ${CACHE}/${DOWNLOADNAME} --directory ${PACKAGESDIR}
-mv packages/bootstrap-* packages/bootstrap
+mv $PACKAGESDIR/bootstrap-* $PACKAGESDIR/bootstrap
 
 
 CFG=/cornerstone/web/datastax/cornerstone-python/Cornerstone/application.cfg
