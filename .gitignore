@@ -6,7 +6,7 @@ cache_old/
 keys/
 logs/
 tmp/
-static/packages
+web/datastax/cornerstone-python/Cornerstone/static/packages/
 
 *.pyc
 Vagrantfile.bak.*
