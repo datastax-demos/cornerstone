@@ -6,6 +6,7 @@ cache_old/
 keys/
 logs/
 tmp/
+static/packages
 
 *.pyc
 Vagrantfile.bak.*
