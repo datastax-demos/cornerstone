@@ -1,0 +1,83 @@
+#!/usr/bin/env bash
+
+if [ $# -eq 0 ]
+then
+    THIS_FILE=`basename "$0"`
+    echo -e "\nUsage:\n\t$THIS_FILE <contributions|showcase|datastax> <existing-project-name-with-hyphens> <contributions|showcase|datastax> <new-project-name-with-hyphens>\n"
+    exit
+fi
+
+DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+cd $DIR/../
+echo "Running script from: $(pwd)"
+
+OLD_GROUP=$1
+OLD_PROJECT=$2
+TEMPLATE_PACKAGE=$(echo $OLD_PROJECT | sed 's/-/_/g')
+
+NEW_GROUP=$3
+NEW_PROJECT=$4
+NEW_PACKAGE=$(echo $NEW_PROJECT | sed 's/-/_/g')
+
+if [[ $NEW_PROJECT == *"$OLD_PROJECT"* ]]
+then
+    echo "Existing name '$OLD_PROJECT' must not be a substring of '$NEW_PROJECT'."
+    echo "No modifications made."
+    exit
+fi
+
+
+mv run/$OLD_GROUP/$OLD_PROJECT run/$NEW_GROUP/$NEW_PROJECT
+sed -i -e "s|$OLD_GROUP/$OLD_PROJECT|$NEW_GROUP/$NEW_PROJECT|g" run/$NEW_GROUP/$NEW_PROJECT/run
+rm run/$NEW_GROUP/$NEW_PROJECT/run-e
+
+mv vagrantfiles/$OLD_GROUP/$OLD_PROJECT vagrantfiles/$NEW_GROUP/$NEW_PROJECT
+sed -i -e "s|$OLD_GROUP/$OLD_PROJECT|$NEW_GROUP/$NEW_PROJECT|g" vagrantfiles/$NEW_GROUP/$NEW_PROJECT
+sed -i -e "s|$OLD_PROJECT|$NEW_PROJECT|g" vagrantfiles/$NEW_GROUP/$NEW_PROJECT
+rm vagrantfiles/$NEW_GROUP/$NEW_PROJECT-e
+
+mv vagrant/$OLD_GROUP/$OLD_PROJECT vagrant/$NEW_GROUP/$NEW_PROJECT
+sed -i -e "s|$OLD_GROUP/$OLD_PROJECT|$NEW_GROUP/$NEW_PROJECT|g" vagrant/$NEW_GROUP/$NEW_PROJECT/3.start.sh
+sed -i -e "/$OLD_PROJECT/s/^/#/" vagrant/$NEW_GROUP/$NEW_PROJECT/4.post.sh
+rm vagrant/$NEW_GROUP/$NEW_PROJECT/3.start.sh-e
+rm vagrant/$NEW_GROUP/$NEW_PROJECT/4.post.sh-e
+
+mv cql/$OLD_GROUP/$OLD_PROJECT cql/$NEW_GROUP/$NEW_PROJECT
+
+mv web/$OLD_GROUP/$OLD_PROJECT web/$NEW_GROUP/$NEW_PROJECT
+sed -i -e "s|$OLD_GROUP.$TEMPLATE_PACKAGE|$NEW_GROUP.$NEW_PACKAGE|g" web/$NEW_GROUP/$NEW_PROJECT/application.py
+sed -i -e "s|$TEMPLATE_PACKAGE|$NEW_PACKAGE|g" web/$NEW_GROUP/$NEW_PROJECT/application.py
+rm web/$NEW_GROUP/$NEW_PROJECT/application.py-e
+
+mv web/datastax/cornerstone-python/Cornerstone/routes/$OLD_GROUP/$TEMPLATE_PACKAGE web/datastax/cornerstone-python/Cornerstone/routes/$NEW_GROUP/$NEW_PACKAGE
+sed -i -e "s|$OLD_GROUP/$OLD_PROJECT|$NEW_GROUP/$NEW_PROJECT|g" web/datastax/cornerstone-python/Cornerstone/routes/$NEW_GROUP/$NEW_PACKAGE/route.py
+sed -i -e "s|$TEMPLATE_PACKAGE|$NEW_PACKAGE|g" web/datastax/cornerstone-python/Cornerstone/routes/$NEW_GROUP/$NEW_PACKAGE/route.py
+rm web/datastax/cornerstone-python/Cornerstone/routes/$NEW_GROUP/$NEW_PACKAGE/route.py-e
+
+mv web/datastax/cornerstone-python/Cornerstone/templates/$OLD_GROUP/$OLD_PROJECT web/datastax/cornerstone-python/Cornerstone/templates/$NEW_GROUP/$NEW_PROJECT
+
+echo "
+
+Run the following commands to complete the renaming:
+
+    git add cql/$NEW_GROUP/$NEW_PROJECT/
+    git add run/$NEW_GROUP/$NEW_PROJECT/
+    git add vagrant/$NEW_GROUP/$NEW_PROJECT/
+    git add vagrantfiles/$NEW_GROUP/$NEW_PROJECT
+    git add web/datastax/cornerstone-python/Cornerstone/routes/$NEW_GROUP/$NEW_PACKAGE/
+    git add web/datastax/cornerstone-python/Cornerstone/templates/$NEW_GROUP/$NEW_PROJECT/
+    git add web/$NEW_GROUP/$NEW_PROJECT/
+
+    git commit -am \"Rename $OLD_GROUP/$OLD_PROJECT to $NEW_GROUP/$NEW_PROJECT\"
+
+To undo project rename, run these commands:
+
+    git checkout -f
+    rm -rf cql/$NEW_GROUP/$NEW_PROJECT/
+    rm -rf run/$NEW_GROUP/$NEW_PROJECT/
+    rm -rf vagrant/$NEW_GROUP/$NEW_PROJECT/
+    rm vagrantfiles/$NEW_GROUP/$NEW_PROJECT
+    rm -rf web/datastax/cornerstone-python/Cornerstone/routes/$NEW_GROUP/$NEW_PACKAGE/
+    rm -rf web/datastax/cornerstone-python/Cornerstone/templates/$NEW_GROUP/$NEW_PROJECT/
+    rm -rf web/$NEW_GROUP/$NEW_PROJECT/
+"
