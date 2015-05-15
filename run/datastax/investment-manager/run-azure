@@ -5,7 +5,7 @@ cd $DIR/../../../
 echo "Running script from: $(pwd)"
 
 # backup existing Vagrantfile
-if [ -f Vagrantfile ]; then
+if [ -f Vagrantfile ] || [ -L Vagrantfile ]; then
     VERSION=$(date +"%Y%m%d_%H%M%S")
     mv Vagrantfile{,.bak.$VERSION}
     echo "Backing up current Vagrantfile to: Vagrantfile.$VERSION"
