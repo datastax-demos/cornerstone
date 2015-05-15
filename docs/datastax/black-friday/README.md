@@ -8,6 +8,20 @@ The job description for the Data Visualization/Engineering Intern can be found
 
 The story of the demo can be found [here](SCRIPT.md).
 
+
+## Out of Office until June 1st
+
+I'll be out of the office until June 1st and will continue reviewing technical screens
+then. If you need to get in contact with our Hiring Department before then,
+please contact Jenna Connell at jconnell@datastax.com.
+
+If you have any issues with any part of the setup, see if other candidates can
+help you on HipChat. I'll review all missed logs upon my return.
+
+If you cannot resolve the issues, please follow the instructions in the last
+section of this document.
+
+
 ## Setup
 
 **Note:** This entire setup expects an OS X or \*nix environment. Windows support
@@ -135,3 +149,8 @@ system that you are on to help us debug that environment further.
 The backup project would be to create an interesting demo, preferably using
 Flask, that coincides with this [story](SCRIPT.md). Showcase your skills, your
 imagination, and your capabilities at full-stack development.
+
+This may seem too simple, or a trick, but rest assured it should be and is not,
+respectively. Just showcase what you're good at and what comes naturally. Build
+a demo using the technologies that you know to visualize data of your choosing.
+The only requirement is that it fits into the retail market.
