@@ -119,7 +119,8 @@ Again, feel free to greenfield ideas since we are looking for high amounts of cr
 with minimal supervision.
 
 Since this same screening is being given out to multiple candidates, please
-submit the `git diff` output as well as screenshots of the created layouts.
+submit the `git diff` output of all modified and added files as well as screenshots
+of the created layouts to joaquin@datastax.com.
 Once an offer is made and accepted, we'll ask that the new hire submit a pull request
 to the repository under their Github account.
 
