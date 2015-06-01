@@ -92,7 +92,7 @@ def login():
     GENERATE SEED DATA FOR THIS ACCOUNT!
     '''
 
-    return render_template('datastax/ticker/orbeus.jinja2')
+    return render_template('datastax/ticker/disclaimer.jinja2')
 
 
 @ticker_endpoint.route('/disclaimer')
