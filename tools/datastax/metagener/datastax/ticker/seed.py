@@ -164,6 +164,7 @@ def insert_portfolios():
     ''')
 
     email_addresses = [
+        'ticker@datastax.com',
         'joaquin@datastax.com',
         'jamie.matthews@datastax.com',
         'wayne.chan@datastax.com',
