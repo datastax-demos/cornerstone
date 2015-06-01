@@ -243,7 +243,7 @@ def insert_users():
 
     values = [
         {
-            'email_address': 'joaquin@datastax.com',
+            'email_address': 'ticker@datastax.com',
             'preferred_investment_types': ['bonds', 'international-securities',
                                            'money-market'],
             'retirement_age': '35-45',
