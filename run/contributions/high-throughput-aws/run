@@ -21,7 +21,14 @@ source set_credentials.sh || exit 1
 # clear envars
 unset SEEDS GATHER_IPS DEMO_HOST WEB_PORT
 
-vagrant up --provider aws testrunner dse0 dse1 dse2 dse3 dse4
+vagrant up --provider aws testrunner &
+vagrant up --provider aws dse0 &
+vagrant up --provider aws dse1 &
+vagrant up --provider aws dse2 &
+vagrant up --provider aws dse3 &
+vagrant up --provider aws dse4 &
+
+wait
 
 # collect DSE seeds
 export GATHER_IPS=1
