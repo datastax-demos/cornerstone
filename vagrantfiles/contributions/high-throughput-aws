@@ -34,41 +34,6 @@ for envar in required_envars
     end
 end
 
-vb_setup = Proc.new do |vb, override|
-    override.vm.synced_folder '.', '/cornerstone', create: true
-
-    override.vm.synced_folder 'cache', '/cache', create: true
-
-    override.vm.box = 'ubuntu/trusty64'
-
-    vb.memory = 512
-    vb.cpus = 1
-end
-
-azure_setup = Proc.new do |azure, override|
-    override.vm.box = 'azure'
-
-    azure.vm_size = 'Medium'
-    azure.vm_location = 'West US'
-
-    azure.mgmt_endpoint = 'https://management.core.windows.net'
-    azure.mgmt_certificate = ENV['AZURE_MGMT_CERT_PEM']
-    azure.subscription_id = ENV['AZURE_SUBSCRIPTION_ID']
-
-    azure.vm_image = 'b39f27a8b8c64d52b05eac6a62ebad85__Ubuntu-14_04_2_LTS-amd64-server-20150309-en-us-30GB'
-    azure.vm_name = "#{DEMO_NAME}-#{ENV['DEMO_USER_WORD']}"
-    azure.vm_virtual_network_name = "#{DEMO_NAME}-#{ENV['DEMO_USER_WORD']}-vnet"
-
-    azure.private_key_file = ENV['AZURE_PRIVATE_KEY']
-    azure.certificate_file = ENV['AZURE_CERT']
-    azure.vm_user = ENV['AZURE_SSH_USER']
-    azure.vm_password = ENV['AZURE_SSH_PASS']
-    override.ssh.username = ENV['AZURE_SSH_USER']
-    override.ssh.password = ENV['AZURE_SSH_PASS']
-
-    azure.ssh_port = '22'
-end
-
 aws_setup = Proc.new do |aws, override|
     override.vm.box = 'aws-dummy'
     override.ssh.username = 'ubuntu'
@@ -142,28 +107,46 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # disable default synced folder for all machines
     config.vm.synced_folder '.', '/vagrant', disabled: true
 
+    config.vm.define 'testrunner', autostart: true do |testrunner|
+
+        dse.vm.provider :aws do |aws, override|
+
+            aws_setup.call aws, override
+
+            # Using the default of i2.2xlarge
+            # aws.instance_type = 'c4.4xlarge'
+
+            aws.ebs_optimized = true
+            aws.block_device_mapping = [{
+                'DeviceName' => '/dev/sda1',
+                'Ebs.VolumeSize' => 200,
+                'Ebs.VolumeType' => 'gp2',
+                'Ebs.DeleteOnTermination' => 'true'
+            }]
+        end
+
+        if ENV['GATHER_IPS']
+            config.vm.provision 'shell', inline: 'echo GATHER_IPS $(hostname -i)'
+        elsif ENV['WEB_PORT']
+            config.vm.provision 'shell', inline: "echo WEB_PORT #{WEB_PORT}"
+        elsif ENV['SEEDS']
+            config.vm.provision :shell, path: 'vagrant/contributions/high-throughput-aws/3.start.sh',
+                                        args: ['--seeds', ENV['SEEDS']],
+                                        privileged: false
+        else
+            bootstrap.call config
+            config.vm.provision :shell, path: 'vagrant/contributions/high-throughput-aws/2.install.sh',
+                                        privileged: false
+        end
+    end
+
+
     MAX_DSE_NODES.times do |i|
 
         config.vm.define "dse#{i}", autostart: true do |dse|
 
-            dse.vm.provider :virtualbox do |vb, override|
-                vb_setup.call vb, override
-
-                vb.memory = 2048
-                vb.cpus = 1
-
-                override.vm.network :private_network, type: 'dhcp'
-            end
-
-            dse.vm.provider :azure do |azure, override|
-                azure_setup.call azure, override
-
-                azure.vm_size = 'ExtraLarge'
-
-                azure.tcp_endpoints = "#{PUBLIC_DSE_PORTS}"
-            end
-
             dse.vm.provider :aws do |aws, override|
+
                 aws_setup.call aws, override
 
                 # Using the default of i2.2xlarge
@@ -193,21 +176,20 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.vm.define 'opscenter', autostart: false do |opscenter|
         WEB_PORT = '8888'
 
-        opscenter.vm.provider :virtualbox do |vb, override|
-            vb_setup.call vb, override
+        opscenter.vm.provider :aws do |aws, override|
 
-            vb.memory = 768
-            vb.cpus = 1
+            aws_setup.call aws, override
 
-            override.vm.network :private_network, type: 'dhcp'
-        end
+            # Using the default of i2.2xlarge
+            # aws.instance_type = 'c4.4xlarge'
 
-        opscenter.vm.provider :azure do |azure, override|
-            azure_setup.call azure, override
-
-            azure.vm_size = 'Large'
-
-            azure.tcp_endpoints = "#{WEB_PORT}"
+            aws.ebs_optimized = true
+            aws.block_device_mapping = [{
+                'DeviceName' => '/dev/sda1',
+                'Ebs.VolumeSize' => 200,
+                'Ebs.VolumeType' => 'gp2',
+                'Ebs.DeleteOnTermination' => 'true'
+            }]
         end
 
         if ENV['GATHER_IPS']
