@@ -132,11 +132,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         elsif ENV['WEB_PORT']
             config.vm.provision 'shell', inline: "echo WEB_PORT #{WEB_PORT}"
         elsif ENV['SEEDS']
+            opscenter_start.call config
             config.vm.provision :shell, path: 'vagrant/contributions/high-throughput-aws/3.start.sh',
                                         args: ['--seeds', ENV['SEEDS']],
                                         privileged: false
         else
             bootstrap.call config
+            opscenter_install.call config
             config.vm.provision :shell, path: 'vagrant/contributions/high-throughput-aws/2.install.sh',
                                         privileged: false
         end
@@ -173,40 +175,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                 bootstrap.call config
                 dse_install.call config
             end
-        end
-    end
-
-
-    config.vm.define 'opscenter', autostart: false do |opscenter|
-        WEB_PORT = '8888'
-
-        opscenter.vm.provider :aws do |aws, override|
-
-            aws_setup.call aws, override
-
-            # Using the default of i2.2xlarge
-            # aws.instance_type = 'c4.4xlarge'
-
-            aws.subnet_id = 'subnet-28e9a35f'
-
-            aws.ebs_optimized = true
-            aws.block_device_mapping = [{
-                'DeviceName' => '/dev/sda1',
-                'Ebs.VolumeSize' => 200,
-                'Ebs.VolumeType' => 'gp2',
-                'Ebs.DeleteOnTermination' => 'true'
-            }]
-        end
-
-        if ENV['GATHER_IPS']
-            config.vm.provision 'shell', inline: 'echo GATHER_IPS $(hostname -i)'
-        elsif ENV['WEB_PORT']
-            config.vm.provision 'shell', inline: "echo WEB_PORT #{WEB_PORT}"
-        elsif ENV['SEEDS']
-            opscenter_start.call config
-        else
-            bootstrap.call config
-            opscenter_install.call config
         end
     end
 end
