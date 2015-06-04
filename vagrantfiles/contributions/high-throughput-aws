@@ -48,7 +48,7 @@ aws_setup = Proc.new do |aws, override|
     aws.keypair_name = ENV['DEMO_AWS_KEYPAIR_NAME']
     override.ssh.private_key_path = ENV['DEMO_AWS_KEYPAIR_LOCATION']
 
-    aws.security_groups = [ENV['DEMO_AWS_SECURITY_GROUP']]
+    aws.security_groups = [ENV['DEMO_AWS_SECURITY_GROUP_ID']]
 
     aws.tags = {
         'Name' => "#{DEMO_NAME}-vagrant",
