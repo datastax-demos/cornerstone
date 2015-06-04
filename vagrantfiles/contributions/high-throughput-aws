@@ -154,6 +154,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                 # Using the default of i2.2xlarge
                 # aws.instance_type = 'c4.4xlarge'
 
+                aws.subnet_id = 'subnet-28e9a35f'
+
                 aws.ebs_optimized = true
                 aws.block_device_mapping = [{
                     'DeviceName' => '/dev/sda1',
@@ -184,6 +186,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
             # Using the default of i2.2xlarge
             # aws.instance_type = 'c4.4xlarge'
+
+            aws.subnet_id = 'subnet-28e9a35f'
 
             aws.ebs_optimized = true
             aws.block_device_mapping = [{
