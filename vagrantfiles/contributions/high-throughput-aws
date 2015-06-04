@@ -7,17 +7,19 @@ MAX_DSE_NODES = 20
 
 # Ubuntu 14.04 LTS
 # http://cloud-images.ubuntu.com/locator/ec2/
-# "trusty instance-store amd64 aki"
+# "14.04 amd64 hvm:ebs-ssd"
+# Could also use "hvm:ebs-io1"
 AMI_LIST = {
-    'ap-northeast-1' => 'ami-40e1e641',
-    'ap-southeast-1' => 'ami-07597455',
-    'ap-southeast-2' => 'ami-39086103',
-    'eu-west-1' => 'ami-5a4bfb2d',
-    'eu-central-1' => 'ami-d21223cf',
-    'sa-east-1' => 'ami-798f3e64',
-    'us-east-1' => 'ami-92f569fa',
-    'us-west-1' => 'ami-71150534',
-    'us-west-2' => 'ami-8b84d0bb'
+    'ap-northeast-1' => 'ami-f4b06cf4',
+    'ap-southeast-1' => 'ami-b899a2ea',
+    'eu-central-1' => 'ami-b6e0d9ab',
+    'eu-west-1' => 'ami-45d8a532',
+    'sa-east-1' => 'ami-1199190c',
+    'us-east-1' => 'ami-5f709f34',
+    'us-west-1' => 'ami-615cb725',
+    'cn-north-1' => 'ami-da930ee3'
+    'ap-southeast-2' => 'ami-b59ce48f',
+    'us-west-2' => 'ami-7f675e4f',
 }
 
 PUBLIC_DSE_PORTS='4040,7080,7081,8983,8012,50030,50060'
@@ -76,7 +78,7 @@ aws_setup = Proc.new do |aws, override|
     aws.region = ENV['DEMO_AWS_REGION']
     aws.availability_zone = ENV['DEMO_AWS_AZ']
     aws.ami = AMI_LIST[aws.region]
-    aws.instance_type = 'm3.medium'
+    aws.instance_type = 'i2.2xlarge'
 
     aws.keypair_name = ENV['DEMO_AWS_KEYPAIR_NAME']
     override.ssh.private_key_path = ENV['DEMO_AWS_KEYPAIR_LOCATION']
@@ -159,6 +161,21 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                 azure.vm_size = 'ExtraLarge'
 
                 azure.tcp_endpoints = "#{PUBLIC_DSE_PORTS}"
+            end
+
+            dse.vm.provider :aws do |aws, override|
+                aws_setup.call aws, override
+
+                # Using the default of i2.2xlarge
+                # aws.instance_type = 'c4.4xlarge'
+
+                aws.ebs_optimized = True
+                aws.block_device_mapping = [{
+                    'DeviceName' => '/dev/sda1',
+                    'Ebs.VolumeSize' => 200,
+                    'Ebs.VolumeType' => 'gp2',
+                    'Ebs.DeleteOnTermination' => 'true'
+                }]
             end
 
             if ENV['GATHER_IPS']
