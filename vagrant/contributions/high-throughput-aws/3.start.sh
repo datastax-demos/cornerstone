@@ -26,5 +26,5 @@ done
 SINGLE_SEED="${SEEDS%%,*}"
 
 # load schema into DSE
-cqlsh $SINGLE_SEED -f /cornerstone/cql/contributions/high-throughput-aws/schema.cql
+# cqlsh $SINGLE_SEED -f /cornerstone/cql/contributions/high-throughput-aws/schema.cql
 

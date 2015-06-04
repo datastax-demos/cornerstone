@@ -32,7 +32,7 @@ wait
 
 # collect DSE seeds
 export GATHER_IPS=1
-OPSCENTER_HOST=$(vagrant provision testrunner | grep GATHER_IPS | awk '{print $4}')
+export OPSCENTER_HOST=$(vagrant provision testrunner | grep GATHER_IPS | awk '{print $4}')
 DSE0=$(vagrant provision dse0 | grep GATHER_IPS | awk '{print $4}')
 DSE1=$(vagrant provision dse1 | grep GATHER_IPS | awk '{print $4}')
 DSE2=$(vagrant provision dse2 | grep GATHER_IPS | awk '{print $4}')
