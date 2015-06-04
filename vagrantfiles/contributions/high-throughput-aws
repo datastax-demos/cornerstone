@@ -109,7 +109,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     config.vm.define 'testrunner', autostart: true do |testrunner|
 
-        dse.vm.provider :aws do |aws, override|
+        testrunner.vm.provider :aws do |aws, override|
 
             aws_setup.call aws, override
 
