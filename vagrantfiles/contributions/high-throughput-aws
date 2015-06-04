@@ -118,6 +118,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
             aws.subnet_id = 'subnet-28e9a35f'
             aws.elastic_ip = true
+            aws.associate_public_ip = true
 
             aws.ebs_optimized = true
             aws.block_device_mapping = [{
@@ -159,6 +160,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
                 aws.subnet_id = 'subnet-28e9a35f'
                 aws.elastic_ip = true
+                aws.associate_public_ip = true
 
                 aws.ebs_optimized = true
                 aws.block_device_mapping = [{
