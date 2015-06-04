@@ -169,7 +169,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                 # Using the default of i2.2xlarge
                 # aws.instance_type = 'c4.4xlarge'
 
-                aws.ebs_optimized = True
+                aws.ebs_optimized = true
                 aws.block_device_mapping = [{
                     'DeviceName' => '/dev/sda1',
                     'Ebs.VolumeSize' => 200,
