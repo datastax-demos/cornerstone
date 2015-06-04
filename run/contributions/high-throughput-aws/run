@@ -21,17 +21,21 @@ source set_credentials.sh || exit 1
 # clear envars
 unset SEEDS GATHER_IPS DEMO_HOST WEB_PORT
 
-vagrant up --provider virtualbox singlenode
+vagrant up --provider aws dse0 dse1 dse2 dse3 dse4
 
 # collect DSE seeds
 export GATHER_IPS=1
-export DEMO_HOST=$(vagrant provision singlenode | grep GATHER_IPS | awk '{print $5}')
+DSE0=$(vagrant provision dse0 | grep GATHER_IPS | awk '{print $4}')
+DSE1=$(vagrant provision dse1 | grep GATHER_IPS | awk '{print $4}')
+DSE2=$(vagrant provision dse2 | grep GATHER_IPS | awk '{print $4}')
+DSE3=$(vagrant provision dse3 | grep GATHER_IPS | awk '{print $4}')
+DSE4=$(vagrant provision dse4 | grep GATHER_IPS | awk '{print $4}')
 unset GATHER_IPS
 
-# gather web ports
-export WEB_PORT=1
-DEMO_PORT=$(vagrant provision singlenode | grep WEB_PORT | awk '{print $4}')
-unset WEB_PORT
+export SEEDS=$DSE0,$DSE1,$DSE2,$DSE3,$DSE4
 
-# display urls
-echo -e "Demo address: \n    http://${DEMO_HOST}:${DEMO_PORT}"
+vagrant provision dse0
+vagrant provision dse1
+vagrant provision dse2
+vagrant provision dse3
+vagrant provision dse4
