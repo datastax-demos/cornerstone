@@ -125,7 +125,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                 'DeviceName' => '/dev/sda1',
                 'Ebs.VolumeSize' => 200,
                 'Ebs.VolumeType' => 'gp2',
-                'Ebs.DeleteOnTermination' => 'true'
+                'Ebs.DeleteOnTermination' => true
             }]
         end
 
@@ -167,7 +167,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                     'DeviceName' => '/dev/sda1',
                     'Ebs.VolumeSize' => 200,
                     'Ebs.VolumeType' => 'gp2',
-                    'Ebs.DeleteOnTermination' => 'true'
+                    'Ebs.DeleteOnTermination' => true
                 }]
             end
 
