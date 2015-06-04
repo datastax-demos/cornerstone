@@ -32,6 +32,7 @@ wait
 
 # collect DSE seeds
 export GATHER_IPS=1
+OPSCENTER_HOST=$(vagrant provision testrunner | grep GATHER_IPS | awk '{print $4}')
 DSE0=$(vagrant provision dse0 | grep GATHER_IPS | awk '{print $4}')
 DSE1=$(vagrant provision dse1 | grep GATHER_IPS | awk '{print $4}')
 DSE2=$(vagrant provision dse2 | grep GATHER_IPS | awk '{print $4}')
@@ -41,13 +42,15 @@ unset GATHER_IPS
 
 export SEEDS=$DSE0,$DSE1,$DSE2,$DSE3,$DSE4
 
+vagrant provision testrunner
 vagrant provision dse0
 vagrant provision dse1
 vagrant provision dse2
 vagrant provision dse3
 vagrant provision dse4
 
-TESTRUNNER_PUBLIC_IP=$(vagrant public_ip -k host -m testrunner)
+TESTRUNNER_PUBLIC_IP=$(vagrant awsinfo -k public_ip -m testrunner)
 
 echo "Seeds: ${SEEDS}"
 echo "Testrunner: ${TESTRUNNER_PUBLIC_IP}"
+echo "Opscenter: http://${TESTRUNNER_PUBLIC_IP}:8888/"
