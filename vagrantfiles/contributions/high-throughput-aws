@@ -118,7 +118,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
             #VPC settings
             #aws.subnet_id = 'subnet-28e9a35f'
-            #aws.associate_public_ip =
+            #aws.associate_public_ip = true
             #aws.security_groups = [ENV['DEMO_AWS_SECURITY_GROUP_ID']]
 
             aws.ebs_optimized = true
