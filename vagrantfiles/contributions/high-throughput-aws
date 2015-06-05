@@ -55,6 +55,23 @@ aws_setup = Proc.new do |aws, override|
         'Owner' => ENV['DEMO_USER'],
         'Email' => ENV['DEMO_EMAIL']
     }
+
+
+    # Using the default of i2.2xlarge
+    # aws.instance_type = 'c4.4xlarge'
+
+    #VPC settings
+    #aws.subnet_id = 'subnet-28e9a35f'
+    #aws.associate_public_ip = true
+    #aws.security_groups = [ENV['DEMO_AWS_SECURITY_GROUP_ID']]
+
+    aws.ebs_optimized = true
+    aws.block_device_mapping = [{
+        'DeviceName' => '/dev/sda1',
+        'Ebs.VolumeSize' => 200,
+        'Ebs.VolumeType' => 'gp2',
+        'Ebs.DeleteOnTermination' => true
+    }]
 end
 
 bootstrap = Proc.new do |config|
@@ -110,24 +127,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.vm.define 'testrunner', autostart: true do |testrunner|
 
         testrunner.vm.provider :aws do |aws, override|
-
             aws_setup.call aws, override
-
-            # Using the default of i2.2xlarge
-            # aws.instance_type = 'c4.4xlarge'
-
-            #VPC settings
-            #aws.subnet_id = 'subnet-28e9a35f'
-            #aws.associate_public_ip = true
-            #aws.security_groups = [ENV['DEMO_AWS_SECURITY_GROUP_ID']]
-
-            aws.ebs_optimized = true
-            aws.block_device_mapping = [{
-                'DeviceName' => '/dev/sda1',
-                'Ebs.VolumeSize' => 200,
-                'Ebs.VolumeType' => 'gp2',
-                'Ebs.DeleteOnTermination' => true
-            }]
         end
 
         if ENV['GATHER_IPS']
@@ -153,24 +153,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         config.vm.define "dse#{i}", autostart: true do |dse|
 
             dse.vm.provider :aws do |aws, override|
-
                 aws_setup.call aws, override
-
-                # Using the default of i2.2xlarge
-                # aws.instance_type = 'c4.4xlarge'
-
-                #VPC settings
-                #aws.subnet_id = 'subnet-28e9a35f'
-                #aws.associate_public_ip = true
-                #aws.security_groups = [ENV['DEMO_AWS_SECURITY_GROUP_ID']]
-
-                aws.ebs_optimized = true
-                aws.block_device_mapping = [{
-                    'DeviceName' => '/dev/sda1',
-                    'Ebs.VolumeSize' => 200,
-                    'Ebs.VolumeType' => 'gp2',
-                    'Ebs.DeleteOnTermination' => true
-                }]
             end
 
             if ENV['GATHER_IPS']
