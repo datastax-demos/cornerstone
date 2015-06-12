@@ -204,22 +204,22 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         end
 
         if ENV['GATHER_IPS']
-            config.vm.provision 'shell', inline: "echo GATHER_IPS $(hostname -i)"
+            singlenode.vm.provision 'shell', inline: "echo GATHER_IPS $(hostname -i)"
         elsif ENV['WEB_PORT']
-            config.vm.provision 'shell', inline: "echo WEB_PORT #{WEB_PORT}"
+            singlenode.vm.provision 'shell', inline: "echo WEB_PORT #{WEB_PORT}"
         else
-            bootstrap.call config
+            bootstrap.call singlenode
 
-            dse_install.call config
-            opscenter_install.call config
-            demo_install.call config
+            dse_install.call singlenode
+            opscenter_install.call singlenode
+            demo_install.call singlenode
 
-            config.vm.provision :shell, path: 'vagrant/general/apt/configure/datastax-enterprise/heap_v2.sh',
-                                        args: ['--max-heap', '400M',
-                                               '--new-size', '200M'],
-                                        privileged: false
-            config.vm.provision :shell, inline: 'sudo service datastax-agent stop',
-                                        privileged: false
+            singlenode.vm.provision :shell, path: 'vagrant/general/apt/configure/datastax-enterprise/heap_v2.sh',
+                                            args: ['--max-heap', '400M',
+                                                   '--new-size', '200M'],
+                                            privileged: false
+            singlenode.vm.provision :shell, inline: 'sudo service datastax-agent stop',
+                                            privileged: false
 
             ENV['SEEDS'] = '127.0.0.1'
             ENV['OPSCENTER_HOST'] = '127.0.0.1'
@@ -227,12 +227,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             ENV['SOLR_NODE'] = ENV['SEEDS']
             ENV['SOLR_DC'] = 'Analytics'
 
-            config.vm.provision :shell, path: 'vagrant/general/apt/configure/datastax-enterprise/enable_solr_v1.sh',
-                                        privileged: false
+            singlenode.vm.provision :shell, path: 'vagrant/general/apt/configure/datastax-enterprise/enable_solr_v1.sh',
+                                            privileged: false
 
-            dse_start.call config
-            # opscenter_start.call config
-            demo_start.call config
+            dse_start.call singlenode
+            # opscenter_start.call singlenode
+            demo_start.call singlenode
         end
     end
 
@@ -248,16 +248,16 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             end
 
             if ENV['GATHER_IPS']
-                config.vm.provision 'shell', inline: "echo GATHER_IPS $(hostname -i)"
+                singlenode.vm.provision 'shell', inline: "echo GATHER_IPS $(hostname -i)"
             elsif ENV['WEB_PORT']
-                config.vm.provision 'shell', inline: "echo WEB_PORT #{WEB_PORT}"
+                singlenode.vm.provision 'shell', inline: "echo WEB_PORT #{WEB_PORT}"
             else
-                class_bootstrap.call config
-                bootstrap.call config
+                class_bootstrap.call singlenode
+                bootstrap.call singlenode
 
-                dse_install.call config
-                opscenter_install.call config
-                demo_install.call config
+                dse_install.call singlenode
+                opscenter_install.call singlenode
+                demo_install.call singlenode
 
                 ENV['SEEDS'] = '127.0.0.1'
                 ENV['OPSCENTER_HOST'] = '127.0.0.1'
@@ -265,9 +265,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                 ENV['SOLR_NODE'] = ENV['SEEDS']
                 ENV['SOLR_DC'] = 'Analytics'
 
-                dse_start.call config
-                # opscenter_start.call config
-                demo_start.call config
+                dse_start.call singlenode
+                # opscenter_start.call singlenode
+                demo_start.call singlenode
             end
         end
     end
@@ -294,12 +294,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             end
 
             if ENV['GATHER_IPS']
-                config.vm.provision 'shell', inline: "echo GATHER_IPS $(hostname -i)"
+                dse.vm.provision 'shell', inline: "echo GATHER_IPS $(hostname -i)"
             elsif ENV['SEEDS'] and ENV['OPSCENTER_HOST']
-                dse_start.call config
+                dse_start.call dse
             else
-                bootstrap.call config
-                dse_install.call config
+                bootstrap.call dse
+                dse_install.call dse
             end
         end
     end
@@ -326,14 +326,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         end
 
         if ENV['GATHER_IPS']
-            config.vm.provision 'shell', inline: 'echo GATHER_IPS $(hostname -i)'
+            opscenter.vm.provision 'shell', inline: 'echo GATHER_IPS $(hostname -i)'
         elsif ENV['WEB_PORT']
-            config.vm.provision 'shell', inline: "echo WEB_PORT #{WEB_PORT}"
+            opscenter.vm.provision 'shell', inline: "echo WEB_PORT #{WEB_PORT}"
         elsif ENV['SEEDS']
-            opscenter_start.call config
+            opscenter_start.call opscenter
         else
-            bootstrap.call config
-            opscenter_install.call config
+            bootstrap.call opscenter
+            opscenter_install.call opscenter
         end
     end
 
@@ -358,15 +358,15 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         end
 
         if ENV['GATHER_IPS']
-            config.vm.provision 'shell', inline: 'echo GATHER_IPS $(hostname -i)'
+            demo.vm.provision 'shell', inline: 'echo GATHER_IPS $(hostname -i)'
         elsif ENV['WEB_PORT']
-            config.vm.provision 'shell', inline: "echo WEB_PORT #{WEB_PORT}"
+            demo.vm.provision 'shell', inline: "echo WEB_PORT #{WEB_PORT}"
         elsif ENV['SEEDS']
-            demo_start.call config
+            demo_start.call demo
         else
-            bootstrap.call config
-            dse_install.call config
-            demo_install.call config
+            bootstrap.call demo
+            dse_install.call demo
+            demo_install.call demo
         end
     end
 end
