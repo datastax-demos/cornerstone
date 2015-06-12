@@ -171,13 +171,13 @@ demo_start = Proc.new do |config|
 end
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+    WEB_PORT = '8080'
 
     # disable default synced folder for all machines
     config.vm.synced_folder '.', '/vagrant', disabled: true
 
     # define the a single-machine developer setup
     config.vm.define 'singlenode', autostart: true do |singlenode|
-        WEB_PORT = '5000'
 
         # define virtualbox machine
         singlenode.vm.provider :virtualbox do |vb, override|
@@ -239,8 +239,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     (0..CLASSROOM_SIZE).each do |i|
         # define the a classroom setup
         config.vm.define "singlenode#{i}", autostart: false do |singlenode|
-            WEB_PORT = '5000'
-
             singlenode.vm.provider :aws do |aws, override|
                 aws_setup.call aws, override
 
@@ -306,8 +304,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
 
     config.vm.define 'opscenter', autostart: false do |opscenter|
-        WEB_PORT = '8888'
-
         opscenter.vm.provider :virtualbox do |vb, override|
             vb_setup.call vb, override
 
@@ -338,8 +334,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     end
 
     config.vm.define 'demo', autostart: false do |demo|
-        WEB_PORT = '5000'
-
         demo.vm.provider :virtualbox do |vb, override|
             vb_setup.call vb, override
 

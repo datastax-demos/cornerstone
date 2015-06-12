@@ -25,6 +25,14 @@ done
 
 SINGLE_SEED="${SEEDS%%,*}"
 
-# load schema into DSE
-cqlsh $SINGLE_SEED -f /cornerstone/cql/contributions/meetup-spark-streaming/schema.cql
+cd datastax-spark-streaming-demo
 
+sbt assembly run
+dse spark-submit \
+    --class com.datastax.examples.meetup.StreamingDemo \
+    ./target/scala-2.10/streaming-demo.jar \
+    -Dspark.cassandra.connection.host=${SINGLE_SEED}
+
+cd web
+
+#./sbt container:start shell
