@@ -118,6 +118,8 @@ dse_install = Proc.new do |config|
 end
 
 dse_start = Proc.new do |config|
+    config.vm.provision :shell, path: 'vagrant/general/apt/configure/datastax-enterprise/enable_hadoop_v1.sh',
+                                privileged: false
 
     if ENV['SPARK']
         config.vm.provision :shell, path: 'vagrant/general/apt/first-start/datastax/spark_v2.sh',
@@ -154,23 +156,14 @@ demo_install = Proc.new do |config|
 end
 
 demo_start = Proc.new do |config|
-    if ENV['SOLR_DC']
-        config.vm.provision :shell, path: 'vagrant/datastax/weather-sensors/3.start.sh',
-                                    args: ['--seeds', ENV['SEEDS'],
-                                           '--solr-dc', ENV['SOLR_DC']],
+        config.vm.provision :shell, path: 'vagrant/datastax/weather-sensors/install-dse-nodes.sh',
                                     privileged: false
-    else
         config.vm.provision :shell, path: 'vagrant/datastax/weather-sensors/3.start.sh',
-                                    args: ['--seeds', ENV['SEEDS']],
                                     privileged: false
-    end
-    config.vm.provision :shell, path: 'vagrant/datastax/weather-sensors/4.post.sh',
-                                args: ['--seeds', ENV['SEEDS'],
-                                       '--solr-node', ENV['SOLR_NODE']],
-                                privileged: false
 end
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+    WEB_PORT = '5000'
 
     # disable default synced folder for all machines
     config.vm.synced_folder '.', '/vagrant', disabled: true
@@ -224,11 +217,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             ENV['SEEDS'] = '127.0.0.1'
             ENV['OPSCENTER_HOST'] = '127.0.0.1'
             ENV['SPARK'] = '1'
-            ENV['SOLR_NODE'] = ENV['SEEDS']
-            ENV['SOLR_DC'] = 'Analytics'
-
-            singlenode.vm.provision :shell, path: 'vagrant/general/apt/configure/datastax-enterprise/enable_solr_v1.sh',
-                                            privileged: false
 
             dse_start.call singlenode
             # opscenter_start.call singlenode
@@ -262,8 +250,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                 ENV['SEEDS'] = '127.0.0.1'
                 ENV['OPSCENTER_HOST'] = '127.0.0.1'
                 ENV['SPARK'] = '1'
-                ENV['SOLR_NODE'] = ENV['SEEDS']
-                ENV['SOLR_DC'] = 'Analytics'
 
                 dse_start.call singlenode
                 # opscenter_start.call singlenode
@@ -293,10 +279,23 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                 azure.tcp_endpoints = "#{PUBLIC_DSE_PORTS}"
             end
 
+            dse.vm.provider :aws do |aws, override|
+                aws_setup.call aws, override
+
+                aws.instance_type = 'm3.2xlarge'
+            end
+
             if ENV['GATHER_IPS']
                 dse.vm.provision 'shell', inline: "echo GATHER_IPS $(hostname -i)"
+            elsif ENV['WEB_PORT']
+                dse.vm.provision 'shell', inline: "echo WEB_PORT #{WEB_PORT}"
             elsif ENV['SEEDS'] and ENV['OPSCENTER_HOST']
                 dse_start.call dse
+
+                if i == 0 then
+                    demo_install.call dse
+                    demo_start.call dse
+                end
             else
                 bootstrap.call dse
                 dse_install.call dse
@@ -325,6 +324,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             azure.tcp_endpoints = "#{WEB_PORT}"
         end
 
+        opscenter.vm.provider :aws do |aws, override|
+            aws_setup.call aws, override
+
+            aws.instance_type = 'm3.2xlarge'
+        end
+
         if ENV['GATHER_IPS']
             opscenter.vm.provision 'shell', inline: 'echo GATHER_IPS $(hostname -i)'
         elsif ENV['WEB_PORT']
@@ -334,39 +339,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         else
             bootstrap.call opscenter
             opscenter_install.call opscenter
-        end
-    end
-
-    config.vm.define 'demo', autostart: false do |demo|
-        WEB_PORT = '5000'
-
-        demo.vm.provider :virtualbox do |vb, override|
-            vb_setup.call vb, override
-
-            vb.memory = 1024
-            vb.cpus = 1
-
-            override.vm.network :private_network, type: 'dhcp'
-        end
-
-        demo.vm.provider :azure do |azure, override|
-            azure_setup.call azure, override
-
-            azure.vm_size = 'Large'
-
-            azure.tcp_endpoints = "#{WEB_PORT}"
-        end
-
-        if ENV['GATHER_IPS']
-            demo.vm.provision 'shell', inline: 'echo GATHER_IPS $(hostname -i)'
-        elsif ENV['WEB_PORT']
-            demo.vm.provision 'shell', inline: "echo WEB_PORT #{WEB_PORT}"
-        elsif ENV['SEEDS']
-            demo_start.call demo
-        else
-            bootstrap.call demo
-            dse_install.call demo
-            demo_install.call demo
         end
     end
 end

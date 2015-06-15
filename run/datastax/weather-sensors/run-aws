@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+
+DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+cd $DIR/../../../
+echo "Running script from: $(pwd)"
+
+# backup existing Vagrantfile
+if [ -f Vagrantfile ] || [ -L Vagrantfile ]; then
+    VERSION=$(date +"%Y%m%d_%H%M%S")
+    mv Vagrantfile{,.bak.$VERSION}
+    echo "Backing up current Vagrantfile to: Vagrantfile.$VERSION"
+fi
+
+# copy correct Vagrantfile in place
+ln -s vagrantfiles/datastax/weather-sensors Vagrantfile
+ls -alh Vagrantfile
+
+echo "Setting credentials using: ./set_credentials.sh"
+source set_credentials.sh || exit 1
+
+# clear envars
+unset SEEDS GATHER_IPS DEMO_HOST WEB_PORT
+
+vagrant up --provider aws dse0 dse1 dse2 dse3 dse4 dse5 opscenter
+
+# collect DSE seeds
+export GATHER_IPS=1
+export DSE0=$(vagrant provision dse0 | grep GATHER_IPS | awk '{print $4}')
+export DSE1=$(vagrant provision dse1 | grep GATHER_IPS | awk '{print $4}')
+export DSE2=$(vagrant provision dse2 | grep GATHER_IPS | awk '{print $4}')
+export DSE3=$(vagrant provision dse3 | grep GATHER_IPS | awk '{print $4}')
+export DSE4=$(vagrant provision dse4 | grep GATHER_IPS | awk '{print $4}')
+export DSE5=$(vagrant provision dse5 | grep GATHER_IPS | awk '{print $4}')
+export OPSCENTER_HOST=$(vagrant provision opscenter | grep GATHER_IPS | awk '{print $4}')
+unset GATHER_IPS
+
+export SEEDS=$DSE0,$DSE1,$DSE2,$DSE3,$DSE4,$DSE5
+
+vagrant provision dse0 dse1 dse2 dse3 dse4 dse5 opscenter
+
+# gather web ports
+export WEB_PORT=1
+DEMO_URL=$(vagrant awsinfo -m dse0 -k public_ip)
+OPSCENTER_URL=$(vagrant awsinfo -m opscenter -k public_ip)
+OPSCENTER_PORT=$(vagrant provision opscenter | grep WEB_PORT | awk '{print $4}')
+DEMO_PORT=$(vagrant provision dse0 | grep WEB_PORT | awk '{print $4}')
+unset WEB_PORT
+
+# display urls
+echo -e "Demo address: \n    http://${DEMO_URL}:${DEMO_PORT}"
+echo -e "OpsCenter address: \n    http://${OPSCENTER_URL}:${OPSCENTER_PORT}"
+
+
+sudo sed -i -e "s|SPARK_ENABLED=.*|SPARK_ENABLED=1|g" /etc/default/dse
+sudo service dse restart
