@@ -4,6 +4,7 @@ bower/
 cache/
 cache_old/
 keys/
+launched-clusters/
 logs/
 tmp/
 web/datastax/cornerstone-python/Cornerstone/static/packages/
