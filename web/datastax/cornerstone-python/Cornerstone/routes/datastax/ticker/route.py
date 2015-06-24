@@ -5,11 +5,11 @@ from decimal import Decimal
 try: import simplejson as json
 except ImportError: import json
 
-from flask import Blueprint, render_template, request, session, jsonify
+from flask import Flask, Blueprint, render_template, request, session, jsonify
 
 from Cornerstone.routes.datastax.cornerstone.rest import get_session, \
     get_solr_session
-
+app = Flask(__name__)
 ticker_endpoint = Blueprint('ticker_endpoint', __name__)
 
 cassandra_session = None
@@ -22,6 +22,7 @@ def preflight_check():
     if not cassandra_session:
         cassandra_session = get_session()
         solr_session = get_solr_session()
+        print cassandra_session
 
         prepared_statements = {}
         prepared_statements['get_user'] = cassandra_session.prepare('''
@@ -86,8 +87,20 @@ def index():
 
 @ticker_endpoint.route('/login', methods=['POST'])
 def login():
+    preflight_check()
+    
     session['email_address'] = request.form.get('email_address')
 
+    values = {
+        'email_address': session['email_address'],
+        'risk_tolerance': '',
+        'preferred_investment_types': [],
+        'retirement_age': '',
+        'withdrawal_year': '',
+    }
+
+
+    cassandra_session.execute(prepared_statements['update_user'].bind(values))
     '''
     GENERATE SEED DATA FOR THIS ACCOUNT!
     '''
@@ -160,6 +173,8 @@ def customize():
         prepared_statements['get_user'].bind((values)))
     if user_profile:
         user_profile = dict(user_profile[0])
+    if user_profile['preferred_investment_types'] is None:
+        user_profile['preferred_investment_types'] = []
     return render_template('datastax/ticker/customize.jinja2',
                            user_profile=user_profile)
 
@@ -278,9 +293,11 @@ def recommendations():
     if values:
         # this is how we'll be indexing preferred_investment_types in the
         # recommendations table
-        values['preferred_investment_types'].sort()
-        values['preferred_investment_types'] = '_'.join(
-            values['preferred_investment_types'])
+        if values['preferred_investment_types'] is not None:
+            values['preferred_investment_types'].sort()
+            values['preferred_investment_types'] = '_'.join(values['preferred_investment_types'])
+        else:
+            values['preferred_investment_types'] = '_'
         del values['email_address']
 
         recommendation_results = cassandra_session.execute(

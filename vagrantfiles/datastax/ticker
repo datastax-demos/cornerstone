@@ -115,6 +115,8 @@ dse_install = Proc.new do |config|
                                 args: ['--datastax-user', "#{ENV['DATASTAX_USER']}",
                                        '--datastax-pass', "#{ENV['DATASTAX_PASS']}"],
                                 privileged: false
+    config.vm.provision :shell, path: 'vagrant/general/apt/configure/datastax-enterprise/enable_spark_v1.sh'
+    config.vm.provision :shell, path: 'vagrant/general/apt/configure/datastax-enterprise/enable_solr_v1.sh'                     
 end
 
 dse_start = Proc.new do |config|
@@ -225,7 +227,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             ENV['OPSCENTER_HOST'] = '127.0.0.1'
             ENV['SPARK'] = '1'
             ENV['SOLR_NODE'] = ENV['SEEDS']
-            ENV['SOLR_DC'] = 'Analytics'
+            ENV['SOLR_DC'] = 'SearchAnalytics'
 
             config.vm.provision :shell, path: 'vagrant/general/apt/configure/datastax-enterprise/enable_solr_v1.sh',
                                         privileged: false

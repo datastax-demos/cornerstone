@@ -2,7 +2,7 @@
 set -x # echo on
 
 SEEDS='127.0.0.1'
-SOLR_DC='Solr'
+SOLR_DC='SearchAnalytics'
 
 while [[ $# > 1 ]]
 do

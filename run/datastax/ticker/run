@@ -23,6 +23,7 @@ unset SEEDS GATHER_IPS DEMO_HOST WEB_PORT
 
 vagrant up --provider virtualbox singlenode
 
+
 # collect DSE seeds
 export GATHER_IPS=1
 export DEMO_HOST=$(vagrant provision singlenode | grep GATHER_IPS | awk '{print $5}')
